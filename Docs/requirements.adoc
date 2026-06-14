@@ -1,0 +1,10 @@
+= Requirements
+
+:game-name: 위그드라실
+이 문서는 생태 전략 시뮬레이션 게임 {game-name}(Yggdrasill)의 요구사항을 명세한다.
+
+== Constraints
+* {game-name}은 Windows와 MaxOS 플랫폼을 지원한다.
+
+== System Requirements
+* 게임 실행 시 화면에 "Hello World"라는 문자열이 출력된다.
