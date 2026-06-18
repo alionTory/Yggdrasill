@@ -42,9 +42,8 @@ runs:
         # butler를 이후 step의 PATH에 영구적으로 추가.
         echo "$(pwd)/butler-bin" >> "$GITHUB_PATH"
         
-        # 설치 및 인증 상태 확인.
+        # 설치 확인.
         ./butler-bin/butler version
-        ./butler-bin/butler status itchio/butler
         
     - name: Push file to itch.io
       env:
