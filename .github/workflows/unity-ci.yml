@@ -1,6 +1,12 @@
 ﻿# 플랫폼 별 버전 번호가 동일하다고 가정.
 name: Unity CICD
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 env:
   ITCH_IO_USER: aliontory
   ITCH_IO_GAME_ID: yggdrasill
