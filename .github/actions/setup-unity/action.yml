@@ -11,7 +11,7 @@ runs:
     #    -> 정렬로 정규화해야 차후 캐시 hit에 유리함.
     - name: Create LFS file list
       shell: bash
-      run: git lfs ls-file -l | cut -d' ' -f1 | sort > .lfs-assets-id
+      run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
       
     # 러너의 로컬 레포지터리에 캐시된 lfs 파일 저장
     - name: Restore LFS cache
