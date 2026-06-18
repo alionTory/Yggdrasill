@@ -1,0 +1,58 @@
+﻿name: Itch.io Upload
+description: |
+  Butler를 사용해 itch.io에 파일 업로드
+  
+inputs:
+  api-key:
+    description: "itch.io API 키 (https://itch.io/user/settings/api-keys)"
+    required: true
+  itch-user:
+    description: "itch.io 사용자 이름 (예: your-username)"
+    required: true
+  itch-game:
+    description: "itch.io 게임 슬러그 (예: your-game-name)"
+    required: true
+  channel:
+    description: >
+      업로드 채널 이름. 이름에 따라 플랫폼 태그가 자동 부여됩니다.
+      win/windows, linux, mac/osx, android, html 등.
+      참고: https://itch.io/docs/butler/pushing.html#channel-names
+    required: true
+  build-path:
+    description: "업로드할 빌드 디렉토리 또는 .zip 파일 경로"
+    required: true
+  version:
+    description: "버전 번호 (비워두면 itch.io가 자동으로 증가하는 정수를 부여합니다)"
+    required: true
+    
+runs:
+  using: composite  # composite action (모듈화된 액션) 임을 명시
+  steps:
+    - name: Download and install Butler
+      shell: bash
+      env:
+        BUTLER_API_KEY: ${{ inputs.api-key }}
+      run: |
+        curl -fsSL -o butler.zip \
+          "https://broth.itch.zone/butler/linux-amd64/LATEST/archive/default"
+        unzip -o butler.zip -d butler-bin
+        rm butler.zip
+        chmod +x butler-bin/butler
+        
+        # butler를 이후 step의 PATH에 영구적으로 추가.
+        echo "$(pwd)/butler-bin" >> "$GITHUB_PATH"
+        
+        # 설치 및 인증 상태 확인.
+        ./butler-bin/butler version
+        ./butler-bin/butler status itchio/butler
+        
+    - name: Push file to itch.io
+      shell: bash
+      env:
+        BUTLER_API_KEY: ${{ inputs.api-key }}
+        TARGET: "${{ inputs.itch-user }}/${{ inputs.itch-game }}:${{ inputs.channel }}"
+        BUILD_PATH: ${{ inputs.build-path }}
+        VERSION: ${{ inputs.version }}
+      run: |
+        echo "배포 시작: ${TARGET}, 버전 ${VERSION} (빌드 파일 경로: ${BUILD_PATH})"
+        butler push "${BUILD_PATH}" "${TARGET}" --userversion "${VERSION}"

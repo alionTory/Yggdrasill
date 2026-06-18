@@ -1,0 +1,99 @@
+﻿# 플랫폼 별 버전 번호가 동일하다고 가정.
+name: Unity CICD
+on: [push, pull_request]
+env:
+  ITCH_IO_USER: aliontory
+  ITCH_IO_GAME_ID: yggdrasill
+jobs:
+  unity-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout non-lfs files
+        uses: actions/checkout@v6
+      - name: Setup Unity
+        uses: ./.github/actions/setup-unity
+      - name: Edit mode tests
+        uses: game-ci/unity-test-runner@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          testMode: editmode
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          checkName: Edit Mode Tests
+      - name: Play mode tests
+        uses: game-ci/unity-test-runner@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          testMode: playmode
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          checkName: Play Mode Tests
+  
+  build:
+    needs: unity-test
+    runs-on: ubuntu-latest
+    strategy: 
+      matrix:
+        include:
+          - targetPlatform: StandaloneWindows64
+            buildProfile: 'Assets/Settings/Build Profiles/Windows'
+    outputs: 
+      # 플랫폼 별 버전 번호가 동일하다고 가정.
+      buildVersion: ${{ steps.buildStep.outputs.buildVersion }}
+    steps:
+      - name: Checkout non-lfs files
+        uses: actions/checkout@v6
+      - name: Setup Unity
+        uses: ./.github/actions/setup-unity
+        
+      # build/targetPlatform 폴더 밑에 빌드 결과물이 생성됨
+      - name: Build
+        uses: game-ci/unity-builder@v4
+        id: buildStep
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: ${{ matrix.targetPlatform }}
+          buildProfile: ${{ matrix.buildProfile }}
+          versioning: Semantic
+          
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: Build-${{ matrix.targetPlatform }}
+          path: build/${{ matrix.targetPlatform }}
+          retention-days: 7
+
+  staging-deploy-itch-io:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy: 
+      matrix:
+        include:
+          - targetPlatform: StandaloneWindows64
+            channel: windows
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        
+      - name: Download build artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: Build-${{ matrix.targetPlatform }}
+          path: build/${{ matrix.targetPlatform }}
+          
+      - name: Deploy to itch.io
+        uses: ./.github/actions/itch-io-upload
+        with:
+          api-key:    ${{ secrets.ITCH_IO_API_KEY }}
+          itch-user:  ${{ env.ITCH_IO_USER }}
+          itch-game:  ${{ env.ITCH_IO_GAME_ID }}
+          channel:    ${{ matrix.channel }}
+          build-path: build/${{ matrix.targetPlatform }}
+          version:    ${{ needs.build.outputs.buildVersion }}
