@@ -10,6 +10,9 @@ on:
 env:
   ITCH_IO_USER: aliontory
   ITCH_IO_GAME_ID: yggdrasill
+permissions:
+  contents: read
+  checks: write
 jobs:
   unity-test:
     runs-on: ubuntu-latest
