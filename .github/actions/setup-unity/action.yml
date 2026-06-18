@@ -10,6 +10,7 @@ runs:
     # 3. OID를 사전순으로 정렬한 뒤 .lfs-assets-id 파일에 저장.
     #    -> 정렬로 정규화해야 차후 캐시 hit에 유리함.
     - name: Create LFS file list
+      shell: bash
       run: git lfs ls-file -l | cut -d' ' -f1 | sort > .lfs-assets-id
       
     # 러너의 로컬 레포지터리에 캐시된 lfs 파일 저장
@@ -25,6 +26,7 @@ runs:
     # 2. git lfs checkout - .git/lfs/ 에 있는 바이너리를 작업 트리로 복사해 포인터 파일을 실제 파일로 교체.
     #    -> lfs 파일을 리포지터리에 받아오기 전에 체크아웃하면, 실제 바이너리 파일 대신 포인터 파일이 작업 트리에 저장됨.
     - name: Git LFS pull
+      shell: bash
       run: git lfs pull
     
     # Unity는 원본 에셋을 Unity에서 사용할 수 있는 형태로 변환하여 Library 폴더에 저장한다.

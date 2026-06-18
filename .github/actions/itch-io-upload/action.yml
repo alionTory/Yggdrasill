@@ -29,9 +29,9 @@ runs:
   using: composite  # composite action (모듈화된 액션) 임을 명시
   steps:
     - name: Download and install Butler
-      shell: bash
       env:
         BUTLER_API_KEY: ${{ inputs.api-key }}
+      shell: bash
       run: |
         curl -fsSL -o butler.zip \
           "https://broth.itch.zone/butler/linux-amd64/LATEST/archive/default"
@@ -47,12 +47,12 @@ runs:
         ./butler-bin/butler status itchio/butler
         
     - name: Push file to itch.io
-      shell: bash
       env:
         BUTLER_API_KEY: ${{ inputs.api-key }}
         TARGET: "${{ inputs.itch-user }}/${{ inputs.itch-game }}:${{ inputs.channel }}"
         BUILD_PATH: ${{ inputs.build-path }}
         VERSION: ${{ inputs.version }}
+      shell: bash
       run: |
         echo "배포 시작: ${TARGET}, 버전 ${VERSION} (빌드 파일 경로: ${BUILD_PATH})"
         butler push "${BUILD_PATH}" "${TARGET}" --userversion "${VERSION}"
