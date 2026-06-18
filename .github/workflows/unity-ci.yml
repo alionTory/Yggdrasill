@@ -49,7 +49,7 @@ jobs:
       matrix:
         include:
           - targetPlatform: StandaloneWindows64
-            buildProfile: 'Assets/Settings/Build Profiles/Windows'
+            buildProfile: 'Assets/Settings/Build Profiles/Windows.asset'
     outputs: 
       # 플랫폼 별 버전 번호가 동일하다고 가정.
       buildVersion: ${{ steps.buildStep.outputs.buildVersion }}
