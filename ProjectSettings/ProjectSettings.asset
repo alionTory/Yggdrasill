@@ -584,7 +584,25 @@ PlayerSettings:
   webGLCloseOnQuit: 0
   webWasm2023: 0
   webEnableSubmoduleStrippingCompatibility: 0
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    Android: QUANTUM_XY
+    EmbeddedLinux: QUANTUM_XY
+    GameCoreScarlett: QUANTUM_XY
+    GameCoreXboxOne: QUANTUM_XY
+    Kepler: QUANTUM_XY
+    LinuxHeadlessSimulation: QUANTUM_XY
+    Nintendo Switch: QUANTUM_XY
+    Nintendo Switch 2: QUANTUM_XY
+    PS4: QUANTUM_XY
+    PS5: QUANTUM_XY
+    QNX: QUANTUM_XY
+    Standalone: QUANTUM_XY
+    VisionOS: QUANTUM_XY
+    WebGL: QUANTUM_XY
+    Windows Store Apps: QUANTUM_XY
+    XboxOne: QUANTUM_XY
+    iPhone: QUANTUM_XY
+    tvOS: QUANTUM_XY
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
