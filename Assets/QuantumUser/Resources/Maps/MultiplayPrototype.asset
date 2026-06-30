@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MultiplayPrototype
   m_EditorClassIdentifier: Quantum.Engine.dll::Quantum.Map
   Identifier:
-    Path: Resources/MultiplayPrototype
+    Path: QuantumUser/Resources/Maps/MultiplayPrototype
     Guid:
       Value: 363481078872077106
   UserAsset:
@@ -32,7 +32,7 @@ MonoBehaviour:
   TriangleMeshCellSize: -1
   StaticColliders3DTrianglesData:
     Id:
-      Value: 0
+      Value: 348683038288017300
   SerializeTrianglesMetadata: 0
   GridSizeX: 64
   GridSizeY: 64
