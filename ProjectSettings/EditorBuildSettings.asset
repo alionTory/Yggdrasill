@@ -5,21 +5,12 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Photon/QuantumMenu/QuantumSampleMenu.unity
-    guid: f23d3edd333e1dc449a4688e04123759
-  - enabled: 0
-    path: Assets/QuantumUser/Scenes/QuantumGameScene.unity
-    guid: df081536c4ede784bbc76a2caf41b108
-  - enabled: 0
-    path: Assets/Scenes/SampleScene.unity
-    guid: 8c9cfa26abfee488c85f1582747f6a02
-  - enabled: 1
-    path: Assets/Scenes/MultiplayPrototype.unity
-    guid: 11cad2fe964a0424a84a5c9c3bfdb9e9
   - enabled: 1
     path: Assets/Scenes/MenuPrototype.unity
     guid: 21e27de20aca94240b1bcad8cc23e615
+  - enabled: 1
+    path: Assets/Scenes/MultiplayPrototype.unity
+    guid: 11cad2fe964a0424a84a5c9c3bfdb9e9
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 4f3094f371eaf724d922cbab6cfd2e57, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
