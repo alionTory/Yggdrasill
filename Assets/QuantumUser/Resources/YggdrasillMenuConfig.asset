@@ -22,7 +22,7 @@ MonoBehaviour:
   - sa
   - us
   _availableScenes:
-  - Name: "\uBA40\uD2F0\uD50C\uB808\uC774 \uD504\uB85C\uD1A0\uD0C0\uC785"
+  - Name: Multiplay Prototype
     ScenePath: Assets/Scenes/MultiplayPrototype.unity
     Preview: {fileID: 0}
     RuntimeConfig:

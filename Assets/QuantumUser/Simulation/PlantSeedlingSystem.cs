@@ -7,7 +7,6 @@ namespace Quantum
         public override void Update(Frame frame)
         {
             var tileClickedCommand = frame.GetPlayerCommand<TileClickedCommand>(0);
-            Log.Info("PlantSeedlingSystem" + tileClickedCommand);
             if (tileClickedCommand != null)
             {
                 var seedlingPrefab =

@@ -20,8 +20,6 @@ public class TilemapView : MonoBehaviour, IPointerClickHandler
         if (eventData.button != PointerEventData.InputButton.Left) // 좌클릭 시에만 실행
             return;
         
-        Debug.Log("클릭 감지됨.");
-
         Vector3 clickPos = eventData.pointerCurrentRaycast.worldPosition;
         Vector3Int cellPos = _tilemap.WorldToCell(clickPos);
         Vector3 cellCenterWorldPos =  _tilemap.GetCellCenterWorld(cellPos);
@@ -31,6 +29,5 @@ public class TilemapView : MonoBehaviour, IPointerClickHandler
             worldPosition = new FPVector2(FP.FromRoundedFloat_UNSAFE(cellCenterWorldPos.x), FP.FromRoundedFloat_UNSAFE(cellCenterWorldPos.y))
         };
         QuantumRunner.Default.Game.SendCommand(command);
-        Debug.Log("커맨드 보냄.");
     }
 }
