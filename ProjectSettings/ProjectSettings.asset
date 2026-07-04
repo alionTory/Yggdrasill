@@ -585,24 +585,24 @@ PlayerSettings:
   webWasm2023: 0
   webEnableSubmoduleStrippingCompatibility: 0
   scriptingDefineSymbols:
-    Android: QUANTUM_XY
-    EmbeddedLinux: QUANTUM_XY
-    GameCoreScarlett: QUANTUM_XY
-    GameCoreXboxOne: QUANTUM_XY
-    Kepler: QUANTUM_XY
-    LinuxHeadlessSimulation: QUANTUM_XY
-    Nintendo Switch: QUANTUM_XY
-    Nintendo Switch 2: QUANTUM_XY
-    PS4: QUANTUM_XY
-    PS5: QUANTUM_XY
-    QNX: QUANTUM_XY
-    Standalone: QUANTUM_XY
-    VisionOS: QUANTUM_XY
-    WebGL: QUANTUM_XY
-    Windows Store Apps: QUANTUM_XY
-    XboxOne: QUANTUM_XY
-    iPhone: QUANTUM_XY
-    tvOS: QUANTUM_XY
+    Android: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    EmbeddedLinux: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    GameCoreScarlett: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    GameCoreXboxOne: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    Kepler: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    LinuxHeadlessSimulation: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    Nintendo Switch: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    Nintendo Switch 2: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    PS4: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    PS5: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    QNX: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    Standalone: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    VisionOS: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    WebGL: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    Windows Store Apps: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    XboxOne: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    iPhone: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    tvOS: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:

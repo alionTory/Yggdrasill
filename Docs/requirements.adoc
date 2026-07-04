@@ -7,4 +7,7 @@
 * {game-name}은 Windows와 MaxOS 플랫폼을 지원한다.
 
 == System Requirements
-* 게임 실행 시 화면에 "Hello World"라는 문자열이 출력된다.
+
+=== 게임 플레이
+- 게임의 맵은 정사각형 격자 구조이다.
+- 플레이어가 격자 칸을 클릭하면, 해당 칸에 묘목이 생성된다.
