@@ -6,14 +6,17 @@ namespace Quantum
     {
         public override void Update(Frame frame)
         {
-            var tileClickedCommand = frame.GetPlayerCommand<TileClickedCommand>(0);
-            if (tileClickedCommand != null)
+            for(int playerIndex = 0; playerIndex<frame.MaxPlayerCount; playerIndex++)
             {
-                var seedlingPrefab =
-                    frame.FindAsset<EntityPrototype>("QuantumUser/Resources/Prefabs/SeedlingEntityPrototype");
-                EntityRef seedling = frame.Create(seedlingPrefab);
-                Transform2D* transform = frame.Unsafe.GetPointer<Transform2D>(seedling);
-                transform->Position = tileClickedCommand.worldPosition;
+                var tileClickedCommand = frame.GetPlayerCommand<TileClickedCommand>(playerIndex);
+                if (tileClickedCommand != null)
+                {
+                    var seedlingPrefab =
+                        frame.FindAsset<EntityPrototype>("QuantumUser/Resources/Prefabs/SeedlingEntityPrototype");
+                    EntityRef seedling = frame.Create(seedlingPrefab);
+                    Transform2D* transform = frame.Unsafe.GetPointer<Transform2D>(seedling);
+                    transform->Position = tileClickedCommand.worldPosition;
+                }
             }
         }
     }
