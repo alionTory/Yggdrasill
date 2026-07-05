@@ -15,6 +15,12 @@ public class TilemapView : MonoBehaviour, IPointerClickHandler
         _tilemap = GetComponent<Tilemap>();
     }
 
+    /// <summary>
+    /// 플레이어가 타일맵의 타일을 클릭하면, 클릭한 타일의 중앙 월드 좌표에 대해 SpawnSeedlingCommand를 생성하고, QuantumRunner.Default.Game.SendCommand()을 통해 서버에 전송함.
+    /// </summary>
+    /// <remarks>
+    /// (마우스 클릭일 경우) 왼쪽 클릭 이벤트 시에만 실행됨. 중앙, 오른쪽 클릭은 무시함.
+    /// </remarks>
     public void OnPointerClick(PointerEventData eventData)
     {
         if (eventData.button != PointerEventData.InputButton.Left) // 좌클릭 시에만 실행
@@ -24,10 +30,7 @@ public class TilemapView : MonoBehaviour, IPointerClickHandler
         Vector3Int cellPos = _tilemap.WorldToCell(clickPos);
         Vector3 cellCenterWorldPos =  _tilemap.GetCellCenterWorld(cellPos);
         
-        TileClickedCommand command = new TileClickedCommand
-        {
-            worldPosition = new FPVector2(FP.FromRoundedFloat_UNSAFE(cellCenterWorldPos.x), FP.FromRoundedFloat_UNSAFE(cellCenterWorldPos.y))
-        };
+        var command = SpawnSeedlingCommand.CreateFromView(cellCenterWorldPos.x, cellCenterWorldPos.y);
         QuantumRunner.Default.Game.SendCommand(command);
     }
 }
