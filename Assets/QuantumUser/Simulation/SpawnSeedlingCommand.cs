@@ -15,7 +15,7 @@ namespace Quantum
         /// 새 <see cref="SpawnSeedlingCommand"/> 인스턴스 생성.
         /// </summary>
         /// <param name="x">묘목을 생성할 위치의 월드 좌표 x. WorldPosition.X에 반영됨.</param>
-        /// <param name="y">묘목을 생성할 위치의 월드 좌표 y. WorldPosition.X에 반영됨.</param>
+        /// <param name="y">묘목을 생성할 위치의 월드 좌표 y. WorldPosition.Y에 반영됨.</param>
         /// <remarks>이 생성자는 비결정론적이므로, 시뮬레이션 코드에서 실행되어서는 안 됨.</remarks>
         public static SpawnSeedlingCommand CreateFromView(float x, float y)
         {

@@ -1,18 +1,17 @@
-﻿using System;
-using Photon.Deterministic;
-using Quantum;
+﻿using Quantum;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
 
 [RequireComponent(typeof(TilemapCollider2D))]
+[RequireComponent(typeof(Tilemap))]
 public class TilemapView : MonoBehaviour, IPointerClickHandler
 {
-    [SerializeField] private Tilemap _tilemap;
+    [SerializeField] private Tilemap tilemap = null!;
 
-    private void Reset()
+    private void OnValidate()
     {
-        _tilemap = GetComponent<Tilemap>();
+        tilemap = GetComponent<Tilemap>();
     }
 
     /// <summary>
@@ -27,8 +26,8 @@ public class TilemapView : MonoBehaviour, IPointerClickHandler
             return;
         
         Vector3 clickPos = eventData.pointerCurrentRaycast.worldPosition;
-        Vector3Int cellPos = _tilemap.WorldToCell(clickPos);
-        Vector3 cellCenterWorldPos =  _tilemap.GetCellCenterWorld(cellPos);
+        Vector3Int cellPos = tilemap.WorldToCell(clickPos);
+        Vector3 cellCenterWorldPos =  tilemap.GetCellCenterWorld(cellPos);
         
         var command = SpawnSeedlingCommand.CreateFromView(cellCenterWorldPos.x, cellCenterWorldPos.y);
         QuantumRunner.Default.Game.SendCommand(command);
