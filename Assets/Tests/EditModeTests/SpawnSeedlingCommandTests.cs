@@ -1,3 +1,4 @@
+using System.Drawing;
 using NUnit.Framework;
 using Photon.Deterministic;
 using Quantum;

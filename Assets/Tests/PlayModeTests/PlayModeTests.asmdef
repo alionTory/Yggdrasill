@@ -16,7 +16,9 @@
     "precompiledReferences": [
         "nunit.framework.dll",
         "Quantum.Deterministic.dll",
-        "Quantum.Engine.dll"
+        "Quantum.Engine.dll",
+        "NSubstitute.dll",
+        "Castle.Core.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [
