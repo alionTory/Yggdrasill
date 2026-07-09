@@ -6,6 +6,8 @@
         "UnityEditor.TestRunner",
         "GameLogic",
         "Quantum.Simulation",
+        "Quantum.Unity",
+        "Quantum.Menu",
         "UnityEngine.UI"
     ],
     "includePlatforms": [
