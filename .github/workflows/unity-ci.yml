@@ -49,5 +49,8 @@ jobs:
       - name: Build
         uses: ./.github/actions/build
         with:
+          unityLicense: ${{ secrets.UNITY_LICENSE }}
+          unityEmail: ${{ secrets.UNITY_EMAIL }}
+          unityPassword: ${{ secrets.UNITY_PASSWORD }}
           targetPlatform: ${{ matrix.targetPlatform }}
           buildProfile: ${{ matrix.buildProfile }}
