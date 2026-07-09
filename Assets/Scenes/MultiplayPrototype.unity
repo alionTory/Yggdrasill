@@ -1797,8 +1797,8 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4180ec5f4eb94cd9a8ac71bcedceb252, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TilemapView
-  _tilemap: {fileID: 1161862292}
+  m_EditorClassIdentifier: GameView::TilemapView
+  tilemap: {fileID: 1161862292}
 --- !u!19719996 &1161862294
 TilemapCollider2D:
   m_ObjectHideFlags: 0
