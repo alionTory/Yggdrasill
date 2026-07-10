@@ -1,0 +1,6 @@
+# docfx가 생성하는 산출물 (docfx.json + index.md/toc.yml 에서 재생성 가능)
+_site/
+api/*.yml
+api/.manifest
+obj/
+*.log
