@@ -1,0 +1,60 @@
+﻿name: Release
+on:
+  workflow_dispatch: 
+env:
+  ITCH_IO_USER: aliontory
+  ITCH_IO_GAME_ID: yggdrasill
+permissions:
+  contents: read
+  checks: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy: 
+      matrix:
+        include:
+          - targetPlatform: StandaloneWindows64
+            buildProfile: 'Assets/Settings/Build Profiles/Windows.asset'
+    outputs: 
+      buildVersion: ${{ steps.buildStep.outputs.buildVersion }}
+    steps:
+      - name: Checkout non-lfs files
+        uses: actions/checkout@v6
+      - name: Build
+        uses: ./.github/actions/build
+        id: buildStep
+        with:
+          unityLicense: ${{ secrets.UNITY_LICENSE }}
+          unityEmail: ${{ secrets.UNITY_EMAIL }}
+          unityPassword: ${{ secrets.UNITY_PASSWORD }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          buildProfile: ${{ matrix.buildProfile }}
+
+  staging-deploy-itch-io:
+    needs: build
+    environment: release  # 이 job을 main 브랜치에서만 실행 가능하도록 제한.
+    runs-on: ubuntu-latest
+    strategy: 
+      matrix:
+        include:
+          - targetPlatform: StandaloneWindows64
+            channel: windows
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        
+      - name: Download build artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: Build-${{ matrix.targetPlatform }}
+          path: build/${{ matrix.targetPlatform }}
+          
+      - name: Deploy to itch.io
+        uses: ./.github/actions/itch-io-upload
+        with:
+          api-key:    ${{ secrets.ITCH_IO_API_KEY }}
+          itch-user:  ${{ env.ITCH_IO_USER }}
+          itch-game:  ${{ env.ITCH_IO_GAME_ID }}
+          channel:    ${{ matrix.channel }}
+          build-path: build/${{ matrix.targetPlatform }}
+          version:    ${{ needs.build.outputs.buildVersion }}  # 플랫폼 별 버전 번호가 동일하다고 가정.

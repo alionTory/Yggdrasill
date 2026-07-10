@@ -107,7 +107,7 @@ PlayerSettings:
   xboxEnableFitness: 0
   visibleInBackground: 1
   allowFullscreenSwitch: 1
-  fullscreenMode: 1
+  fullscreenMode: 3
   xboxSpeechDB: 0
   xboxEnableHeadOrientation: 0
   xboxEnableGuest: 0
@@ -584,8 +584,27 @@ PlayerSettings:
   webGLCloseOnQuit: 0
   webWasm2023: 0
   webEnableSubmoduleStrippingCompatibility: 0
-  scriptingDefineSymbols: {}
-  additionalCompilerArguments: {}
+  scriptingDefineSymbols:
+    Android: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    EmbeddedLinux: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    GameCoreScarlett: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    GameCoreXboxOne: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    Kepler: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    LinuxHeadlessSimulation: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    Nintendo Switch: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    Nintendo Switch 2: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    PS4: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    PS5: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    QNX: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    Standalone: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    VisionOS: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    WebGL: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    Windows Store Apps: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    XboxOne: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    iPhone: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+    tvOS: QUANTUM_XY;QUANTUM_LOGLEVEL_INFO
+  additionalCompilerArguments:
+    Standalone: []
   platformArchitecture: {}
   scriptingBackend:
     Android: 1

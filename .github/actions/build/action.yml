@@ -1,0 +1,47 @@
+﻿name: build
+author: aliontory
+description: '유니티 게임 빌드'
+inputs: 
+  unityLicense:
+    description: 'https://game.ci/docs/github/activation 참고'
+    required: true
+  unityEmail:
+    description: 'https://game.ci/docs/github/activation 참고'
+    required: true
+  unityPassword:
+    description: 'https://game.ci/docs/github/activation 참고'
+    required: true
+  targetPlatform:
+    description: '빌드 대상 플랫폼의 이름. 허용되는 값 목록은 https://docs.unity3d.com/ScriptReference/BuildTarget.html 참고.'
+    required: true
+  buildProfile:
+    description: 'targetPlatform에 대응하는 유니티 Build Profile 에셋 경로'
+    required: true
+outputs:
+  buildVersion: 
+    value: ${{ steps.buildStep.outputs.buildVersion }}
+    description: 'game-ci 액션이 생성한 게임 빌드 버전. https://game.ci/docs/github/builder#versioning 참고'
+runs:
+  using: composite
+  steps:
+    - name: Setup Unity
+      uses: ./.github/actions/setup-unity
+    # build/targetPlatform 폴더 밑에 빌드 결과물이 생성됨
+    - name: Build
+      uses: game-ci/unity-builder@v4
+      id: buildStep
+      env:
+        UNITY_LICENSE: ${{ inputs.unityLicense }}
+        UNITY_EMAIL: ${{ inputs.unityEmail }}
+        UNITY_PASSWORD: ${{ inputs.unityPassword }}
+      with:
+        targetPlatform: ${{ inputs.targetPlatform }}
+        buildProfile: ${{ inputs.buildProfile }}
+        versioning: Semantic
+
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v7
+      with:
+        name: Build-${{ inputs.targetPlatform }}
+        path: build/${{ inputs.targetPlatform }}
+        retention-days: 7

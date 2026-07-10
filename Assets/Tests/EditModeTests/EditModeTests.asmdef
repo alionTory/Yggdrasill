@@ -4,7 +4,11 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "GameLogic"
+        "GameLogic",
+        "Quantum.Simulation",
+        "Quantum.Unity",
+        "Quantum.Menu",
+        "UnityEngine.UI"
     ],
     "includePlatforms": [
         "Editor"
@@ -13,7 +17,11 @@
     "allowUnsafeCode": false,
     "overrideReferences": true,
     "precompiledReferences": [
-        "nunit.framework.dll"
+        "nunit.framework.dll",
+        "Quantum.Deterministic.dll",
+        "Quantum.Engine.dll",
+        "NSubstitute.dll",
+        "Castle.Core.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [
