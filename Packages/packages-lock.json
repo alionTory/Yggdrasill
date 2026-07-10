@@ -1,5 +1,15 @@
 {
   "dependencies": {
+    "com.eflatun.scenereference": {
+      "version": "5.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "3.0.2",
+        "com.unity.settings-manager": "2.0.1"
+      },
+      "url": "https://package.openupm.com"
+    },
     "com.github-glitchenzo.nugetforunity": {
       "version": "https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity",
       "depth": 0,
@@ -190,6 +200,13 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.unity.nuget.newtonsoft-json": {
+      "version": "3.2.2",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "com.unity.render-pipelines.core": {
       "version": "17.4.0",
       "depth": 1,
@@ -224,6 +241,13 @@
     "com.unity.searcher": {
       "version": "4.9.4",
       "depth": 2,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.settings-manager": {
+      "version": "2.1.1",
+      "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
