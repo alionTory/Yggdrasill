@@ -1,4 +1,7 @@
-﻿namespace Editor
+﻿using Quantum;
+using QuantumUser.View;
+
+namespace Editor
 {
     // Assets/Scripts/Editor/SceneCodeGenerator.cs
     using System.IO;
@@ -10,19 +13,38 @@
 
     public static class SceneListManager
     {
-        // 생성물은 Runtime asmdef 폴더에 둬서 게임/테스트 코드가 모두 참조 가능
-        private const string OutputPath = "Assets/QuantumUser/View/SceneList.g.cs";
+        private const string SceneListCodeOutputPath = "Assets/QuantumUser/View/SceneList.g.cs";
+        private const string QuantumMenuSceneAssetOutputDir = "Assets/QuantumUser/Resources/Maps/";
 
+        /// <summary>
+        /// <see cref="SceneListConfigSchema"/> 에셋의 데이터를 기반으로 다음을 수행한다.
+        /// 1. SceneList 클래스 코드 생성
+        /// 2. QuantumMenuSceneInfo 에셋 생성
+        /// </summary>
+        /// <remarks>
+        /// SceneList 클래스는 정적 상수를 통해, 씬의 존재를 컴파일 타임에 보장해 주는 용도이다.
+        /// <see cref="SceneListConfigSchema"/>는 프로젝트 내에 정확히 하나 존재해야 한다. 그렇지 않으면, 이 메서드는 에러 로그를 출력한 뒤 아무 작업도 수행하지 않는다.
+        /// </remarks>
+        [MenuItem("Tools/Scenes/Generate Scene List")]
         public static void Generate()
         {
             var list = FindList();
             if (list == null)
                 return;
 
+            if (!list.Validate())
+                return;
+
             WriteFile(list);
-            Debug.Log($"Scenes.g.cs 생성 완료 ({list.scenes.Length} scenes).");
+            GenerateQuantumMenuSceneInfos(list);
         }
 
+        /// <summary>
+        /// 에셋 데이터베이스의 유일한 <see cref="SceneListConfigSchema"/> 에셋을 찾아 반환한다.
+        /// </summary>
+        /// <remarks>
+        /// 에셋 데이터베이스 내에 <see cref="SceneListConfigSchema"/> 에셋이 존재하지 않거나, 2개 이상인 경우, 에러 로그를 출력하고 null을 반환한다.
+        /// </remarks>
         private static SceneListConfigSchema? FindList()
         {
             var guids = AssetDatabase.FindAssets("t:SceneListConfigSchema");
@@ -38,6 +60,9 @@
             return result;
         }
 
+        /// <summary>
+        /// <see cref="list"/>에 대응하는 SceneList 클래스 코드를 작성한다.
+        /// </summary>
         private static void WriteFile(SceneListConfigSchema list)
         {
             var sb = new StringBuilder();
@@ -70,11 +95,18 @@
 
             sb.AppendLine("}");
 
-            Directory.CreateDirectory(Path.GetDirectoryName(OutputPath)!);
-            File.WriteAllText(OutputPath, sb.ToString());
+            Directory.CreateDirectory(Path.GetDirectoryName(SceneListCodeOutputPath)!);
+            File.WriteAllText(SceneListCodeOutputPath, sb.ToString());
+            
+            Debug.Log($"Scenes.g.cs 생성 완료 ({list.scenes.Length} scenes).");
         }
 
-        // 씬 이름이 유효한 C# 식별자가 아닐 수 있으므로 정규화 ("Main Menu" -> "Main_Menu")
+        /// <summary>
+        /// <see cref="name"/> 이 유효한 C# 식별자가 되도록 정규화된 결과를 반환한다.
+        /// </summary>
+        /// <remarks>
+        /// 예: "Main Menu" -> "Main_Menu"
+        /// </remarks>
         private static string Sanitize(string name)
         {
             // 영문자와 숫자를 제외한 모든 문자를 "_"로 교체
@@ -84,8 +116,57 @@
             return id;
         }
 
-        private static void GenerateQuantumMenuSceneInfo()
+        /// <summary>
+        /// <see cref="list"/> 내 <see cref="SceneInfo.hasRuntimeConfig"/>가 true인 씬에 대해 <see cref="QuantumMenuSceneInfo"/> 에셋을 생성/갱신한다.
+        /// </summary>
+        private static void GenerateQuantumMenuSceneInfos(SceneListConfigSchema list)
         {
+            AssetDatabase.StartAssetEditing();
+            try
+            {
+                foreach (var sceneInfo in list.scenes.Where(sceneInfo => sceneInfo.hasRuntimeConfig))
+                {
+                    GenerateQuantumMenuSceneInfo(sceneInfo);
+                }
+            }
+            finally
+            {
+                AssetDatabase.StopAssetEditing();
+            }
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            Debug.Log($"QuantumMenuSceneInfo 에셋 생성/갱신 완료");
+        }
+
+        /// <summary>
+        /// <see cref="QuantumMenuSceneAssetOutputDir"/>에 <see cref="sceneInfo"/>에 대응하는 <see cref="QuantumMenuSceneInfo"/> 에셋을 생성한다.
+        /// 에셋이 이미 존재하는 경우, 기존 에셋을 갱신한다.
+        /// </summary>
+        /// <param name="sceneInfo"></param>
+        private static void GenerateQuantumMenuSceneInfo(SceneInfo sceneInfo)
+        {
+            string assetPath = QuantumMenuSceneAssetOutputDir + sceneInfo.scene.Name + "_QuantumMenuSceneInfo.asset";
+            var oldAsset = AssetDatabase.LoadAssetAtPath<QuantumMenuSceneInfo>(assetPath);
+            
+            QuantumMenuSceneInfo quantumMenuSceneAsset;
+            if (oldAsset == null)
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(assetPath)!);
+                quantumMenuSceneAsset = ScriptableObject.CreateInstance<QuantumMenuSceneInfo>();
+            }
+            else
+            {
+                quantumMenuSceneAsset = oldAsset;
+            }
+
+            sceneInfo.SyncQuantumMenuSceneInfo(quantumMenuSceneAsset);
+
+            if (oldAsset == null)
+                AssetDatabase.CreateAsset(quantumMenuSceneAsset, assetPath);
+            else
+                EditorUtility.SetDirty(quantumMenuSceneAsset);
         }
     }
 }

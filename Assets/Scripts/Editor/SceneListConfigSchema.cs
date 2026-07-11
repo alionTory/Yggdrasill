@@ -3,10 +3,16 @@ using UnityEngine;
 
 namespace Editor 
 {
+    /// <summary>
+    /// 프로젝트에서 사용할 씬 정보를 한 곳에 저장하기 위한 에셋.
+    /// </summary>
+    /// <remarks>
+    /// 이 에셋은 프로젝트 내에 정확히 하나 존재해야 한다.
+    /// </remarks>
     [CreateAssetMenu(fileName = "SceneList", menuName = "Scriptable Objects/SceneList")]
     public class SceneListConfigSchema : ScriptableObject
     {
-        public SceneInfo[] scenes;
+        public SceneInfo[] scenes = { }; 
 
         public bool Validate()
         {
@@ -34,10 +40,7 @@ namespace Editor
 
         private void OnValidate()
         {
-            if (Validate())
-            {
-                SceneListManager.Generate();
-            }
+            Validate();
         }
     }
 }
