@@ -1,9 +1,4 @@
-﻿using Eflatun.SceneReference;
-using JetBrains.Annotations;
-using Quantum;
-using QuantumUser.View;
-
-namespace Editor
+﻿namespace Editor
 {
     // Assets/Scripts/Editor/SceneCodeGenerator.cs
     using System.IO;
@@ -51,31 +46,20 @@ namespace Editor
             sb.AppendLine("using Eflatun.SceneReference;");
             sb.AppendLine("using Quantum;");
             sb.AppendLine("using QuantumUser.View;");
-            
+            sb.AppendLine("using UnityEngine;");
+
             sb.AppendLine("public static class SceneList");
             sb.AppendLine("{");
-            
+
             foreach (var sceneInfo in list.scenes)
             {
                 var id = Sanitize(sceneInfo.scene.Name);
-                sb.Append(
+                var json = JsonUtility.ToJson(sceneInfo);
+                json = json.Replace("\"", "\"\"");
+                sb.AppendLine(
                     $"    public static readonly SceneInfo {id} = " +
-                     "new SceneInfo {\n" +
-                    $"        scene = new SceneReference(\"{sceneInfo.scene.Guid}\"),\n" +
-                    $"        hasRuntimeConfig = {sceneInfo.hasRuntimeConfig.ToString().ToLower()},\n"
+                    $"JsonUtility.FromJson<SceneInfo>(@\"{json}\");"
                 );
-                if (sceneInfo.hasRuntimeConfig && sceneInfo.runtimeConfig != null)
-                {
-                    sb.Append(
-                         "        runtimeConfig = new RuntimeConfig {\n" +
-                        $"            Map = new AssetGuid({sceneInfo.runtimeConfig.Map.Id.Value}),\n" +
-                        $"            SimulationConfig = new AssetGuid({sceneInfo.runtimeConfig.SimulationConfig.Id.Value}),\n" +
-                        $"            SystemsConfig = new AssetGuid({sceneInfo.runtimeConfig.SystemsConfig.Id.Value})\n" +
-                         "        },\n"
-                    );
-                }
-
-                sb.Append("    };\n");
             }
 
 
@@ -98,6 +82,10 @@ namespace Editor
 
             if (id.Length == 0 || char.IsDigit(id[0])) id = "_" + id;
             return id;
+        }
+
+        private static void GenerateQuantumMenuSceneInfo()
+        {
         }
     }
 }

@@ -2,21 +2,11 @@
 using Eflatun.SceneReference;
 using Quantum;
 using QuantumUser.View;
+using UnityEngine;
 public static class SceneList
 {
-    public static readonly SceneInfo MenuPrototype = new SceneInfo {
-        scene = new SceneReference("21e27de20aca94240b1bcad8cc23e615"),
-        hasRuntimeConfig = false,
-    };
-    public static readonly SceneInfo MultiplayPrototype = new SceneInfo {
-        scene = new SceneReference("11cad2fe964a0424a84a5c9c3bfdb9e9"),
-        hasRuntimeConfig = true,
-        runtimeConfig = new RuntimeConfig {
-            Map = new AssetGuid(363481078872077106),
-            SimulationConfig = new AssetGuid(163983649200099817),
-            SystemsConfig = new AssetGuid(378553162747903325)
-        },
-    };
+    public static readonly SceneInfo MenuPrototype = JsonUtility.FromJson<SceneInfo>(@"{""scene"":{""asset"":{""instanceID"":87504},""guid"":""21e27de20aca94240b1bcad8cc23e615""},""hasRuntimeConfig"":false,""runtimeConfig"":{""Seed"":0,""Map"":{""Id"":{""Value"":0}},""SimulationConfig"":{""Id"":{""Value"":0}},""SystemsConfig"":{""Id"":{""Value"":0}}}}");
+    public static readonly SceneInfo MultiplayPrototype = JsonUtility.FromJson<SceneInfo>(@"{""scene"":{""asset"":{""instanceID"":84572},""guid"":""11cad2fe964a0424a84a5c9c3bfdb9e9""},""hasRuntimeConfig"":true,""runtimeConfig"":{""Seed"":0,""Map"":{""Id"":{""Value"":363481078872077106}},""SimulationConfig"":{""Id"":{""Value"":163983649200099817}},""SystemsConfig"":{""Id"":{""Value"":378553162747903325}}}}");
 
     public static readonly SceneInfo[] All = { MenuPrototype, MultiplayPrototype };
 }
