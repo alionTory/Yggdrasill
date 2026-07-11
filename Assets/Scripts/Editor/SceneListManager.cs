@@ -17,9 +17,10 @@ namespace Editor
         private const string QuantumMenuSceneAssetOutputDir = "Assets/QuantumUser/Resources/Maps/";
 
         /// <summary>
-        /// <see cref="SceneListConfigSchema"/> 에셋의 데이터를 기반으로 다음을 수행한다.
-        /// 1. SceneList 클래스 코드 생성
-        /// 2. QuantumMenuSceneInfo 에셋 생성
+        /// <see cref="SceneListConfigSchema"/> 에셋의 데이터를 기반으로 다음을 수행한다. <br/>
+        /// 1. SceneList 클래스 코드 생성 <br/>
+        /// 2. QuantumMenuSceneInfo 에셋 생성 <br/>
+        /// 3. 에디터 build profiles의 씬 목록 작성
         /// </summary>
         /// <remarks>
         /// SceneList 클래스는 정적 상수를 통해, 씬의 존재를 컴파일 타임에 보장해 주는 용도이다.
@@ -37,6 +38,7 @@ namespace Editor
 
             WriteFile(list);
             GenerateQuantumMenuSceneInfos(list);
+            SetBuildProfilesSceneList(list);
         }
 
         /// <summary>
@@ -168,5 +170,17 @@ namespace Editor
             else
                 EditorUtility.SetDirty(quantumMenuSceneAsset);
         }
+        
+        /// <summary>
+        /// 에디터 build profiles의 씬 목록을 <see cref="list"/>에 맞게 갱신한다.
+        /// </summary>
+        private static void SetBuildProfilesSceneList(SceneListConfigSchema list)
+        {
+            EditorBuildSettings.scenes = list.scenes.Select(sceneInfo => new EditorBuildSettingsScene(sceneInfo.scene.Path, true)).ToArray();
+            Debug.Log("Build Profiles 씬 설정 완료.");
+        }
+
     }
+    
+    
 }
