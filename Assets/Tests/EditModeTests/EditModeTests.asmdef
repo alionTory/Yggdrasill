@@ -8,7 +8,8 @@
         "Quantum.Simulation",
         "Quantum.Unity",
         "Quantum.Menu",
-        "UnityEngine.UI"
+        "UnityEngine.UI",
+        "Photon.Realtime"
     ],
     "includePlatforms": [
         "Editor"
