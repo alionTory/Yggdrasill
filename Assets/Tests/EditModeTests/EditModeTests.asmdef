@@ -4,12 +4,12 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "GameLogic",
         "Quantum.Simulation",
         "Quantum.Unity",
         "Quantum.Menu",
         "UnityEngine.UI",
-        "Photon.Realtime"
+        "Photon.Realtime",
+        "GameView"
     ],
     "includePlatforms": [
         "Editor"
