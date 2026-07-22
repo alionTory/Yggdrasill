@@ -1,0 +1,56 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "src": "../../Assets",
+          "files": [
+            "Photon/**/*.cs",
+            "QuantumUser/**/*.cs"
+          ]
+        }
+      ],
+      "dest": "api",
+      "outputFormat": "mref",
+      "includePrivateMembers": false,
+      "disableGitFeatures": false,
+      "disableDefaultFilter": false,
+      "noRestore": true,
+      "namespaceLayout": "nested",
+      "memberLayout": "samePage",
+      "allowCompilationErrors": true
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [
+          "api/**.yml",
+          "api/index.md"
+        ]
+      },
+      {
+        "files": [
+          "*.md",
+          "toc.yml"
+        ]
+      }
+    ],
+    "resource": [],
+    "output": "_site",
+    "template": [
+      "default",
+      "modern"
+    ],
+    "globalMetadata": {
+      "_appName": "Yggdrasill",
+      "_appTitle": "Yggdrasill API 문서",
+      "_appFooter": "Yggdrasill — Photon / Quantum API 문서",
+      "_enableSearch": true,
+      "_disableContribution": true
+    },
+    "sitemap": {
+      "baseUrl": ""
+    }
+  }
+}

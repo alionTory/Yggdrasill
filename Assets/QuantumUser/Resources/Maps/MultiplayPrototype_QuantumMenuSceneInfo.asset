@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5ef11b24dd8b636479cc530200469ee2, type: 3}
-  m_Name: MultiplayPrototypeSceneInfo
+  m_Name: MultiplayPrototype_QuantumMenuSceneInfo
   m_EditorClassIdentifier: Quantum.Unity::Quantum.QuantumMenuSceneInfo
-  Name: 
-  ScenePath: 
+  Name: MultiplayPrototype
+  ScenePath: Assets/Scenes/MultiplayPrototype.unity
   Preview: {fileID: 0}
   IsHidden: 0
   RuntimeConfig:
     Seed: 0
     Map:
       Id:
-        Value: 0
+        Value: 363481078872077106
     SimulationConfig:
       Id:
-        Value: 0
+        Value: 163983649200099817
     SystemsConfig:
       Id:
-        Value: 0
+        Value: 378553162747903325
