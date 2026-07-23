@@ -18,11 +18,12 @@
         "Quantum.Deterministic.dll",
         "Quantum.Engine.dll",
         "NSubstitute.dll",
-        "Castle.Core.dll"
+        "Castle.Core.dll",
+        "StreamJsonRpc.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [
-        "E2E_TEST_ONLY"
+        "DEBUG"
     ],
     "versionDefines": [],
     "noEngineReferences": false
