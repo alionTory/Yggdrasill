@@ -40,7 +40,7 @@ namespace QuantumUser.View
         }
     }
 
-    static class ValidateExtensions
+    public static class ValidateExtensions
     {
         /// <summary>
         /// 검증을 수행하고, 검증에 실패하면 에러 로그를 출력한다.
