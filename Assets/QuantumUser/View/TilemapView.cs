@@ -1,17 +1,31 @@
-﻿using Quantum;
+﻿using System.Collections.Generic;
+using Quantum;
+using QuantumUser.View;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
 
 [RequireComponent(typeof(TilemapCollider2D))]
 [RequireComponent(typeof(Tilemap))]
-public class TilemapView : MonoBehaviour, IPointerClickHandler
+public class TilemapView : MonoBehaviour, IPointerClickHandler, IValidatable
 {
     [SerializeField] private Tilemap tilemap = null!;
+
+    public List<string> Validate()
+    {
+        var result = new List<string>();
+        if (tilemap == null)
+            result.Add($"{nameof(tilemap)}이 null임.");
+        return result;
+    }
 
     private void OnValidate()
     {
         tilemap = GetComponent<Tilemap>();
+        foreach (var errorMessage in Validate())
+        {
+            Debug.LogError(errorMessage, this);
+        }
     }
 
     /// <summary>
@@ -24,11 +38,11 @@ public class TilemapView : MonoBehaviour, IPointerClickHandler
     {
         if (eventData.button != PointerEventData.InputButton.Left) // 좌클릭 시에만 실행
             return;
-        
+
         Vector3 clickPos = eventData.pointerCurrentRaycast.worldPosition;
         Vector3Int cellPos = tilemap.WorldToCell(clickPos);
-        Vector3 cellCenterWorldPos =  tilemap.GetCellCenterWorld(cellPos);
-        
+        Vector3 cellCenterWorldPos = tilemap.GetCellCenterWorld(cellPos);
+
         var command = SpawnSeedlingCommand.CreateFromView(cellCenterWorldPos.x, cellCenterWorldPos.y);
         QuantumRunner.Default.Game.SendCommand(command);
     }
