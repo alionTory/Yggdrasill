@@ -15,7 +15,7 @@ public class TilemapView : MonoBehaviour, IPointerClickHandler, IValidatable
     {
         var result = new List<string>();
         if (tilemap == null)
-            result.Add($"{nameof(tilemap)}이 null임.");
+            result.Add($"{nameof(tilemap)} is null.");
         return result;
     }
 
