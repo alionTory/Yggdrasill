@@ -4,11 +4,11 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "GameLogic",
         "Unity.TextMeshPro",
         "Quantum.Unity",
         "Quantum.Simulation",
-        "GameView"
+        "GameView",
+        "Unity.InputSystem"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -23,9 +23,7 @@
         "StreamJsonRpc.dll"
     ],
     "autoReferenced": false,
-    "defineConstraints": [
-        "DEBUG"
-    ],
+    "defineConstraints": [],
     "versionDefines": [],
     "noEngineReferences": false
 }
