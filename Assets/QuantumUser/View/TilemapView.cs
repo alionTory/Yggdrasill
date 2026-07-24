@@ -14,8 +14,7 @@ public class TilemapView : MonoBehaviour, IPointerClickHandler, IValidatable
     public List<string> Validate()
     {
         var result = new List<string>();
-        if (tilemap == null)
-            result.Add($"{nameof(tilemap)} is null.");
+        IValidatable.CheckNotNull(tilemap, result);
         return result;
     }
 

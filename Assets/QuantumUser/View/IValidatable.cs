@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace QuantumUser.View
 {
@@ -7,7 +8,6 @@ namespace QuantumUser.View
     /// </summary>
     public interface IValidatable
     {
-        
         /// <summary>
         /// 검증을 수행하고, 에러 메시지 리스트를 반환한다.
         /// </summary>
@@ -25,6 +25,16 @@ namespace QuantumUser.View
         public bool IsValid()
         {
             return Validate().Count == 0;
+        }
+
+        /// <summary>
+        /// <see cref="value"/>가 null이면 <see cref="errorMessages"/>에 에러 메시지 문자열을 추가한다.
+        /// </summary>
+        public static void CheckNotNull<T>(T? value, List<string> errorMessages,
+            [CallerArgumentExpression(nameof(value))] string? valueName = null) where T : class
+        {
+            if(value == null)
+                errorMessages.Add($"{valueName} is null.");
         }
     }
 }
