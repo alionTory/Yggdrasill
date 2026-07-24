@@ -78,8 +78,8 @@ public class TestHookServer : MonoBehaviour
     [MemberNotNull(nameof(_listener))]
     private async Task TcpConnect()
     {
-        Contract.RequireNotNull(_port, nameof(_port) + " must not be null.");
-        Contract.RequireNotNull(_cts, nameof(_cts) + " must not be null.");
+        Contract.RequireNotNull(_port);
+        Contract.RequireNotNull(_cts);
         _listener = new TcpListener(IPAddress.Loopback, _port.Value);
         _listener.Start();
         Debug.Log($"[HOOK] listening on 127.0.0.1:{_port}");
@@ -102,8 +102,8 @@ public class TestHookServer : MonoBehaviour
     /// </summary>
     private async Task JsonRpcConnect()
     {
-        Contract.RequireNotNull(_client, nameof(_client) + " must not be null.");
-        Contract.RequireNotNull(_unityContext, nameof(_unityContext) + " must not be null.");
+        Contract.RequireNotNull(_client);
+        Contract.RequireNotNull(_unityContext);
         _jsonRpc = new JsonRpc(_client.GetStream())
         {
             SynchronizationContext = _unityContext,

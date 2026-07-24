@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 
 namespace QuantumUser.View
@@ -10,31 +11,31 @@ namespace QuantumUser.View
         public const bool PreconditionCheckEnabledDefault = true;
 
         [Conditional("DEBUG")]
-        public static void Require(bool condition, string explanation)
+        public static void Require(bool condition, string explanation, [CallerArgumentExpression(nameof(condition))] string? expression = null)
         {
             if (!condition)
-                throw new PreconditionException(explanation);
+                throw new PreconditionException($"[{expression}] {explanation}");
         }
 
         [Conditional("DEBUG")]
-        public static void RequireNotNull<T>([NotNull] T? value, string explanation) where T : class
+        public static void RequireNotNull<T>([NotNull] T? value, [CallerArgumentExpression(nameof(value))] string? valueName = null) where T : class
         {
             if (value is null)
-                throw new PreconditionException(explanation);
+                throw new PreconditionException($"{valueName} must not be null");
         }
 
         [Conditional("DEBUG")]
-        public static void RequireNotNull<T>([NotNull] T? value, string explanation) where T : struct
+        public static void RequireNotNull<T>([NotNull] T? value, [CallerArgumentExpression(nameof(value))] string? valueName = null) where T : struct
         {
             if (!value.HasValue)
-                throw new PreconditionException(explanation);
+                throw new PreconditionException($"{valueName} must not be null");
         }
 
         [Conditional("DEBUG")]
-        public static void Ensure(bool condition, string explanation)
+        public static void Ensure(bool condition, string explanation, [CallerArgumentExpression(nameof(condition))] string? expression = null)
         {
             if (!condition)
-                throw new PostconditionException(explanation);
+                throw new PostconditionException($"[{expression}] {explanation}");
         }
     }
 
