@@ -21,10 +21,7 @@ public class TilemapView : MonoBehaviour, IPointerClickHandler, IValidatable
     private void OnValidate()
     {
         tilemap = GetComponent<Tilemap>();
-        foreach (var errorMessage in Validate())
-        {
-            Debug.LogError(errorMessage, this);
-        }
+        this.LogError();
     }
 
     /// <summary>

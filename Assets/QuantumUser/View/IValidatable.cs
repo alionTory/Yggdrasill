@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using UnityEngine;
 
 namespace QuantumUser.View
 {
@@ -31,10 +32,28 @@ namespace QuantumUser.View
         /// <see cref="value"/>가 null이면 <see cref="errorMessages"/>에 에러 메시지 문자열을 추가한다.
         /// </summary>
         public static void CheckNotNull<T>(T? value, List<string> errorMessages,
-            [CallerArgumentExpression(nameof(value))] string? valueName = null) where T : class
+            [CallerArgumentExpression(nameof(value))]
+            string? valueName = null) where T : class
         {
-            if(value == null)
+            if (value == null)
                 errorMessages.Add($"{valueName} is null.");
+        }
+    }
+
+    static class ValidateExtensions
+    {
+        /// <summary>
+        /// 검증을 수행하고, 검증에 실패하면 에러 로그를 출력한다.
+        /// </summary>
+        /// <remarks>
+        /// 내부적으로 <see cref="Validate"/>를 호출한다.
+        /// </remarks>
+        public static void LogError<T>(this T obj) where T : Object, IValidatable
+        {
+            foreach (var errorMessage in obj.Validate())
+            {
+                Debug.LogError(errorMessage, obj);
+            }
         }
     }
 }
