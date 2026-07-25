@@ -9,30 +9,31 @@ namespace QuantumUser.View
     public static class Contract
     {
         public const bool PreconditionCheckEnabledDefault = true;
+        
 
         [Conditional("DEBUG")]
-        public static void Require(bool condition, string explanation, [CallerArgumentExpression(nameof(condition))] string? expression = null)
+        public static void Require(bool condition, string explanation, [CallerArgumentExpression("condition")] string? expression = null)
         {
             if (!condition)
                 throw new PreconditionException($"[{expression}] {explanation}");
         }
 
         [Conditional("DEBUG")]
-        public static void RequireNotNull<T>([NotNull] T? value, [CallerArgumentExpression(nameof(value))] string? valueName = null) where T : class
+        public static void RequireNotNull<T>([NotNull] T? value, [CallerArgumentExpression("value")] string? valueName = null) where T : class
         {
             if (value is null)
                 throw new PreconditionException($"{valueName} must not be null");
         }
 
         [Conditional("DEBUG")]
-        public static void RequireNotNull<T>([NotNull] T? value, [CallerArgumentExpression(nameof(value))] string? valueName = null) where T : struct
+        public static void RequireNotNull<T>([NotNull] T? value, [CallerArgumentExpression("value")] string? valueName = null) where T : struct
         {
             if (!value.HasValue)
                 throw new PreconditionException($"{valueName} must not be null");
         }
 
         [Conditional("DEBUG")]
-        public static void Ensure(bool condition, string explanation, [CallerArgumentExpression(nameof(condition))] string? expression = null)
+        public static void Ensure(bool condition, string explanation, [CallerArgumentExpression("condition")] string? expression = null)
         {
             if (!condition)
                 throw new PostconditionException($"[{expression}] {explanation}");

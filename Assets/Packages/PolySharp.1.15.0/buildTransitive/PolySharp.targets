@@ -109,7 +109,6 @@
     <!-- Mark the MSBuild properties to configure the generator visible for the compiler, so the analyzer can see them -->
     <ItemGroup>
       <CompilerVisibleProperty Include="PolySharpUsePublicAccessibilityForGeneratedTypes"/>
-      <CompilerVisibleProperty Include="PolySharpUseEmbeddedAttributeForGeneratedTypes"/>
       <CompilerVisibleProperty Include="PolySharpIncludeRuntimeSupportedAttributes"/>
       <CompilerVisibleProperty Include="PolySharpUseInteropServices2NamespaceForUnmanagedCallersOnlyAttribute"/>
       <CompilerVisibleProperty Include="PolySharpExcludeGeneratedTypes"/>

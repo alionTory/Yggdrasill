@@ -32,7 +32,7 @@ namespace QuantumUser.View
         /// <see cref="value"/>가 null이면 <see cref="errorMessages"/>에 에러 메시지 문자열을 추가한다.
         /// </summary>
         public static void CheckNotNull<T>(T? value, List<string> errorMessages,
-            [CallerArgumentExpression(nameof(value))]
+            [CallerArgumentExpression("value")]
             string? valueName = null) where T : UnityEngine.Object
         {
             if (value == null)
