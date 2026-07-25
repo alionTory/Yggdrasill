@@ -33,7 +33,7 @@ namespace QuantumUser.View
         /// </summary>
         public static void CheckNotNull<T>(T? value, List<string> errorMessages,
             [CallerArgumentExpression(nameof(value))]
-            string? valueName = null) where T : class
+            string? valueName = null) where T : UnityEngine.Object
         {
             if (value == null)
                 errorMessages.Add($"{valueName} is null.");
