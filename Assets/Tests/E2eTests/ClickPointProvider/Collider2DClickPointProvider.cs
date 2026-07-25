@@ -9,9 +9,9 @@ namespace Tests.E2eTests.ClickPointProvider
     [RequireComponent(typeof(Collider2D))]
     public class Collider2DClickPointProvider : MonoBehaviour, IClickPointProvider, IValidatable
     {
-        [SerializeField] private Collider2D collider = null!;
-        [SerializeField] private Physics2DRaycaster raycaster = null!;
-        [SerializeField] private Camera worldCamera = null!;
+        [SerializeField, HideInInspector] private Collider2D collider = null!;
+        [SerializeField, HideInInspector] private Physics2DRaycaster raycaster = null!;
+        [SerializeField, HideInInspector] private Camera worldCamera = null!;
 
         public List<string> Validate()
         {
@@ -24,9 +24,13 @@ namespace Tests.E2eTests.ClickPointProvider
 
         private void OnValidate()
         {
-            collider = GetComponent<Collider2D>();
-            raycaster = FindAnyObjectByType<Physics2DRaycaster>();
-            worldCamera = raycaster.eventCamera;
+            if (collider == null) TryGetComponent(out collider);
+            if (raycaster == null)
+            {
+                raycaster = FindAnyObjectByType<Physics2DRaycaster>();
+                worldCamera = raycaster.eventCamera;
+            }
+
             this.LogError();
         }
 

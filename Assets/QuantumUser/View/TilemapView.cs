@@ -9,7 +9,7 @@ using UnityEngine.Tilemaps;
 [RequireComponent(typeof(Tilemap))]
 public class TilemapView : MonoBehaviour, IPointerClickHandler, IValidatable
 {
-    [SerializeField] private Tilemap tilemap = null!;
+    [SerializeField, HideInInspector] private Tilemap tilemap = null!;
 
     public List<string> Validate()
     {
@@ -20,7 +20,7 @@ public class TilemapView : MonoBehaviour, IPointerClickHandler, IValidatable
 
     private void OnValidate()
     {
-        tilemap = GetComponent<Tilemap>();
+        if(tilemap == null) TryGetComponent(out tilemap);
         this.LogError();
     }
 

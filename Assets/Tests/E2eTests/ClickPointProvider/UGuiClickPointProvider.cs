@@ -7,10 +7,10 @@ using UnityEngine.Serialization;
 namespace Tests.E2eTests.ClickPointProvider
 {
     [RequireComponent(typeof(RectTransform))]
-    public class UGuiClickPointProvider:MonoBehaviour, IClickPointProvider, IValidatable
+    public class UGuiClickPointProvider : MonoBehaviour, IClickPointProvider, IValidatable
     {
-        [SerializeField] private RectTransform rectTransform = null!;
-        [SerializeField] private Canvas canvas = null!;
+        [SerializeField, HideInInspector] private RectTransform rectTransform = null!;
+        [SerializeField, HideInInspector] private Canvas canvas = null!;
 
         public List<string> Validate()
         {
@@ -22,8 +22,8 @@ namespace Tests.E2eTests.ClickPointProvider
 
         private void OnValidate()
         {
-            rectTransform = GetComponent<RectTransform>();
-            canvas = GetComponentInParent<Canvas>();
+            if (rectTransform == null) TryGetComponent(out rectTransform);
+            if(canvas == null) TryGetComponent(out canvas);
             this.LogError();
         }
 
@@ -38,7 +38,7 @@ namespace Tests.E2eTests.ClickPointProvider
                 result = new Vector2(center.x, center.y);
             else
                 result = canvas.worldCamera.WorldToScreenPoint(center);
-            
+
             return result;
         }
     }
