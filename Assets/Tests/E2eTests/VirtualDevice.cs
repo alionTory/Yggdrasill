@@ -14,14 +14,14 @@ namespace Tests.E2eTests
             var m = Ensure();
 
             InputSystem.QueueStateEvent(m, new MouseState { position = screenPos });
-            Awaitable.NextFrameAsync(); // 이동 반영
+            await Awaitable.NextFrameAsync(); // 이동 반영
 
             InputSystem.QueueStateEvent(m, new MouseState { position = screenPos }
                 .WithButton(MouseButton.Left));
-            Awaitable.NextFrameAsync(); // press 처리 (UI 모듈이 한 프레임 필요)
+            await Awaitable.NextFrameAsync(); // press 처리 (UI 모듈이 한 프레임 필요)
 
             InputSystem.QueueStateEvent(m, new MouseState { position = screenPos });
-            Awaitable.NextFrameAsync(); // release → click 성립
+            await Awaitable.NextFrameAsync(); // release → click 성립
         }
     }
 }
