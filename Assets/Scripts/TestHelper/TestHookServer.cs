@@ -10,6 +10,7 @@ using QuantumUser.View;
 using StreamJsonRpc;
 using Tests.E2eTests;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Debug = UnityEngine.Debug;
 
 public class TestHookServer : MonoBehaviour
@@ -59,6 +60,10 @@ public class TestHookServer : MonoBehaviour
         _port = ParsePortArg();
         if (_port.HasValue)
         {
+            // 창이 포커스된 상태가 아니여도 클릭 이벤트가 가능하도록 하기 위해 필요.
+            Application.runInBackground = true;
+            InputSystem.settings.backgroundBehavior = InputSettings.BackgroundBehavior.IgnoreFocus;
+            
             await TcpConnect();
             if(_client != null)
                 JsonRpcConnect();
