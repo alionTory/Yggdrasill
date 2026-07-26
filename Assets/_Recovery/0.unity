@@ -142,7 +142,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: E2eTests::Tests.E2eTests.ClickPointProvider.UGuiClickPointProvider
   rectTransform: {fileID: 142155977}
-  canvas: {fileID: 0}
+  canvas: {fileID: 842610452}
 --- !u!114 &142155984
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -244,6 +244,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!223 &842610452 stripped
+Canvas:
+  m_CorrespondingSourceObject: {fileID: 4529919782565470391, guid: 49f915c0e914e4d45813ce0d351d15b5, type: 3}
+  m_PrefabInstance: {fileID: 2117581012}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1048566166
 GameObject:
   m_ObjectHideFlags: 0

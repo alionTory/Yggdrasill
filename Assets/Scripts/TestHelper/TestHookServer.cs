@@ -86,15 +86,17 @@ public class TestHookServer : MonoBehaviour
         Debug.Log($"[HOOK] listening on 127.0.0.1:{_port}");
         try
         {
+            Debug.Log("[HOOK] 클라이언트 연결 대기 중...");
             _client = await _listener.AcceptTcpClientAsync();
+            Debug.Log("[HOOK] 클라이언트 연결 완료.");
         }
         catch (ObjectDisposedException)
         {
-            // 연결 취소됨.
+            Debug.Log("[HOOK] 클라이언트 연결 취소됨.");
         }
         catch (SocketException) when (_cts.IsCancellationRequested)
         {
-            // 연결 취소됨.
+            Debug.Log("[HOOK] 클라이언트 연결 취소됨.");
         }
     }
 

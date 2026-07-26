@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using QuantumUser.View;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Tests.E2eTests.ClickPointProvider
 {
@@ -23,7 +21,7 @@ namespace Tests.E2eTests.ClickPointProvider
         private void OnValidate()
         {
             if (rectTransform == null) TryGetComponent(out rectTransform);
-            if(canvas == null) TryGetComponent(out canvas);
+            if(canvas == null) canvas = GetComponentInParent<Canvas>();
             this.LogError();
         }
 

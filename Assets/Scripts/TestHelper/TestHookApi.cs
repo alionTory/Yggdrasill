@@ -7,7 +7,7 @@ using Tests.E2eTests.ClickPointProvider;
 
 namespace Tests.E2eTests
 {
-    public class TestHookApi
+    public class TestHookApi:ITestHookApi
     {
         public virtual async Task ClickObject(GameObjectId gameObjectId)
         {

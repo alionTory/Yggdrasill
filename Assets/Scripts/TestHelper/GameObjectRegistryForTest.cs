@@ -6,7 +6,7 @@ namespace Tests.E2eTests
 {
     public enum GameObjectId
     {
-        None,
+        QuickPlayButton,
     }
     
     /// <summary>

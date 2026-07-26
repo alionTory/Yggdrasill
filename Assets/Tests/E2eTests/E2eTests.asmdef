@@ -8,9 +8,13 @@
         "Quantum.Unity",
         "Quantum.Simulation",
         "GameView",
-        "Unity.InputSystem"
+        "Unity.InputSystem",
+        "Eflatun.SceneReference",
+        "TestHelper"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,
@@ -23,7 +27,9 @@
         "StreamJsonRpc.dll"
     ],
     "autoReferenced": false,
-    "defineConstraints": [],
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
     "versionDefines": [],
     "noEngineReferences": false
 }
