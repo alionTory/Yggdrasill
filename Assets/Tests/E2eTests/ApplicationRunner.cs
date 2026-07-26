@@ -175,6 +175,54 @@ namespace Tests.E2eTests
             Debug.Log("게임 씬 입장 완료.");
         }
 
+        /// <summary>
+        /// 격자(타일맵)의 <paramref name="cell.x"/>열 <paramref name="cell.y"/>행 칸의 중앙을 클릭한다.
+        /// </summary>
+        /// <param name="cell">
+        /// 가장 왼쪽 열의 칸은 <paramref name="cell.x"/>==1, 가장 아래 행의 칸은 <paramref name="cell.y"/>==1.
+        /// </param>
+        public async Task ClickTile(Vector2Int cell)
+        {
+            Debug.Log($"타일 ({cell.x}, {cell.y}) 클릭 시도 중.");
+            await _testHookApi.ClickTile(cell);
+            Debug.Log($"타일 ({cell.x}, {cell.y}) 클릭 완료.");
+        }
+
+        /// <summary>
+        /// 격자(타일맵)의 <paramref name="cell.x"/>열 <paramref name="cell.y"/>행 칸에 묘목이 존재하는지 확인한다.
+        /// </summary>
+        /// <param name="cell">
+        /// 가장 왼쪽 열의 칸은 <paramref name="cell.x"/>==1, 가장 아래 행의 칸은 <paramref name="cell.y"/>==1.
+        /// </param>
+        /// <param name="timeout">
+        /// 대기 시간. 묘목은 서버를 거쳐 생성되므로 즉시 나타나지 않는다.
+        /// 이 시간 안에 묘목이 나타나면 true, 나타나지 않으면 false를 리턴한다.
+        /// </param>
+        public async Task<bool> IsSeedlingExistInTile(Vector2Int cell, TimeSpan timeout)
+        {
+            Debug.Log($"타일 ({cell.x}, {cell.y})에 묘목이 생성되기를 기다리는 중.");
+            using var cancellationTokenSource = new CancellationTokenSource(timeout);
+            try
+            {
+                await _testHookApi.WaitUntilSeedlingExistInTile(cell, cancellationTokenSource.Token);
+                Debug.Log($"타일 ({cell.x}, {cell.y})에 묘목 존재 확인.");
+                return true;
+            }
+            catch (OperationCanceledException)
+            {
+                Debug.Log($"타임아웃. 타일 ({cell.x}, {cell.y})에 묘목이 존재하지 않음.");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 이 게임 클라이언트에 존재하는 묘목의 총 개수를 조회한다.
+        /// </summary>
+        public async Task<int> GetSeedlingCount()
+        {
+            return await _testHookApi.GetSeedlingCount();
+        }
+
         public void Dispose()
         {
             _jsonRpc?.Dispose();

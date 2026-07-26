@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 293016603209130090}
   - component: {fileID: 4826644448056525510}
   - component: {fileID: 833212502664911475}
+  - component: {fileID: 833212502664911476}
   m_Layer: 0
   m_Name: Seedling
   m_TagString: Untagged
@@ -298,6 +299,18 @@ MonoBehaviour:
   OnEntityDestroyed:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &833212502664911476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4185389589987139290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75c7fc24c7edcb542b12f79550af36d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: TestHelper::Tests.E2eTests.SeedlingTestTag
 --- !u!1 &6078121452423821438
 GameObject:
   m_ObjectHideFlags: 0

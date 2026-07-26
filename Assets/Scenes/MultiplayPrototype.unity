@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 253529691}
   - component: {fileID: 253529694}
   - component: {fileID: 253529695}
+  - component: {fileID: 253529696}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -273,6 +274,21 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_MaxRayIntersections: 0
+--- !u!114 &253529696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 253529690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8031660c2e1489e93cfe44ea16fdfde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameView::QuantumUser.View.CameraFocusManager
+  targetPoint: {x: 0, y: 0}
+  viewportPosition: {x: 0, y: 0}
+  camera: {fileID: 253529692}
 --- !u!1 &311295909
 GameObject:
   m_ObjectHideFlags: 0
@@ -639,6 +655,7 @@ GameObject:
   - component: {fileID: 1161862291}
   - component: {fileID: 1161862294}
   - component: {fileID: 1161862293}
+  - component: {fileID: 1161862295}
   m_Layer: 0
   m_Name: Tilemap
   m_TagString: Untagged
@@ -1837,6 +1854,19 @@ TilemapCollider2D:
   m_MaximumTileChangeCount: 1000
   m_ExtrusionFactor: 0
   m_UseDelaunayMesh: 0
+--- !u!114 &1161862295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1161862289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d28c053e99e4a76aae58f608384bb6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: TestHelper::Tests.E2eTests.TestId
+  id: 1
 --- !u!1 &1913726826
 GameObject:
   m_ObjectHideFlags: 0
