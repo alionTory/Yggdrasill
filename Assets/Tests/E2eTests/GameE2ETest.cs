@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using UnityEngine;
 
 namespace Tests.E2eTests
 {
@@ -19,7 +18,7 @@ namespace Tests.E2eTests
 
         private async Task OneTimeInitialize()
         {
-            Debug.Log("애플리케이션 시작");
+            TestContext.WriteLine("애플리케이션 시작");
             var applicationRunner1 = ApplicationRunner.StartAsync();
             var applicationRunner2 = ApplicationRunner.StartAsync();
             _applicationRunner1 = await applicationRunner1;

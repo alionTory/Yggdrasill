@@ -7,9 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using StreamJsonRpc;
-using UnityEditorInternal;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 
 namespace Tests.E2eTests
 {
@@ -57,7 +55,7 @@ namespace Tests.E2eTests
             }
             catch (Exception ex)
             {
-                Debug.LogWarning("ApplicationRunner 초기화 실패");
+                TestContext.WriteLine("ApplicationRunner 초기화 실패");
                 result.Dispose();
                 throw;
             }
@@ -70,7 +68,7 @@ namespace Tests.E2eTests
         private async Task InitializeAsync()
         {
             _port = GetFreePort();
-            Debug.Log($"포트 {_port}에서 게임 애플리케이션 시작 중.");
+            TestContext.WriteLine($"포트 {_port}에서 게임 애플리케이션 시작 중.");
 
             var processInfo = new ProcessStartInfo()
             {
@@ -93,12 +91,12 @@ namespace Tests.E2eTests
             _process.OutputDataReceived += (_, e) =>
             {
                 if (!string.IsNullOrEmpty(e.Data))
-                    Debug.Log($"[게임 프로세스 {_port}] {e.Data}");
+                    TestContext.WriteLine($"[게임 프로세스 {_port}] {e.Data}");
             };
             _process.ErrorDataReceived += (_, e) =>
             {
                 if (!string.IsNullOrEmpty(e.Data))
-                    Debug.LogWarning($"[게임 프로세스 {_port}] {e.Data}");
+                    TestContext.WriteLine($"[게임 프로세스 {_port} - stderr!] {e.Data}");
             };
 
             _process.Start();
@@ -113,7 +111,7 @@ namespace Tests.E2eTests
 
         private async Task TcpConnectAsync()
         {
-            Debug.Log("TCP 연결 시도 시작...");
+            TestContext.WriteLine("TCP 연결 시도 시작...");
             _tcpClient = new TcpClient();
 
             bool canceled = false;
@@ -148,7 +146,7 @@ namespace Tests.E2eTests
             if (!canceled)
             {
                 Assert.That(connected, Is.True);
-                Debug.Log("TCP 연결 성공.");
+                TestContext.WriteLine("TCP 연결 성공.");
             }
             else
             {
@@ -158,9 +156,9 @@ namespace Tests.E2eTests
 
         public async Task ClickQuickPlayButton()
         {
-            Debug.Log("Quick Play 버튼 클릭 시도 중.");
+            TestContext.WriteLine("Quick Play 버튼 클릭 시도 중.");
             await _testHookApi.ClickObject(GameObjectId.QuickPlayButton);
-            Debug.Log("Quick Play 버튼 클릭 완료");
+            TestContext.WriteLine("Quick Play 버튼 클릭 완료");
         }
 
         /// <summary>
@@ -169,10 +167,10 @@ namespace Tests.E2eTests
         /// <param name="timeout">대기 시간. 이 시간을 넘으면 예외 발생.</param>
         public async Task WaitUntilGameEntrance(TimeSpan timeout)
         {
-            Debug.Log("게임 씬 입장을 기다리는 중.");
+            TestContext.WriteLine("게임 씬 입장을 기다리는 중.");
             using var cancellationTokenSource = new CancellationTokenSource(timeout);
             await _testHookApi.WaitUntilSceneLoad(SceneId.MultiplayPrototype, cancellationTokenSource.Token);
-            Debug.Log("게임 씬 입장 완료.");
+            TestContext.WriteLine("게임 씬 입장 완료.");
         }
 
         /// <summary>
@@ -182,9 +180,9 @@ namespace Tests.E2eTests
         /// <param name="row">가장 아래 행의 칸이 1.</param>
         public async Task ClickTile(int column, int row)
         {
-            Debug.Log($"타일 ({column}, {row}) 클릭 시도 중.");
+            TestContext.WriteLine($"타일 ({column}, {row}) 클릭 시도 중.");
             await _testHookApi.ClickTile(column, row);
-            Debug.Log($"타일 ({column}, {row}) 클릭 완료.");
+            TestContext.WriteLine($"타일 ({column}, {row}) 클릭 완료.");
         }
 
         /// <summary>
@@ -198,17 +196,17 @@ namespace Tests.E2eTests
         /// </param>
         public async Task<bool> IsSeedlingExistInTile(int column, int row, TimeSpan timeout)
         {
-            Debug.Log($"타일 ({column}, {row})에 묘목이 생성되기를 기다리는 중.");
+            TestContext.WriteLine($"타일 ({column}, {row})에 묘목이 생성되기를 기다리는 중.");
             using var cancellationTokenSource = new CancellationTokenSource(timeout);
             try
             {
                 await _testHookApi.WaitUntilSeedlingExistInTile(column, row, cancellationTokenSource.Token);
-                Debug.Log($"타일 ({column}, {row})에 묘목 존재 확인.");
+                TestContext.WriteLine($"타일 ({column}, {row})에 묘목 존재 확인.");
                 return true;
             }
             catch (OperationCanceledException)
             {
-                Debug.Log($"타임아웃. 타일 ({column}, {row})에 묘목이 존재하지 않음.");
+                TestContext.WriteLine($"타임아웃. 타일 ({column}, {row})에 묘목이 존재하지 않음.");
                 return false;
             }
         }
