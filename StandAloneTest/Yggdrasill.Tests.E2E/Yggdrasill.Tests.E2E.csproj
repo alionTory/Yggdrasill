@@ -14,6 +14,7 @@
       VSTHRD200: 테스트 메서드와 조작 API에 Async 접미사를 붙이지 않는다.
     -->
     <NoWarn>$(NoWarn);VSTHRD003;VSTHRD103;VSTHRD200</NoWarn>
+    <RunSettingsFilePath>$(MSBuildProjectDirectory)/local.runsettings</RunSettingsFilePath>
   </PropertyGroup>
 
   <ItemGroup>

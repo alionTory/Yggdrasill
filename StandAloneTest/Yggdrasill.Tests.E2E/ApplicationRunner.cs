@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -22,6 +23,14 @@ namespace Tests.E2eTests
         /// 리포지터리 루트 디렉터리에 놓여 있는 표식 파일의 이름.
         /// </summary>
         private const string RepositoryRootMarkerFileName = ".repository_root";
+
+        /// <summary>
+        /// 게임 프로세스에 덧붙일 명령행 인수를 공백으로 구분해 지정하는 환경 변수의 이름.
+        /// </summary>
+        /// <remarks>
+        /// 예: YGGDRASILL_E2E_GAME_ARGS="-batchmode -nographics -screen-width 1920 -screen-height 1080"
+        /// </remarks>
+        private const string ExtraGameArgumentsEnvironmentVariable = "YGGDRASILL_E2E_GAME_ARGS";
 
         private static readonly string BuildPath = GetBuildPath();
 
@@ -51,7 +60,12 @@ namespace Tests.E2eTests
 
         private static string GetBuildPath()
         {
-            return Path.Combine(RepositoryRoot(), "Builds", "Windows-Development", "Yggdrasill.exe");
+            const string BuildPathParameterName = "BuildPath";
+            var buildPath = TestContext.Parameters[BuildPathParameterName];
+            if (buildPath == null)
+                throw new InvalidOperationException(
+                    $"(리포지터리 루트 기준으로) 게임 빌드 실행 파일의 상대 경로를 지정하는 테스트 파라미터 {BuildPathParameterName}가 주어지지 않았습니다.");
+            return Path.Combine(RepositoryRoot(), TestContext.Parameters[BuildPathParameterName]);
         }
 
         private static int GetFreePort()
@@ -61,6 +75,21 @@ namespace Tests.E2eTests
             int port = ((IPEndPoint)listener.LocalEndpoint).Port;
             listener.Stop();
             return port;
+        }
+
+        /// <summary>
+        /// 게임 프로세스에 덧붙일 명령행 인수를 환경 변수에서 읽는다.
+        /// </summary>
+        /// <remarks>
+        /// 환경변수가 지정되지 않으면 아무것도 덧붙이지 않는다.
+        /// </remarks>
+        private static IEnumerable<string> ExtraGameArguments()
+        {
+            var raw = Environment.GetEnvironmentVariable(ExtraGameArgumentsEnvironmentVariable);
+            if (string.IsNullOrWhiteSpace(raw))
+                return Array.Empty<string>();
+
+            return raw.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
         }
 
         public static async Task<ApplicationRunner> StartAsync()
@@ -102,6 +131,8 @@ namespace Tests.E2eTests
                     "-",
                 }
             };
+            foreach (var argument in ExtraGameArguments())
+                processInfo.ArgumentList.Add(argument);
 
             _process = new Process { StartInfo = processInfo };
 
