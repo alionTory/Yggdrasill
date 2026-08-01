@@ -35,18 +35,18 @@ namespace Tests.E2eTests
             }
         }
 
-        public virtual async Task ClickTile(Vector2Int cell)
+        public virtual async Task ClickTile(int column, int row)
         {
             var tilemapView = GameObjectRegistryForTest.GetTilemapView();
-            Vector2 clickPoint = tilemapView.GetTileClickPosition(cell);
+            Vector2 clickPoint = tilemapView.GetTileClickPosition(new Vector2Int(column, row));
             await VirtualDevice.ClickAt(clickPoint);
         }
 
-        public virtual async Task WaitUntilSeedlingExistInTile(Vector2Int cell, CancellationToken cancellationToken)
+        public virtual async Task WaitUntilSeedlingExistInTile(int column, int row, CancellationToken cancellationToken)
         {
             var tilemapView = GameObjectRegistryForTest.GetTilemapView();
 
-            while (SeedlingRegistryForTest.CountInCell(tilemapView, cell) == 0)
+            while (SeedlingRegistryForTest.CountInCell(tilemapView, new Vector2Int(column, row)) == 0)
                 await Awaitable.NextFrameAsync(cancellationToken);
         }
 

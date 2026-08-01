@@ -176,41 +176,39 @@ namespace Tests.E2eTests
         }
 
         /// <summary>
-        /// 격자(타일맵)의 <paramref name="cell.x"/>열 <paramref name="cell.y"/>행 칸의 중앙을 클릭한다.
+        /// 격자(타일맵)의 <paramref name="column"/>열 <paramref name="row"/>행 칸의 중앙을 클릭한다.
         /// </summary>
-        /// <param name="cell">
-        /// 가장 왼쪽 열의 칸은 <paramref name="cell.x"/>==1, 가장 아래 행의 칸은 <paramref name="cell.y"/>==1.
-        /// </param>
-        public async Task ClickTile(Vector2Int cell)
+        /// <param name="column">가장 왼쪽 열의 칸이 1.</param>
+        /// <param name="row">가장 아래 행의 칸이 1.</param>
+        public async Task ClickTile(int column, int row)
         {
-            Debug.Log($"타일 ({cell.x}, {cell.y}) 클릭 시도 중.");
-            await _testHookApi.ClickTile(cell);
-            Debug.Log($"타일 ({cell.x}, {cell.y}) 클릭 완료.");
+            Debug.Log($"타일 ({column}, {row}) 클릭 시도 중.");
+            await _testHookApi.ClickTile(column, row);
+            Debug.Log($"타일 ({column}, {row}) 클릭 완료.");
         }
 
         /// <summary>
-        /// 격자(타일맵)의 <paramref name="cell.x"/>열 <paramref name="cell.y"/>행 칸에 묘목이 존재하는지 확인한다.
+        /// 격자(타일맵)의 <paramref name="column"/>열 <paramref name="row"/>행 칸에 묘목이 존재하는지 확인한다.
         /// </summary>
-        /// <param name="cell">
-        /// 가장 왼쪽 열의 칸은 <paramref name="cell.x"/>==1, 가장 아래 행의 칸은 <paramref name="cell.y"/>==1.
-        /// </param>
+        /// <param name="column">가장 왼쪽 열의 칸이 1.</param>
+        /// <param name="row">가장 아래 행의 칸이 1.</param>
         /// <param name="timeout">
         /// 대기 시간. 묘목은 서버를 거쳐 생성되므로 즉시 나타나지 않는다.
         /// 이 시간 안에 묘목이 나타나면 true, 나타나지 않으면 false를 리턴한다.
         /// </param>
-        public async Task<bool> IsSeedlingExistInTile(Vector2Int cell, TimeSpan timeout)
+        public async Task<bool> IsSeedlingExistInTile(int column, int row, TimeSpan timeout)
         {
-            Debug.Log($"타일 ({cell.x}, {cell.y})에 묘목이 생성되기를 기다리는 중.");
+            Debug.Log($"타일 ({column}, {row})에 묘목이 생성되기를 기다리는 중.");
             using var cancellationTokenSource = new CancellationTokenSource(timeout);
             try
             {
-                await _testHookApi.WaitUntilSeedlingExistInTile(cell, cancellationTokenSource.Token);
-                Debug.Log($"타일 ({cell.x}, {cell.y})에 묘목 존재 확인.");
+                await _testHookApi.WaitUntilSeedlingExistInTile(column, row, cancellationTokenSource.Token);
+                Debug.Log($"타일 ({column}, {row})에 묘목 존재 확인.");
                 return true;
             }
             catch (OperationCanceledException)
             {
-                Debug.Log($"타임아웃. 타일 ({cell.x}, {cell.y})에 묘목이 존재하지 않음.");
+                Debug.Log($"타임아웃. 타일 ({column}, {row})에 묘목이 존재하지 않음.");
                 return false;
             }
         }

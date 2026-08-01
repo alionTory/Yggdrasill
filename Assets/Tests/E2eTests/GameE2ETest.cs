@@ -66,19 +66,16 @@ namespace Tests.E2eTests
         [TestCase(3,2, 3, 3)]
         public async Task CheckSeedlingSynchronization(int column1, int row1, int column2, int row2)
         {
-            var cell1 =  new Vector2Int(column1, row1);
-            var cell2 = new Vector2Int(column2, row2);
-            
             await _oneTimeInitialization;
             var timeout = TimeSpan.FromSeconds(1);
 
-            await _applicationRunner1.ClickTile(cell1);
-            Assert.That(await _applicationRunner1.IsSeedlingExistInTile(cell1, timeout), Is.True);
-            Assert.That(await _applicationRunner2.IsSeedlingExistInTile(cell1, timeout), Is.True);
+            await _applicationRunner1.ClickTile(column1, row1);
+            Assert.That(await _applicationRunner1.IsSeedlingExistInTile(column1, row1, timeout), Is.True);
+            Assert.That(await _applicationRunner2.IsSeedlingExistInTile(column1, row1, timeout), Is.True);
 
-            await _applicationRunner2.ClickTile(cell2);
-            Assert.That(await _applicationRunner1.IsSeedlingExistInTile(cell2, timeout), Is.True);
-            Assert.That(await _applicationRunner2.IsSeedlingExistInTile(cell2, timeout), Is.True);
+            await _applicationRunner2.ClickTile(column2, row2);
+            Assert.That(await _applicationRunner1.IsSeedlingExistInTile(column2, row2, timeout), Is.True);
+            Assert.That(await _applicationRunner2.IsSeedlingExistInTile(column2, row2, timeout), Is.True);
 
             // 위치뿐 아니라 개수도 동기화되어야 한다.
             // (예: 클릭한 클라이언트가 서버를 거치지 않고 묘목을 하나 더 만들면 위치는 맞지만 개수가 어긋난다.)
