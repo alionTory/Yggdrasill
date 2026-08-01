@@ -38,7 +38,7 @@ runs:
   steps:
     - name: Setup Unity
       uses: ./.github/actions/setup-unity
-    # 빌드된 실행 파일이 build/targetPlatform/buildName/buildName.exe.or.app.etc 경로에 생성됨.
+    # 빌드된 실행 파일이 build/targetPlatform/buildName.exe.or.app.etc 경로에 생성됨.
     - name: Build
       uses: game-ci/unity-builder@v4
       id: buildStep
@@ -56,5 +56,6 @@ runs:
       uses: actions/upload-artifact@v7
       with:
         name: ${{ inputs.artifactName }}
-        path: build/${{ inputs.targetPlatform }}/${{ inputs.executionFileName }}
+        path: build/${{ inputs.targetPlatform }}
         retention-days: 7
+        if-no-files-found: error

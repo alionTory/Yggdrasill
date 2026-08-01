@@ -38,15 +38,15 @@ runs:
         path: Builds/
 
     - name: Run E2E tests
-      shell: pwsh
+      shell: bash
       env:
         YGGDRASILL_E2E_GAME_ARGS: ${{ inputs.gameArguments }}
         BUILD_PATH: Builds/${{ inputs.executionFilePath }}
       run: >
-        dotnet test 
-        StandAloneTest/Yggdrasill.Tests.sln 
-        --logger "trx;LogFileName=e2e.trx" 
-        --results-directory TestResults 
+        dotnet test
+        StandAloneTest/Yggdrasill.Tests.sln
+        --logger "trx;LogFileName=e2e.trx"
+        --results-directory TestResults
         -- "TestRunParameters.Parameter(name=\"BuildPath\", value=\"$BUILD_PATH\")"
 
     - name: Upload test results

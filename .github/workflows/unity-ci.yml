@@ -75,4 +75,4 @@ jobs:
         uses: ./.github/actions/e2e-test
         with:
           artifactName: ${{ matrix.artifactName }}
-          executionFilePath: ${{ matrix.executionFilePath }}.exe
+          executionFilePath: ${{ matrix.executionFilePath }}
