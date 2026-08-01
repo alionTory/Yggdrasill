@@ -7,7 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using StreamJsonRpc;
-using UnityEngine;
 
 namespace Tests.E2eTests
 {
@@ -19,21 +18,40 @@ namespace Tests.E2eTests
         private JsonRpc _jsonRpc = null!;
         private ITestHookApi _testHookApi = null!;
 
+        /// <summary>
+        /// 리포지터리 루트 디렉터리에 놓여 있는 표식 파일의 이름.
+        /// </summary>
+        private const string RepositoryRootMarkerFileName = ".repository_root";
+
         private static readonly string BuildPath = GetBuildPath();
 
-        private static string ProjectRoot()
+        /// <summary>
+        /// 리포지터리 루트 디렉터리의 절대 경로를 반환한다.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">리포지터리 루트를 찾지 못하면 예외 발생.</exception>
+        private static string RepositoryRoot()
         {
-            var assetsPath = Application.dataPath;
-            var projectRoot = new DirectoryInfo(assetsPath).Parent;
-            if (projectRoot != null)
-                return projectRoot.FullName;
-            else
-                return Directory.GetDirectoryRoot(Application.dataPath);
+            var assemblyPath = typeof(ApplicationRunner).Assembly.Location;
+            if (string.IsNullOrEmpty(assemblyPath))
+                throw new InvalidOperationException(
+                    "이 어셈블리의 파일 경로를 알 수 없어 리포지터리 루트를 찾을 수 없습니다.");
+
+            var directory = new DirectoryInfo(Path.GetDirectoryName(assemblyPath)!);
+            while (directory != null)
+            {
+                if (File.Exists(Path.Combine(directory.FullName, RepositoryRootMarkerFileName)))
+                    return directory.FullName;
+                directory = directory.Parent;
+            }
+
+            throw new InvalidOperationException(
+                $"리포지터리 루트를 찾을 수 없습니다. '{assemblyPath}'의 상위 디렉터리 중 " +
+                $"'{RepositoryRootMarkerFileName}' 파일을 가진 디렉터리가 없습니다.");
         }
 
         private static string GetBuildPath()
         {
-            return Path.Combine(ProjectRoot(), "Builds", "Windows-Development", "Yggdrasill.exe");
+            return Path.Combine(RepositoryRoot(), "Builds", "Windows-Development", "Yggdrasill.exe");
         }
 
         private static int GetFreePort()
