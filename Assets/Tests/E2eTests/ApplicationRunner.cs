@@ -171,7 +171,7 @@ namespace Tests.E2eTests
         {
             Debug.Log("게임 씬 입장을 기다리는 중.");
             using var cancellationTokenSource = new CancellationTokenSource(timeout);
-            await _testHookApi.WaitUntilSceneLoad(SceneList.MultiplayPrototype, cancellationTokenSource.Token);
+            await _testHookApi.WaitUntilSceneLoad(SceneId.MultiplayPrototype, cancellationTokenSource.Token);
             Debug.Log("게임 씬 입장 완료.");
         }
 

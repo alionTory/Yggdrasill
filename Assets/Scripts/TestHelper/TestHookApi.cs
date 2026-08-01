@@ -1,10 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using QuantumUser.View;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.Tilemaps;
 using Tests.E2eTests.ClickPointProvider;
 
 namespace Tests.E2eTests
@@ -22,13 +19,14 @@ namespace Tests.E2eTests
             await VirtualDevice.ClickAt(clickPoint);
         }
 
-        public virtual async Task WaitUntilSceneLoad(SceneInfo sceneInfo, CancellationToken cancellationToken)
+        public virtual async Task WaitUntilSceneLoad(SceneId sceneId, CancellationToken cancellationToken)
         {
+            var scene = SceneList.Get(sceneId).scene;
             bool sceneLoaded = false;
             while (!sceneLoaded)
             {
                 await Awaitable.NextFrameAsync(cancellationToken);
-                if (sceneInfo.scene.TryGetLoadedScene(out var loadedScene))
+                if (scene.TryGetLoadedScene(out var loadedScene))
                 {
                     if (loadedScene.IsValid()) sceneLoaded = true;
                 }

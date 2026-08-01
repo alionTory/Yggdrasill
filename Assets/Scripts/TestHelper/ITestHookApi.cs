@@ -1,6 +1,5 @@
 using System.Threading;
 using System.Threading.Tasks;
-using QuantumUser.View;
 
 namespace Tests.E2eTests
 {
@@ -8,7 +7,7 @@ namespace Tests.E2eTests
     {
         public Task ClickObject(GameObjectId gameObjectId);
 
-        public Task WaitUntilSceneLoad(SceneInfo sceneInfo, CancellationToken cancellationToken);
+        public Task WaitUntilSceneLoad(SceneId sceneId, CancellationToken cancellationToken);
 
         /// <summary>
         /// 격자(타일맵)의 <paramref name="column"/>열 <paramref name="row"/>행 칸의 중앙에 해당하는 화면 좌표를 클릭한다.
