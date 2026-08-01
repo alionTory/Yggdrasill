@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <RootNamespace>Tests.E2eTests</RootNamespace>
+    <!--
+      StreamJsonRpc가 딸려보내는 VS Threading 분석기 규칙 중, 테스트 드라이버에 맞지 않는 것들을 끈다.
+      VSTHRD003: OneTimeSetUp에서 시작한 초기화 Task를 각 테스트가 await 하는 것은 의도된 패턴이다.
+      VSTHRD103: 테스트 로그 출력은 동기로 충분하다.
+      VSTHRD200: 테스트 메서드와 조작 API에 Async 접미사를 붙이지 않는다.
+    -->
+    <NoWarn>$(NoWarn);VSTHRD003;VSTHRD103;VSTHRD200</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- 게임 빌드 안의 StreamJsonRpc(Assets/Packages/StreamJsonRpc.2.19.27)와 같은 버전이어야 한다. -->
+    <PackageReference Include="StreamJsonRpc" Version="2.19.27" />
+    <PackageReference Include="NUnit" Version="3.14.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--
+      유니티 의존 코드와 공유하는 통신 규약 어셈블리 링크.
+      해당 어셈블리는 유니티에 의존하지 않아야 함.
+    -->
+    <Compile Include="..\..\Assets\Scripts\TestHelper\Protocol\**\*.cs" LinkBase="Protocol" />
+  </ItemGroup>
+
+</Project>

@@ -105,3 +105,12 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+
+# 유니티 밖에서 도는 테스트 (StandAloneTest)
+# 유니티가 자동 생성하는 프로젝트 파일이 아니라 직접 관리하는 .NET 프로젝트이므로,
+# 위의 *.csproj / *.sln 무시 규칙에서 제외한다. 빌드 산출물과 IDE 설정만 무시한다.
+/[Ss]tand[Aa]lone[Tt]est/**/bin/
+/[Ss]tand[Aa]lone[Tt]est/**/obj/
+/[Ss]tand[Aa]lone[Tt]est/**/.idea/
+!/[Ss]tand[Aa]lone[Tt]est/**/*.csproj
+!/[Ss]tand[Aa]lone[Tt]est/**/*.sln

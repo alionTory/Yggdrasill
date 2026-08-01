@@ -71,7 +71,7 @@ namespace Tests.E2eTests
                 await result.InitializeAsync();
                 return result;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 TestContext.WriteLine("ApplicationRunner 초기화 실패");
                 result.Dispose();
@@ -96,7 +96,7 @@ namespace Tests.E2eTests
                 RedirectStandardOutput = true,
                 ArgumentList =
                 {
-                    $"{TestHookServer.TestHookPortCommandLineArgumentName}",
+                    ITestHookApi.PortCommandLineArgumentName,
                     $"{_port}",
                     "-logfile",
                     "-",
@@ -148,7 +148,7 @@ namespace Tests.E2eTests
                         await _tcpClient.ConnectAsync(IPAddress.Loopback, _port);
                         connected = true;
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         try
                         {
