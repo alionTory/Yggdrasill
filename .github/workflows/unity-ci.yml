@@ -35,14 +35,16 @@ jobs:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           checkName: Play Mode Tests
   
-  build:
+  development-build:
     needs: unity-test
     runs-on: ubuntu-latest
-    strategy: 
+    strategy:
       matrix:
         include:
           - targetPlatform: StandaloneWindows64
-            buildProfile: 'Assets/Settings/Build Profiles/Windows.asset'
+            buildProfile: 'Assets/Settings/Build Profiles/Windows-Development.asset'
+            artifactName: Build-Windows-Development
+            
     steps:
       - name: Checkout non-lfs files
         uses: actions/checkout@v6
@@ -54,3 +56,23 @@ jobs:
           unityPassword: ${{ secrets.UNITY_PASSWORD }}
           targetPlatform: ${{ matrix.targetPlatform }}
           buildProfile: ${{ matrix.buildProfile }}
+          artifactName: ${{ matrix.artifactName }}
+
+  e2e-test:
+    needs: development-build
+    runs-on: ${{ matrix.actionRunsOn }}
+    timeout-minutes: 20
+    strategy:
+      matrix:
+        include:
+          - artifactName: Build-Windows-Development
+            executionFilePath: Yggdrasill.exe
+            actionRunsOn: windows-latest
+    steps:
+      - name: Checkout non-lfs files
+        uses: actions/checkout@v6
+      - name: E2E tests
+        uses: ./.github/actions/e2e-test
+        with:
+          artifactName: ${{ matrix.artifactName }}
+          executionFilePath: ${{ matrix.executionFilePath }}.exe

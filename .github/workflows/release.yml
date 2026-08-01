@@ -15,6 +15,7 @@ jobs:
         include:
           - targetPlatform: StandaloneWindows64
             buildProfile: 'Assets/Settings/Build Profiles/Windows-Release.asset'
+            artifactName: Build-Windows-Release
     outputs: 
       buildVersion: ${{ steps.buildStep.outputs.buildVersion }}
     steps:
@@ -29,6 +30,7 @@ jobs:
           unityPassword: ${{ secrets.UNITY_PASSWORD }}
           targetPlatform: ${{ matrix.targetPlatform }}
           buildProfile: ${{ matrix.buildProfile }}
+          artifactName: ${{ matrix.artifactName }}
 
   staging-deploy-itch-io:
     needs: build
@@ -37,7 +39,7 @@ jobs:
     strategy: 
       matrix:
         include:
-          - targetPlatform: StandaloneWindows64
+          - artifactName: Build-Windows-Release
             channel: windows
     steps:
       - name: Checkout repository
@@ -46,8 +48,8 @@ jobs:
       - name: Download build artifact
         uses: actions/download-artifact@v7
         with:
-          name: Build-${{ matrix.targetPlatform }}
-          path: build/${{ matrix.targetPlatform }}
+          name: ${{ matrix.artifactName }}
+          path: Builds/
           
       - name: Deploy to itch.io
         uses: ./.github/actions/itch-io-upload
@@ -56,5 +58,5 @@ jobs:
           itch-user:  ${{ env.ITCH_IO_USER }}
           itch-game:  ${{ env.ITCH_IO_GAME_ID }}
           channel:    ${{ matrix.channel }}
-          build-path: build/${{ matrix.targetPlatform }}
+          build-path: Builds/
           version:    ${{ needs.build.outputs.buildVersion }}  # 플랫폼 별 버전 번호가 동일하다고 가정.
