@@ -15,8 +15,6 @@ using Debug = UnityEngine.Debug;
 
 public class TestHookServer : MonoBehaviour
 {
-    public const string TestHookPortCommandLineArgumentName = "--test-hook-port";
-
     private int? _port;
 
     private SynchronizationContext? _unityContext;
@@ -130,7 +128,7 @@ public class TestHookServer : MonoBehaviour
     }
 
     /// <summary>
-    /// 게임 프로세스 실행 시 주어진 명령행 인수 <see cref="TestHookPortCommandLineArgumentName"/> 에 지정된 값을 반환한다.
+    /// 게임 프로세스 실행 시 주어진 명령행 인수 <see cref="TestHookConstants.PortCommandLineArgumentName"/> 에 지정된 값을 반환한다.
     /// </summary>
     /// <returns>
     /// 해당 명령행 인수가 지정되지 않았을 시, null 리턴.
@@ -139,7 +137,7 @@ public class TestHookServer : MonoBehaviour
     {
         var args = Environment.GetCommandLineArgs();
         for (int i = 0; i < args.Length - 1; i++)
-            if (args[i] == TestHookPortCommandLineArgumentName && int.TryParse(args[i + 1], out int p))
+            if (args[i] == ITestHookApi.PortCommandLineArgumentName && int.TryParse(args[i + 1], out int p))
                 return p;
         return null;
     }

@@ -14,13 +14,13 @@ namespace Editor
     public static class SceneListManager
     {
         private const string SceneListCodeOutputPath = "Assets/QuantumUser/View/SceneList.g.cs";
-        private const string SceneIdCodeOutputPath = "Assets/QuantumUser/View/SceneId.g.cs";
+        private const string SceneIdCodeOutputPath = "Assets/Scripts/TestHelper/Protocol/SceneId.g.cs";
         private const string QuantumMenuSceneAssetOutputDir = "Assets/QuantumUser/Resources/Maps/";
 
         /// <summary>
         /// <see cref="SceneListConfigSchema"/> 에셋의 데이터를 기반으로 다음을 수행한다. <br/>
-        /// 1. SceneList 클래스 코드 생성 <br/>
-        /// 2. SceneId 열거형 코드 생성 <br/>
+        /// 1. SceneId 열거형 코드 생성 <br/>
+        /// 2. SceneList 클래스 코드 생성 <br/>
         /// 3. QuantumMenuSceneInfo 에셋 생성 <br/>
         /// 4. 에디터 build profiles의 씬 목록 작성
         /// </summary>

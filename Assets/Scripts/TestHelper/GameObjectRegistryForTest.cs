@@ -1,16 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 namespace Tests.E2eTests
 {
-    public enum GameObjectId
-    {
-        QuickPlayButton,
-        Tilemap,
-    }
-
     /// <summary>
     /// E2E 테스트를 위해 GameObject를 등록하고 조회할 수 있는 레지스트리이다.
     /// </summary>

@@ -5,6 +5,11 @@ namespace Tests.E2eTests
 {
     public interface ITestHookApi
     {
+        /// <summary>
+        /// 게임 프로세스 실행 시, 테스트 훅 서버가 열 포트 번호를 지정하는 명령행 인수의 이름.
+        /// </summary>
+        public const string PortCommandLineArgumentName = "--test-hook-port";
+        
         public Task ClickObject(GameObjectId gameObjectId);
 
         public Task WaitUntilSceneLoad(SceneId sceneId, CancellationToken cancellationToken);
