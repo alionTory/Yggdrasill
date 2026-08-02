@@ -14,26 +14,15 @@ jobs:
         uses: actions/checkout@v6
       - name: Setup Unity
         uses: ./.github/actions/setup-unity
-      - name: Edit mode tests
+      - name: Edit&Play mode tests
         uses: game-ci/unity-test-runner@v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
-          testMode: editmode
           githubToken: ${{ secrets.GITHUB_TOKEN }}
-          checkName: Edit Mode Tests
-      - name: Play mode tests
-        uses: game-ci/unity-test-runner@v4
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-        with:
-          testMode: playmode
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-          checkName: Play Mode Tests
+          checkName: Edit&Play Mode Tests
   
   development-build:
     needs: unity-test
