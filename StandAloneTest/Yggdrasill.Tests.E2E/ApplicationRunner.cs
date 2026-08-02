@@ -102,7 +102,7 @@ namespace Tests.E2eTests
             }
             catch (Exception)
             {
-                TestContext.WriteLine("ApplicationRunner 초기화 실패");
+                TestContext.Progress.WriteLine("ApplicationRunner 초기화 실패");
                 result.Dispose();
                 throw;
             }
@@ -115,7 +115,7 @@ namespace Tests.E2eTests
         private async Task InitializeAsync()
         {
             _port = GetFreePort();
-            TestContext.WriteLine($"포트 {_port}에서 게임 애플리케이션 시작 중.");
+            TestContext.Progress.WriteLine($"포트 {_port}에서 게임 애플리케이션 시작 중.");
 
             var processInfo = new ProcessStartInfo()
             {
@@ -136,16 +136,23 @@ namespace Tests.E2eTests
 
             _process = new Process { StartInfo = processInfo };
 
-            // 게임 프로세스 로그를 테스트 드라이버 로그에 전달
+            // 게임 프로세스 로그를 테스트 드라이버 로그에 전달.
+            //
+            // 여기서 TestContext.Out (또는 Out 생략)을 쓰면 안 된다.
+            // TestContext.Out은 BeginOutputReadLine을 호출한 시점에서 실행 중인 테스트 컨텍스트를 물려받는다.
+            // 이는 로그가 기록되지 않도록 만들 수 있다. 예를 들어, 게임 프로세스가 [OneTimeSetUp]에서 시작한다면,
+            // 그 컨텍스트는 개별 테스트가 아니라 픽스처이고, 픽스처 수준 출력은 .trx 파일에 기록되지 않아 로그가 통째로 사라진다.
+            //
+            // 대신 현재 실행 중인 테스트의 컨텍스트에 귀속되지 않는 TestContext.Progress를 써야 한다.
             _process.OutputDataReceived += (_, e) =>
             {
                 if (!string.IsNullOrEmpty(e.Data))
-                    TestContext.WriteLine($"[게임 프로세스 {_port}] {e.Data}");
+                    TestContext.Progress.WriteLine($"[게임 프로세스 {_port}] {e.Data}");
             };
             _process.ErrorDataReceived += (_, e) =>
             {
                 if (!string.IsNullOrEmpty(e.Data))
-                    TestContext.WriteLine($"[게임 프로세스 {_port} - stderr!] {e.Data}");
+                    TestContext.Progress.WriteLine($"[게임 프로세스 {_port} - stderr!] {e.Data}");
             };
 
             _process.Start();
@@ -160,7 +167,7 @@ namespace Tests.E2eTests
 
         private async Task TcpConnectAsync()
         {
-            TestContext.WriteLine("TCP 연결 시도 시작...");
+            TestContext.Progress.WriteLine("TCP 연결 시도 시작...");
             _tcpClient = new TcpClient();
 
             bool canceled = false;
@@ -195,7 +202,7 @@ namespace Tests.E2eTests
             if (!canceled)
             {
                 Assert.That(connected, Is.True);
-                TestContext.WriteLine("TCP 연결 성공.");
+                TestContext.Progress.WriteLine("TCP 연결 성공.");
             }
             else
             {

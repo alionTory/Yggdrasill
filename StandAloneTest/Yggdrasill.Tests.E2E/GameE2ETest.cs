@@ -12,7 +12,7 @@ namespace Tests.E2eTests
         [OneTimeSetUp]
         public async Task Setup()
         {
-            TestContext.WriteLine("애플리케이션 시작");
+            TestContext.Progress.WriteLine("애플리케이션 시작");
             var applicationRunner1 = ApplicationRunner.StartAsync();
             var applicationRunner2 = ApplicationRunner.StartAsync();
             _applicationRunner1 = await applicationRunner1;
