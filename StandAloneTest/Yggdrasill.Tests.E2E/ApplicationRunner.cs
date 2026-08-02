@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
@@ -123,6 +124,11 @@ namespace Tests.E2eTests
                 UseShellExecute = false,
                 RedirectStandardError = true,
                 RedirectStandardOutput = true,
+                // 유니티는 로그를 UTF-8로 출력한다.
+                // 이를 아래와 같이 명시하지 않으면, 콘솔 기본 인코딩으로 디코딩된다.
+                // 그러면 UTF-8을 사용하지 않는 콘솔에서 한글이 깨질 수 있다.
+                StandardOutputEncoding = Encoding.UTF8,
+                StandardErrorEncoding = Encoding.UTF8,
                 ArgumentList =
                 {
                     ITestHookApi.PortCommandLineArgumentName,
