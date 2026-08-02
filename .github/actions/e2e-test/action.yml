@@ -2,13 +2,16 @@ name: e2e-test
 author: aliontory
 description: 'E2E 테스트 실행. 게임 빌드 아티팩트를 내려받아 별도 프로세스로 구동하고 원격 조작한다.'
 inputs:
-  artifactName:
+  buildArtifactName:
     description: >-
       E2E 테스트가 구동할 게임 빌드 아티팩트의 이름.
       DEBUG 스크립팅 디파인이 켜진 빌드여야 한다.
     required: true
   executionFilePath:
     description: '아티팩트 루트로부터 게임 실행 파일까지의 경로. 실팽 파일 이름에 확장자도 포함되어야 함.'
+    required: true
+  testResultName:
+    description: 'E2E 테스트 결과를 저장할 아티팩트와 github check 이름'
     required: true
   dotnetVersion:
     description: 'E2E 테스트 드라이버를 빌드/실행할 .NET SDK 버전'
@@ -34,7 +37,7 @@ runs:
     - name: Download game build
       uses: actions/download-artifact@v7
       with:
-        name: ${{ inputs.artifactName }}
+        name: ${{ inputs.buildArtifactName }}
         path: Builds/
 
     - name: Run E2E tests
@@ -53,7 +56,7 @@ runs:
       if: always()
       uses: actions/upload-artifact@v7
       with:
-        name: E2eTestResults
+        name: ${{ inputs.testResultName }}
         path: TestResults
         retention-days: 7
 
@@ -61,7 +64,7 @@ runs:
       if: always()
       uses: dorny/test-reporter@v3
       with:
-        name: E2E Tests
+        name: ${{ inputs.testResultName }}
         path: TestResults/e2e.trx
         reporter: dotnet-trx
 

@@ -54,14 +54,16 @@ jobs:
     strategy:
       matrix:
         include:
-          - artifactName: Build-Windows-Development
+          - buildArtifactName: Build-Windows-Development
             executionFilePath: Yggdrasill.exe
             actionRunsOn: windows-latest
+            testResultName: E2E-Test-Windows
     steps:
       - name: Checkout non-lfs files
         uses: actions/checkout@v6
       - name: E2E tests
         uses: ./.github/actions/e2e-test
         with:
-          artifactName: ${{ matrix.artifactName }}
+          buildArtifactName: ${{ matrix.buildArtifactName }}
           executionFilePath: ${{ matrix.executionFilePath }}
+          testResultName: ${{ matrix.testResultName }}
