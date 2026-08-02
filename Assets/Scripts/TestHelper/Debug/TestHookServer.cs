@@ -1,4 +1,3 @@
-#if DEBUG
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
@@ -151,4 +150,3 @@ public class TestHookServer : MonoBehaviour
         _listener?.Stop();
     }
 }
-#endif
