@@ -24,7 +24,7 @@ jobs:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           checkName: Edit&Play Mode Tests
   
-  development-build:
+  build:
     needs: unity-test
     runs-on: ubuntu-latest
     strategy:
@@ -33,6 +33,9 @@ jobs:
           - targetPlatform: StandaloneWindows64
             buildProfile: 'Assets/Settings/Build Profiles/Windows-Development.asset'
             artifactName: Build-Windows-Development
+          - targetPlatform: StandaloneWindows64
+            buildProfile: 'Assets/Settings/Build Profiles/Windows-Release.asset'
+            artifactName: Build-Windows-Release
             
     steps:
       - name: Checkout non-lfs files
@@ -48,7 +51,7 @@ jobs:
           artifactName: ${{ matrix.artifactName }}
 
   e2e-test:
-    needs: development-build
+    needs: build
     runs-on: ${{ matrix.actionRunsOn }}
     timeout-minutes: 20
     strategy:
