@@ -172,3 +172,7 @@ Packages/packages-lock.json linguist-generated
 
 # Exceptions for .asset files such as lightning pre-baking
 LightingData.asset     binary
+
+# Rider가 윈도우에서 CRLF로 저장하는 반면, 위의 `* text=auto eol=lf`는 LF를 기대함.
+# 내용이 그대로인데도 파일이 계속 수정된 것으로 잡히는 것 방지.
+.idea/**                text eol=crlf
