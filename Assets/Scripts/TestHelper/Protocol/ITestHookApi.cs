@@ -12,6 +12,12 @@ namespace Tests.E2eTests
         
         public Task ClickObject(GameObjectId gameObjectId);
 
+        /// <summary>
+        /// <paramref name="sceneId"/>에 해당하는 씬이 로드될 때까지 대기한다.
+        /// </summary>
+        /// <remarks>
+        /// 여기서 "씬 로드"의 정의: 씬 내 모든 활성 초기 오브젝트의 Awake와 OnEnable이 완료된 시점.
+        /// </remarks>
         public Task WaitUntilSceneLoad(SceneId sceneId, CancellationToken cancellationToken);
 
         /// <summary>

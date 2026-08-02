@@ -28,7 +28,7 @@ namespace Tests.E2eTests
                 await Awaitable.NextFrameAsync(cancellationToken);
                 if (scene.TryGetLoadedScene(out var loadedScene))
                 {
-                    if (loadedScene.IsValid()) sceneLoaded = true;
+                    if (loadedScene.isLoaded) sceneLoaded = true;
                 }
             }
         }
