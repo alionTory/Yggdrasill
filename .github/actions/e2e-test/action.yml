@@ -1,0 +1,70 @@
+name: e2e-test
+author: aliontory
+description: 'E2E 테스트 실행. 게임 빌드 아티팩트를 내려받아 별도 프로세스로 구동하고 원격 조작한다.'
+inputs:
+  buildArtifactName:
+    description: >-
+      E2E 테스트가 구동할 게임 빌드 아티팩트의 이름.
+      DEBUG 스크립팅 디파인이 켜진 빌드여야 한다.
+    required: true
+  executionFilePath:
+    description: '아티팩트 루트로부터 게임 실행 파일까지의 경로. 실팽 파일 이름에 확장자도 포함되어야 함.'
+    required: true
+  testResultName:
+    description: 'E2E 테스트 결과를 저장할 아티팩트와 github check 이름'
+    required: true
+  dotnetVersion:
+    description: 'E2E 테스트 드라이버를 빌드/실행할 .NET SDK 버전'
+    required: false
+    default: '8.0.x'
+  gameArguments:
+    description: >-
+      게임 프로세스에 덧붙일 명령행 인수.
+      
+      기본값 설명:
+      GitHub이 제공하는 러너에는 GPU도 인터랙티브 데스크톱 세션도 없으므로 그래픽 장치 없이 띄운다.
+      화면 클릭과 같은 테스트도 진행되므로, 화면 크기도 명시한다.
+    required: false
+    default: '-batchmode -nographics -screen-width 1920 -screen-height 1080'
+runs:
+  using: composite
+  steps:
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v6
+      with:
+        dotnet-version: ${{ inputs.dotnetVersion }}
+
+    - name: Download game build
+      uses: actions/download-artifact@v7
+      with:
+        name: ${{ inputs.buildArtifactName }}
+        path: Builds/
+
+    - name: Run E2E tests
+      shell: bash
+      env:
+        YGGDRASILL_E2E_GAME_ARGS: ${{ inputs.gameArguments }}
+        BUILD_PATH: Builds/${{ inputs.executionFilePath }}
+      run: >
+        dotnet test
+        StandAloneTest/Yggdrasill.Tests.sln
+        --logger "trx;LogFileName=e2e.trx"
+        --results-directory TestResults
+        -- "TestRunParameters.Parameter(name=\"BuildPath\", value=\"$BUILD_PATH\")"
+
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v7
+      with:
+        name: ${{ inputs.testResultName }}
+        path: TestResults
+        retention-days: 7
+
+    - name: Publish test results to github check
+      if: always()
+      uses: dorny/test-reporter@v3
+      with:
+        name: ${{ inputs.testResultName }}
+        path: TestResults/e2e.trx
+        reporter: dotnet-trx
+
