@@ -57,3 +57,11 @@ runs:
         path: TestResults
         retention-days: 7
 
+    - name: Publish test results to github check
+      if: always()
+      uses: dorny/test-reporter@v3
+      with:
+        name: E2E Tests
+        path: TestResults/e2e.trx
+        reporter: dotnet-trx
+
