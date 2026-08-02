@@ -106,6 +106,16 @@ InitTestScene*.unity*
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
 
+# Eflatun.SceneReference의 씬 GUID 맵.
+# 씬 에셋 변경·패키지 변경·플레이 모드 진입·빌드 직전마다 패키지가 자동 재생성한다.
+# (com.eflatun.scenereference의 Editor/MapGeneratorTriggers 참고)
+/[Aa]ssets/[Rr]esources/Eflatun_SceneReference_SceneGuidTo*Map.generated.json
+/[Aa]ssets/[Rr]esources/Eflatun_SceneReference_SceneGuidTo*Map.generated.json.meta
+
+# Performance Testing 패키지가 테스트를 실행할 때마다 기록하는 실행 정보.
+/[Aa]ssets/[Rr]esources/PerformanceTestRun*.json
+/[Aa]ssets/[Rr]esources/PerformanceTestRun*.json.meta
+
 # 유니티 밖에서 도는 테스트 (StandAloneTest)
 # 유니티가 자동 생성하는 프로젝트 파일이 아니라 직접 관리하는 .NET 프로젝트이므로,
 # 위의 *.csproj / *.sln 무시 규칙에서 제외한다. 빌드 산출물과 IDE 설정만 무시한다.
