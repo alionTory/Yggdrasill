@@ -4,7 +4,7 @@
 이 문서는 생태 전략 시뮬레이션 게임 {game-name}(Yggdrasill)의 요구사항을 명세한다.
 
 == Constraints
-* {game-name}은 Windows와 MaxOS 플랫폼을 지원한다.
+* {game-name}은 Windows 플랫폼을 지원한다.
 
 == System Requirements
 
