@@ -13,9 +13,9 @@ namespace Editor
 
     public static class SceneListManager
     {
-        private const string SceneListCodeOutputPath = "Assets/QuantumUser/View/SceneList.g.cs";
+        private const string SceneListCodeOutputPath = "Assets/Scripts/GameView/SceneList.g.cs";
         private const string SceneIdCodeOutputPath = "Assets/Scripts/TestHelper/Protocol/SceneId.g.cs";
-        private const string QuantumMenuSceneAssetOutputDir = "Assets/QuantumUser/Resources/Maps/";
+        private const string QuantumMenuSceneAssetOutputDir = "Assets/Resources/Maps/";
 
         /// <summary>
         /// <see cref="SceneListConfigSchema"/> 에셋의 데이터를 기반으로 다음을 수행한다. <br/>

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MultiplayPrototype_mesh
   m_EditorClassIdentifier: Quantum.Engine.dll::Quantum.BinaryData
   Identifier:
-    Path: QuantumUser/Resources/Maps/MultiplayPrototype_mesh
+    Path: Resources/Maps/MultiplayPrototype_mesh
     Guid:
       Value: 348683038288017300
   Data: 0000000000000000

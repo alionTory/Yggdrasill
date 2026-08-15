@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MultiplayPrototype
   m_EditorClassIdentifier: Quantum.Engine.dll::Quantum.Map
   Identifier:
-    Path: QuantumUser/Resources/Maps/MultiplayPrototype
+    Path: Resources/Maps/MultiplayPrototype
     Guid:
       Value: 363481078872077106
   UserAsset:
