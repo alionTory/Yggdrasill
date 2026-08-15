@@ -2,9 +2,6 @@
     "name": "TestHelper.CallDebug",
     "rootNamespace": "",
     "references": [
-        "GUID:caca889fed6088d40b22c2d7e2909c31",
-        "GUID:d629280cd7692bc4aa0841f7fb16ad13",
-        "GUID:75469ad4d38634e559750d17036d5f7c",
         "GUID:563ec5f017b641829d88ae8abd97599a",
         "GUID:ba6a477d944789c419812f779ac5d6e4"
     ],

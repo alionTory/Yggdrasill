@@ -13,7 +13,7 @@ namespace Editor
 
     public static class SceneListManager
     {
-        private const string SceneListCodeOutputPath = "Assets/Scripts/GameView/SceneList.g.cs";
+        private const string SceneListCodeOutputPath = "Assets/Scripts/Utilities/SceneList.g.cs";
         private const string SceneIdCodeOutputPath = "Assets/Scripts/TestHelper/Protocol/SceneId.g.cs";
         private const string QuantumMenuSceneAssetOutputDir = "Assets/Resources/Maps/";
 
