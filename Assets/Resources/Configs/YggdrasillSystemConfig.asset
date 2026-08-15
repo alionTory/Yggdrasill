@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: YggdrasillSystemConfig
   m_EditorClassIdentifier: Quantum.Simulation::Quantum.SystemsConfig
   Identifier:
-    Path: Resources/YggdrasillSystemConfig
+    Path: Resources/Configs/YggdrasillSystemConfig
     Guid:
       Value: 378553162747903325
   Entries:
