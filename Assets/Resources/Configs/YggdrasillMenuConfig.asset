@@ -14,8 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Quantum.Menu::Quantum.Menu.QuantumMenuConfig
   _maxPlayers: 6
   _adaptFramerateForMobilePlatform: 1
-  _availableAppVersions:
-  - 1.0
+  _availableAppVersions: []
   _availableRegions:
   - asia
   - eu
