@@ -30,24 +30,26 @@
 ==== 멀티 플레이
 멀티 플레이 버튼을 클릭하면, 다음 세 가지 버튼이 뜬다.
 
-* 자동 매칭
+* <<auto-matching>>
 * 비공개 방 만들기
 * 비공개 방 참가하기
  
 멀티 플레이를 위해, 다음 두 가지 방식의 매치메이킹이 지원된다.
 
-* 자동 매칭
-* 비공개 방 매칭
+* <<auto-matching>>
+* <<private-room-matching>>
 
 위 두 방식 모두, 클라이언트 풀 내에서만 매칭이 이루어진다. 클라이언트 풀의 정의는 다음과 같다.
 [[client-pool, 클라이언트 풀]]
-클라이언트 풀:: <<game-version>>과 <<region>> 설정이 일치하는 모든 클라이언트 집합.
+<<client-pool>>:: <<game-version>>과 <<region>> 설정이 일치하는 모든 클라이언트 집합.
 
-===== 자동 매칭
-* "자동 매칭" 버튼 클릭 시, <<client-pool>> 내에 매칭 대기 중인 다른 클라이언트가 존재할 때까지 대기한다. 
+[[auto-matching, 자동 매칭]]
+===== <<auto-matching>>
+* <<auto-matching>> 버튼 클릭 시, <<client-pool>> 내에 매칭 대기 중인 다른 클라이언트가 존재할 때까지 대기한다. 
 * <<client-pool>> 내에 매칭 대기 중인 다른 클라이언트가 하나 이상 존재한다면, 그 중 임의의 한 클라이언트와 같은 방에 입장한다.
 
-===== 비공개 방 매칭
+[[private-room-matching, 비공개 방 매칭]]
+===== <<private-room-matching>>
 [[invitation-code, 참가 코드]]
 * "비공개 방 만들기" 버튼 클릭 시, <<invitation-code>>가 자동 생성되고, <<invitation-code>>가 부여된 비공개 방이 생성된다.
 * "비공개 방 참가하기" 버튼에서 <<invitation-code>>를 입력하면, 다음 조건을 모두 만족할 경우 방에 참가한다.
