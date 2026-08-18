@@ -8,6 +8,7 @@ namespace Tests.E2eTests
     /// </remarks>
     public enum GameObjectId
     {
+        SinglePlayButton,
         MultiPlayButton,
         AutoMatchingButton,
         PrivateRoomCreateButton,
