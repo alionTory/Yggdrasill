@@ -27,18 +27,11 @@ public class MatchingTest
     public async Task AutoMatchingTest(int clientCount)
     {
         TestContext.WriteLine("애플리케이션 시작");
-        applications = await Task.WhenAll(
-            Enumerable.Range(0, clientCount)
-                .Select(_ => ApplicationRunner.StartAsync(photonAppVersion: _photonAppVersion))
-        );
+        applications = await ApplicationRunners.StartRunners(clientCount);
 
         // 멀티플레이 메뉴 진입 및 자동 매칭 버튼 클릭
-        await Task.WhenAll(
-            applications.Select(application => application.Click(GameObjectId.MultiPlayButton))
-        );
-        await Task.WhenAll(
-            applications.Select(application => application.Click(GameObjectId.AutoMatchingButton))
-        );
+        await applications.ForEachParallel(app => app.Click(GameObjectId.MultiPlayButton));
+        await applications.ForEachParallel(app => app.Click(GameObjectId.AutoMatchingButton));
 
         // 매칭 여부 검증 - 게임 씬 입장 여부 확인
         ApplicationRunner? notMatchedClient = null;
@@ -64,11 +57,10 @@ public class MatchingTest
         else
             Assert.That(notMatchedClient, Is.Null, "짝수 개의 클라이언트 중 매칭에 실패한 클라이언트가 없어야 함.");
 
-        foreach (var matchedClient in matchedClients)
-        {
-            Assert.That(await matchedClient.IsSeedlingExistInTile(tileColumn, tileRow), Is.False,
-                $"초기에 타일 ({tileColumn}, {tileRow})에 묘목이 없어야 함.");
-        }
+        await matchedClients.ForEachParallel(async app => Assert.That(
+            await app.IsSeedlingExistInTile(tileColumn, tileRow), Is.False,
+            $"초기에 타일 ({tileColumn}, {tileRow})에 묘목이 없어야 함.")
+        );
 
         /*
          매칭 여부 검증 - 동기화 체크
@@ -85,13 +77,11 @@ public class MatchingTest
             await clientToBeCheckedSync.IsSeedlingExistInTileUntilTimeout(tileColumn, tileRow, syncCheckTimeout);
 
             // 나머지 클라이언트들 중 동기화된 것을 찾음.
-            var synchronizedClient = (await Task.WhenAll(
-                syncNotVerifiedClients.Select(async client =>
-                    (client: client,
-                        seedlingExist: await client.IsSeedlingExistInTileUntilTimeout(tileColumn, tileRow,
-                            syncCheckTimeout))
+            var synchronizedClient = (
+                await syncNotVerifiedClients.WhereParallel(app =>
+                    app.IsSeedlingExistInTileUntilTimeout(tileColumn, tileRow, syncCheckTimeout)
                 )
-            )).Where(x => x.seedlingExist).Select(x => x.client).ToArray();
+            ).ToArray();
 
             Assert.That(synchronizedClient.Length, Is.EqualTo(1), "클라이언트는 1:1로 매칭되어 동기화되어야 함.");
             syncNotVerifiedClients.Remove(synchronizedClient[0]);
@@ -102,17 +92,11 @@ public class MatchingTest
     public async Task PrivateRoomMathcingTest()
     {
         TestContext.WriteLine("애플리케이션 시작");
-        this.applications = await Task.WhenAll(
-            Enumerable.Range(0, 2)
-                .Select(_ => ApplicationRunner.StartAsync())
-        );
-
-        var twoApplications = this.applications.ToImmutableList();
+        var twoApplications = await ApplicationRunners.StartRunners(2);
+        this.applications = twoApplications;
 
         // 멀티플레이 메뉴 진입
-        await Task.WhenAll(
-            twoApplications.Select(application => application.Click(GameObjectId.MultiPlayButton))
-        );
+        await twoApplications.ForEachParallel(app => app.Click(GameObjectId.MultiPlayButton));
 
         await twoApplications[0].Click(GameObjectId.PrivateRoomCreateButton);
         var invitationCode = await twoApplications[0].GetInvitationCode(TimeSpan.FromSeconds(1));
@@ -122,20 +106,20 @@ public class MatchingTest
         await twoApplications[1].SubmitPrivateRoomInvitationCode(invitationCode);
 
         // 매칭 여부 검증 - 게임 씬 입장 여부 확인
-        await Task.WhenAll(
-            twoApplications.Select(application => application.WaitUntilGameEntrance(TimeSpan.FromSeconds(10)))
-        );
-        
-        // 매칭 여부 검증 - 동기화 체크
-        foreach (var application in twoApplications)
-        {
-            Assert.That(await application.IsSeedlingExistInTile(tileColumn, tileRow), Is.False,
-                $"초기에 타일 ({tileColumn}, {tileRow})에 묘목이 없어야 함.");
-        }
-        await twoApplications[0].ClickTile(tileColumn, tileRow);
-        Assert.That(await twoApplications[0].IsSeedlingExistInTileUntilTimeout(tileColumn, tileRow, TimeSpan.FromSeconds(1)), Is.True);
-        Assert.That(await twoApplications[1].IsSeedlingExistInTileUntilTimeout(tileColumn, tileRow, TimeSpan.FromSeconds(1)), Is.True);
+        await twoApplications.ForEachParallel(app => app.WaitUntilGameEntrance(TimeSpan.FromSeconds(10)));
 
+        // 매칭 여부 검증 - 동기화 체크
+        await twoApplications.ForEachParallel(async app =>
+            Assert.That(await app.IsSeedlingExistInTile(tileColumn, tileRow), Is.False,
+                $"초기에 타일 ({tileColumn}, {tileRow})에 묘목이 없어야 함.")
+        );
+
+        await twoApplications[0].ClickTile(tileColumn, tileRow);
+        await twoApplications.ForEachParallel(async app =>
+            Assert.That(
+                await app.IsSeedlingExistInTileUntilTimeout(tileColumn, tileRow, TimeSpan.FromSeconds(1)),
+                Is.True, "묘목이 동기화되어야 함.")
+        );
     }
 
     [TearDown]
