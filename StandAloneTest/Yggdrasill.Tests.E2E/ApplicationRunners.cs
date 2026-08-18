@@ -115,15 +115,17 @@ public static class ApplicationRunners
         return runnerBoolPairs.Where(pair => pair.boolResult).Select(pair => pair.runner);
     }
 
-    public static async Task AssertThat(this IEnumerable<ApplicationRunner> runners,
-        Func<ApplicationRunner, Task<TestDelegate>> func, IResolveConstraint constraint, string message = "")
+    public static async Task AssertThat<TResult>(this IEnumerable<ApplicationRunner> runners,
+        Func<ApplicationRunner, Task<TResult>> func, IResolveConstraint constraint, string message = "")
     {
+        // new ReusableConstraint 없으면 constraint 재사용 시 오작동.
+        var reusableConstraint = new ReusableConstraint(constraint);
         var taskExecutionResults = await runners.ForEachParallel(func);
         Assert.Multiple(() =>
         {
             foreach (var (result, index) in taskExecutionResults.Select((result, index) => (result, index)))
             {
-                Assert.That(result, constraint, $"{index}번 Assert 실패: "+message);
+                Assert.That(result, reusableConstraint, $"{index}번 Assert 실패: "+message);
             }
         });
     }
