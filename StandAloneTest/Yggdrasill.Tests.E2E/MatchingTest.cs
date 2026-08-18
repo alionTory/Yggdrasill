@@ -11,7 +11,7 @@ namespace Tests.E2eTests;
 public class MatchingTest
 {
     private string _photonAppVersion = Guid.NewGuid().ToString();
-    private IEnumerable<ApplicationRunner>? applications = null;
+    private IEnumerable<ApplicationRunner>? _applications = null;
 
     // 동기화 테스트에 쓰일 타일 번호
     const int tileRow = 1;
@@ -27,16 +27,16 @@ public class MatchingTest
     public async Task AutoMatchingTest(int clientCount)
     {
         TestContext.WriteLine("애플리케이션 시작");
-        applications = await ApplicationRunners.StartRunners(clientCount);
+        _applications = await ApplicationRunners.StartRunners(clientCount);
 
         // 멀티플레이 메뉴 진입 및 자동 매칭 버튼 클릭
-        await applications.ForEachParallel(app => app.Click(GameObjectId.MultiPlayButton));
-        await applications.ForEachParallel(app => app.Click(GameObjectId.AutoMatchingButton));
+        await _applications.ForEachParallel(app => app.Click(GameObjectId.MultiPlayButton));
+        await _applications.ForEachParallel(app => app.Click(GameObjectId.AutoMatchingButton));
 
         // 매칭 여부 검증 - 게임 씬 입장 여부 확인
         ApplicationRunner? notMatchedClient = null;
         List<ApplicationRunner> matchedClients = new List<ApplicationRunner>();
-        foreach (var application in applications)
+        foreach (var application in _applications)
         {
             try
             {
@@ -93,7 +93,7 @@ public class MatchingTest
     {
         TestContext.WriteLine("애플리케이션 시작");
         var twoApplications = await ApplicationRunners.StartRunners(2);
-        this.applications = twoApplications;
+        this._applications = twoApplications;
 
         // 멀티플레이 메뉴 진입
         await twoApplications.ForEachParallel(app => app.Click(GameObjectId.MultiPlayButton));
@@ -125,9 +125,9 @@ public class MatchingTest
     [TearDown]
     public void TearDown()
     {
-        if (applications != null)
+        if (_applications != null)
         {
-            foreach (var application in applications)
+            foreach (var application in _applications)
             {
                 application.Dispose();
             }
