@@ -223,6 +223,14 @@ namespace Tests.E2eTests
             TestContext.WriteLine("Quick Play 버튼 클릭 완료");
         }
 
+        /**
+         * 게임 오브젝트를 클릭한다.
+         */
+        public async Task Click(GameObjectId gameObjectId)
+        {
+            await _testHookApi.ClickObject(gameObjectId);
+        }
+
         /// <summary>
         /// 게임 클라이언트가 멀티플레이 게임 시뮬레이션에 진입할 때까지 대기한다. <br/>
         /// </summary>
@@ -248,7 +256,7 @@ namespace Tests.E2eTests
         }
 
         /// <summary>
-        /// 격자(타일맵)의 <paramref name="column"/>열 <paramref name="row"/>행 칸에 묘목이 존재하는지 확인한다.
+        /// 격자(타일맵)의 <paramref name="column"/>열 <paramref name="row"/>행 칸에 묘목이 존재할 때까지 대기한다. <br/>
         /// </summary>
         /// <param name="column">가장 왼쪽 열의 칸이 1.</param>
         /// <param name="row">가장 아래 행의 칸이 1.</param>
@@ -256,7 +264,7 @@ namespace Tests.E2eTests
         /// 대기 시간. 묘목은 서버를 거쳐 생성되므로 즉시 나타나지 않는다.
         /// 이 시간 안에 묘목이 나타나면 true, 나타나지 않으면 false를 리턴한다.
         /// </param>
-        public async Task<bool> IsSeedlingExistInTile(int column, int row, TimeSpan timeout)
+        public async Task<bool> IsSeedlingExistInTileUntilTimeout(int column, int row, TimeSpan timeout)
         {
             TestContext.WriteLine($"타일 ({column}, {row})에 묘목이 생성되기를 기다리는 중.");
             using var cancellationTokenSource = new CancellationTokenSource(timeout);

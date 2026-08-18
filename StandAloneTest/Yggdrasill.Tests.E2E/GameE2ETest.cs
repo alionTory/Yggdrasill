@@ -61,12 +61,12 @@ namespace Tests.E2eTests
             var timeout = TimeSpan.FromSeconds(1);
 
             await _applicationRunner1.ClickTile(column1, row1);
-            Assert.That(await _applicationRunner1.IsSeedlingExistInTile(column1, row1, timeout), Is.True);
-            Assert.That(await _applicationRunner2.IsSeedlingExistInTile(column1, row1, timeout), Is.True);
+            Assert.That(await _applicationRunner1.IsSeedlingExistInTileUntilTimeout(column1, row1, timeout), Is.True);
+            Assert.That(await _applicationRunner2.IsSeedlingExistInTileUntilTimeout(column1, row1, timeout), Is.True);
 
             await _applicationRunner2.ClickTile(column2, row2);
-            Assert.That(await _applicationRunner1.IsSeedlingExistInTile(column2, row2, timeout), Is.True);
-            Assert.That(await _applicationRunner2.IsSeedlingExistInTile(column2, row2, timeout), Is.True);
+            Assert.That(await _applicationRunner1.IsSeedlingExistInTileUntilTimeout(column2, row2, timeout), Is.True);
+            Assert.That(await _applicationRunner2.IsSeedlingExistInTileUntilTimeout(column2, row2, timeout), Is.True);
 
             // 위치뿐 아니라 개수도 동기화되어야 한다.
             // (예: 클릭한 클라이언트가 서버를 거치지 않고 묘목을 하나 더 만들면 위치는 맞지만 개수가 어긋난다.)

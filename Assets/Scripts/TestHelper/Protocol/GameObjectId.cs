@@ -8,6 +8,10 @@ namespace Tests.E2eTests
     /// </remarks>
     public enum GameObjectId
     {
+        MultiPlayButton,
+        AutoMatchingButton,
+        PrivateRoomCreateButton,
+        PrivateRoomParticipateButton,
         QuickPlayButton,
         Tilemap,
     }
