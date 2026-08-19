@@ -40,6 +40,13 @@ namespace Tests.E2eTests
             await VirtualDevice.ClickAt(clickPoint);
         }
 
+        public virtual Task<bool> IsSeedlingExistInTile(int column, int row)
+        {
+            var tilemapView = GameObjectRegistryForTest.GetTilemapView();
+            var result = SeedlingRegistryForTest.CountInCell(tilemapView, new Vector2Int(column, row)) > 0;
+            return Task.FromResult(result);
+        }
+
         public virtual async Task WaitUntilSeedlingExistInTile(int column, int row, CancellationToken cancellationToken)
         {
             var tilemapView = GameObjectRegistryForTest.GetTilemapView();

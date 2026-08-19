@@ -256,6 +256,19 @@ namespace Tests.E2eTests
         }
 
         /// <summary>
+        /// 현재 격자(타일맵)의 <paramref name="column"/>열 <paramref name="row"/>행 칸에 묘목이 존재하는지 확인한다. <br/>
+        /// </summary>
+        /// <param name="column">가장 왼쪽 열의 칸이 1.</param>
+        /// <param name="row">가장 아래 행의 칸이 1.</param>
+        /// <returns>
+        /// 묘목이 존재하면 true, 존재하지 않으면 false.
+        /// </returns>
+        public async Task<bool> IsSeedlingExistInTile(int column, int row)
+        {
+            return await _testHookApi.IsSeedlingExistInTile(column, row);
+        }
+
+        /// <summary>
         /// 격자(타일맵)의 <paramref name="column"/>열 <paramref name="row"/>행 칸에 묘목이 존재할 때까지 대기한다. <br/>
         /// </summary>
         /// <param name="column">가장 왼쪽 열의 칸이 1.</param>
