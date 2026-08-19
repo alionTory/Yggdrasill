@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8f98ff78397bdc4a9886959982c466e, type: 3}
   m_Name: YggdrasillMenuConfig
   m_EditorClassIdentifier: Quantum.Menu::Quantum.Menu.QuantumMenuConfig
-  _maxPlayers: 6
+  _maxPlayers: 2
   _adaptFramerateForMobilePlatform: 1
   _availableAppVersions: []
   _availableRegions:
