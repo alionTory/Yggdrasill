@@ -21,9 +21,9 @@ namespace Tests.E2eTests
         {
             var timeout = TimeSpan.FromSeconds(10);
 
-            await _applicationRunners.ForEachParallel(app=>app.Click(GameObjectId.MultiPlayButton));
-            await _applicationRunners.ForEachParallel(app=>app.Click(GameObjectId.AutoMatchingButton));
-            await _applicationRunners.ForEachParallel(app=>app.WaitUntilGameEntrance(timeout));
+            await _applicationRunners.WhenAll(app=>app.Click(GameObjectId.MultiPlayButton));
+            await _applicationRunners.WhenAll(app=>app.Click(GameObjectId.AutoMatchingButton));
+            await _applicationRunners.WhenAll(app=>app.WaitUntilGameEntrance(timeout));
         }
 
         /// <summary>

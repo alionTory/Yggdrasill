@@ -30,8 +30,8 @@ public class MatchingTest
         _applications = await ApplicationRunners.StartRunners(clientCount);
 
         // 멀티플레이 메뉴 진입 및 자동 매칭 버튼 클릭
-        await _applications.ForEachParallel(app => app.Click(GameObjectId.MultiPlayButton));
-        await _applications.ForEachParallel(app => app.Click(GameObjectId.AutoMatchingButton));
+        await _applications.WhenAll(app => app.Click(GameObjectId.MultiPlayButton));
+        await _applications.WhenAll(app => app.Click(GameObjectId.AutoMatchingButton));
 
         // 매칭 여부 검증 - 게임 씬 입장 여부 확인
         ApplicationRunner? notMatchedClient = null;
@@ -57,7 +57,7 @@ public class MatchingTest
         else
             Assert.That(notMatchedClient, Is.Null, "짝수 개의 클라이언트 중 매칭에 실패한 클라이언트가 없어야 함.");
 
-        await matchedClients.ForEachParallel(async app => Assert.That(
+        await matchedClients.WhenAll(async app => Assert.That(
             await app.IsSeedlingExistInTile(tileColumn, tileRow), Is.False,
             $"초기에 타일 ({tileColumn}, {tileRow})에 묘목이 없어야 함.")
         );
@@ -78,7 +78,7 @@ public class MatchingTest
 
             // 나머지 클라이언트들 중 동기화된 것을 찾음.
             var synchronizedClient = (
-                await syncNotVerifiedClients.WhereParallel(app =>
+                await syncNotVerifiedClients.WhereAsync(app =>
                     app.IsSeedlingExistInTileUntilTimeout(tileColumn, tileRow, syncCheckTimeout)
                 )
             ).ToArray();
@@ -96,7 +96,7 @@ public class MatchingTest
         this._applications = twoApplications;
 
         // 멀티플레이 메뉴 진입
-        await twoApplications.ForEachParallel(app => app.Click(GameObjectId.MultiPlayButton));
+        await twoApplications.WhenAll(app => app.Click(GameObjectId.MultiPlayButton));
 
         await twoApplications[0].Click(GameObjectId.PrivateRoomCreateButton);
         var invitationCode = await twoApplications[0].GetInvitationCode(TimeSpan.FromSeconds(1));
@@ -106,16 +106,16 @@ public class MatchingTest
         await twoApplications[1].SubmitPrivateRoomInvitationCode(invitationCode);
 
         // 매칭 여부 검증 - 게임 씬 입장 여부 확인
-        await twoApplications.ForEachParallel(app => app.WaitUntilGameEntrance(TimeSpan.FromSeconds(10)));
+        await twoApplications.WhenAll(app => app.WaitUntilGameEntrance(TimeSpan.FromSeconds(10)));
 
         // 매칭 여부 검증 - 동기화 체크
-        await twoApplications.ForEachParallel(async app =>
+        await twoApplications.WhenAll(async app =>
             Assert.That(await app.IsSeedlingExistInTile(tileColumn, tileRow), Is.False,
                 $"초기에 타일 ({tileColumn}, {tileRow})에 묘목이 없어야 함.")
         );
 
         await twoApplications[0].ClickTile(tileColumn, tileRow);
-        await twoApplications.ForEachParallel(async app =>
+        await twoApplications.WhenAll(async app =>
             Assert.That(
                 await app.IsSeedlingExistInTileUntilTimeout(tileColumn, tileRow, TimeSpan.FromSeconds(1)),
                 Is.True, "묘목이 동기화되어야 함.")
