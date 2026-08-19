@@ -102,7 +102,7 @@ public class MatchingTest
         var invitationCode = await twoApplications[0].GetInvitationCode(TimeSpan.FromSeconds(1));
         Assert.That(invitationCode, Is.Not.Null, "비공개 방 생성 시 참가 코드도 생성되어야 함.");
 
-        await twoApplications[1].Click(GameObjectId.PrivateRoomCreateButton);
+        await twoApplications[1].Click(GameObjectId.PrivateRoomParticipateButton);
         await twoApplications[1].SubmitPrivateRoomInvitationCode(invitationCode);
 
         // 매칭 여부 검증 - 게임 씬 입장 여부 확인
