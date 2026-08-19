@@ -342,19 +342,67 @@ public class YggdrasillMenuConnection : QuantumMenuConnectionBehaviour
     private QuantumRunner? _runner;
     private CancellationTokenSource? _cancellation;
 
-    // --- 추상 멤버 구현 ---
-    public override RealtimeClient Client => _client!;
-    public override string SessionName    => _client?.CurrentRoom?.Name!;
-    public override string Region         => _client?.CurrentRegion!;
-    public override string AppVersion     => _client?.AppSettings?.AppVersion!;
-    public override int    MaxPlayerCount => _client?.CurrentRoom?.MaxPlayers ?? 0;
-    public override bool   IsConnected    => _client?.IsConnected ?? false;
-    public override int    Ping           => _runner?.Session?.Stats.Ping ?? 0;
-    public override List<string> Usernames => /* SDK 구현 참고, 필요 없으면 null */ null!;
+    // ─── 추상 멤버 구현 ────────────────────────────────────────────
+    // 반환 타입을 nullable로 선언한다. null 억제 연산자(!)를 쓰지 말 것.
+    // 이유는 아래 "널 가능성 다루기" 절 참고.
 
+    /// <summary>
+    /// Photon 클라이언트. 온라인 접속이 성립한 뒤에만 유효하다.
+    /// </summary>
+    /// <remarks>
+    /// 다음 경우 <see langword="null"/>이다.
+    /// <list type="bullet">
+    /// <item>접속을 시작하기 전 (메인 화면, 멀티플레이 화면)</item>
+    /// <item><b>싱글 플레이 중 — 로컬 모드는 Photon을 전혀 쓰지 않는다</b></item>
+    /// <item><see cref="DisconnectAsyncInternal"/> 완료 후</item>
+    /// <item>온라인 접속이 실패로 끝난 후</item>
+    /// </list>
+    /// </remarks>
+    public override RealtimeClient? Client => _client;
+
+    /// <summary>
+    /// 현재 참가 중인 Photon 방 이름. 비공개 방이면 참가 코드와 같다.
+    /// </summary>
+    /// <remarks>
+    /// <see cref="Client"/>가 <see langword="null"/>이거나 아직 방에 입장하지 않았으면
+    /// <see langword="null"/>. 싱글 플레이 중에는 항상 <see langword="null"/>.
+    /// </remarks>
+    public override string? SessionName => _client?.CurrentRoom?.Name;
+
+    /// <summary>
+    /// 실제로 접속한 Photon 리전 코드.
+    /// </summary>
+    /// <remarks><see cref="Client"/>와 같은 조건에서 <see langword="null"/>.</remarks>
+    public override string? Region => _client?.CurrentRegion;
+
+    /// <summary>
+    /// 이번 접속에 사용된 Photon AppVersion. 요구사항의 "클라이언트 풀" 식별자.
+    /// </summary>
+    /// <remarks><see cref="Client"/>와 같은 조건에서 <see langword="null"/>.</remarks>
+    public override string? AppVersion => _client?.AppSettings?.AppVersion;
+
+    /// <summary>
+    /// 이 프로젝트에서는 플레이어 목록 UI를 쓰지 않으므로 항상 <see langword="null"/>.
+    /// </summary>
+    /// <remarks>
+    /// 목록이 필요해지면 <c>QuantumMenuConnectionBehaviourSDK.Usernames</c> 구현을 참고할 것.
+    /// </remarks>
+    public override List<string>? Usernames => null;
+
+    // 아래 셋은 값 타입이라 널 문제가 없다. 미접속 시 각각 0 / false / 0.
+    public override int  MaxPlayerCount => _client?.CurrentRoom?.MaxPlayers ?? 0;
+    public override bool IsConnected    => _client?.IsConnected ?? false;
+    public override int  Ping           => _runner?.Session?.Stats.Ping ?? 0;
+
+    /// <summary>
+    /// 리전 선택 UI를 쓰지 않으므로 항상 빈 목록을 반환한다.
+    /// </summary>
+    /// <remarks>
+    /// 리전은 <c>YggdrasillMenuConfig</c>에서 하나로 고정한다 (3-3장).
+    /// </remarks>
     public override Task<List<QuantumMenuOnlineRegion>>
         RequestAvailableOnlineRegionsAsync(QuantumMenuConnectArgs a)
-        => Task.FromResult(new List<QuantumMenuOnlineRegion>());   // 리전 UI 미사용
+        => Task.FromResult(new List<QuantumMenuOnlineRegion>());
 
     protected override Task<ConnectResult> ConnectAsyncInternal(QuantumMenuConnectArgs args)
         => PlayMode == YggdrasillPlayMode.SinglePlay
@@ -364,6 +412,70 @@ public class YggdrasillMenuConnection : QuantumMenuConnectionBehaviour
     protected override Task DisconnectAsyncInternal(int reason) { /* 아래 2-6 */ }
 }
 ```
+
+**2-2-1. 널 가능성 다루기 — `!`를 쓰지 말 것**
+
+위 구현에서 `Client` / `SessionName` / `Region` / `AppVersion` / `Usernames`는 **실제로 null이 될 수 있습니다.** 특히 싱글 플레이 중에는 `Client`가 항상 null입니다. 그런데 이 프로젝트의 어셈블리들은 `csc.rsp`에 `-nullable:enable`이 걸려 있어, 그냥 두면 컴파일 경고가 납니다.
+
+여기서 **`!`(널 억제 연산자)로 경고를 끄면 안 됩니다.** `!`는 컴파일러에게 "내가 보증한다"고 말할 뿐 런타임에는 아무것도 하지 않습니다. `_client?.CurrentRoom?.Name!` 같은 표현은 **실제로 null을 반환하면서 타입만 비-null이라고 주장**하므로, 호출자가 널 검사를 생략하게 만들어 오히려 위험합니다.
+
+**대신 반환 타입 자체를 nullable로 선언하면 됩니다.** Photon SDK의 `Quantum.Menu` 어셈블리에는 `csc.rsp`도 `#nullable` 지시문도 없어서 **nullable 주석이 없는(oblivious) 상태**입니다. 이런 베이스 멤버를 오버라이드할 때는 `string?`으로 좁혀 선언해도 컴파일러가 불일치 경고를 내지 않습니다.
+
+```csharp
+public override string? SessionName => _client?.CurrentRoom?.Name;   // ✅ 정직하고 경고 없음
+public override string  SessionName => _client?.CurrentRoom?.Name!;  // ❌ 거짓말
+```
+
+> 만약 향후 SDK가 이 멤버들에 nullable 주석을 붙여 `CS8765`(반환 타입 널 가능성 불일치) 경고가 뜬다면, 그때도 `!`로 덮지 말고 `#pragma warning disable CS8765`를 **주석과 함께** 좁은 범위에 적용하세요.
+
+**SDK 소비자는 널을 어떻게 다루는가** — 위 멤버들을 실제로 읽는 SDK 코드를 전수 확인한 결과입니다.
+
+| 읽는 곳 | 대상 | 널 안전한가 |
+|---|---|---|
+| `QuantumMenuScreenPluginVersion.CreateInformationVersion` | `Region`, `AppVersion` | ✅ `string.IsNullOrEmpty` 검사 |
+| `QuantumMenuScreenPluginVersion.Show` | `IsConnected` | ✅ 값 타입 |
+| `QuantumMenuUIGameplay.Show` | `SessionName` | ✅ `CodeGenerator.IsValid`가 `IsNullOrEmpty` 검사 |
+| `QuantumMenuUIGameplay.UpdateUsernames` | `Usernames` | ✅ `!= null` 검사 |
+| `QuantumMenuMppmJoinCommand.ExecuteAsync` | `IsConnected` | ✅ 값 타입 |
+| **`QuantumMenuUIGameplay.ShowUser`** | **`Client`** | ❌ **널 검사 없이 역참조** |
+
+마지막 한 줄이 이 튜토리얼이 `QuantumMenuUIGameplay`를 버리라고 하는 이유입니다.
+
+```csharp
+// QuantumMenu.Sdk.cs — 싱글 플레이에서는 Client가 null이므로 여기서 터진다
+_photonDisconnectListener = Connection.Client.CallbackMessage.ListenManual<OnDisconnectedMsg>(OnDisconnect);
+```
+
+**이 한 곳만 피하면, 나머지 SDK 코드는 전부 널을 안전하게 다룹니다.** 반대로 말해 `QuantumMenuUIGameplay`를 계속 쓰기로 결정한다면 싱글 플레이에서 반드시 NRE가 납니다.
+
+직접 작성하는 화면 코드에서도 같은 원칙을 지키세요.
+
+```csharp
+// YggdrasillUIGameplay.Show()
+var connection = (YggdrasillMenuConnection)Connection;
+_invitationCodeText.text = connection.InvitationCode ?? string.Empty;   // 싱글 플레이면 null
+```
+
+**예외 — 인스펙터 주입 필드**: 아래 스켈레톤들에 나오는 `[SerializeField] private Text _foo = null!;`는 `!`를 써도 되는 유일한 자리입니다. Unity가 직렬화로 값을 넣어 주므로 C# 컴파일러가 알 수 없는 초기화이고, 이 프로젝트는 이미 그 관례를 씁니다 (`TilemapView`, `UGuiClickPointProvider`).
+
+다만 "인스펙터에서 연결하는 것을 잊는" 실수는 실제로 자주 일어나므로, 이 프로젝트의 `IValidatable` 패턴을 함께 쓰는 것을 권합니다.
+
+```csharp
+public class YggdrasillUIMultiPlay : QuantumMenuUIScreen, IValidatable
+{
+    [SerializeField] private InputField _invitationCodeField = null!;
+
+    public List<string> Validate() {
+        var result = new List<string>();
+        IValidatable.CheckNotNull(_invitationCodeField, result);
+        return result;
+    }
+
+    private void OnValidate() => this.LogError();
+}
+```
+
+이러면 연결을 빠뜨렸을 때 **런타임 NRE가 아니라 에디터 콘솔 에러**로 먼저 드러납니다.
 
 **2-3. 공통 — RuntimeConfig 준비**
 
@@ -519,14 +631,23 @@ private async Task<ConnectResult> StartOnlineAsync(QuantumMenuConnectArgs args)
 **대기 루프**는 이렇게 씁니다.
 
 ```csharp
-private async Task WaitForOpponentAsync(CancellationToken token)
+/// <summary>
+/// 방 인원이 2명이 될 때까지 대기한다.
+/// </summary>
+/// <param name="client">방에 입장한 클라이언트. 호출 시점에 방 안에 있어야 한다.</param>
+/// <exception cref="OperationCanceledException">
+/// 인원이 차기 전에 <paramref name="token"/>이 취소되면 예외 발생. 사용자가 취소 버튼을 누른 경우다.
+/// </exception>
+private static async Task WaitForOpponentAsync(RealtimeClient client, CancellationToken token)
 {
-    while (_client!.CurrentRoom.PlayerCount < 2) {
+    while (client.CurrentRoom.PlayerCount < 2) {
         token.ThrowIfCancellationRequested();
         await Awaitable.NextFrameAsync(token);
     }
 }
 ```
+
+클라이언트를 필드에서 읽지 않고 **매개변수로 받는 것**에 주목하세요. `_client`는 nullable이라 `_client!`가 필요해지지만, 매개변수로 받으면 "호출 시점에 이미 방에 들어가 있다"는 사실이 시그니처에 드러나고 널 억제도 사라집니다. 호출부는 `await WaitForOpponentAsync(_client, _cancellation.Token);` 이며, 바로 위에서 `_client`를 대입했으므로 컴파일러가 비-null임을 스스로 압니다.
 
 `Awaitable.NextFrameAsync`는 이 프로젝트의 `TestHookApi`가 이미 쓰는 패턴이라 일관됩니다. 콜백 기반을 선호한다면 `_client.CallbackMessage.ListenManual<OnPlayerEnteredRoomMsg>(...)`로 `TaskCompletionSource`를 완료시켜도 됩니다.
 
@@ -927,6 +1048,8 @@ Unity 6의 Multiplayer Play Mode 또는 빌드 2개를 띄워 확인합니다.
 | AppVersion 미격리 | `AutoMatchingTest`가 무작위로 실패 | 커맨드라인으로 고유 AppVersion 주입 |
 | 대기 중 Photon 타임아웃 | 대기가 길어지면 연결이 끊김 | 대기 구간을 `ConnectionServiceScope`로 감싸기 검토 |
 | 싱글 플레이에서 `Client` 접근 | NRE | `QuantumMenuUIGameplay` 대신 자체 화면 사용 |
+| `!`로 널 경고 억제 | 런타임 NRE. 호출자가 널 검사를 생략하게 됨 | 반환 타입을 `string?` 등으로 선언 (2-2-1장). 인스펙터 주입 필드만 예외 |
+| 인스펙터 참조 연결 누락 | 첫 `Show()`에서 NRE | `IValidatable` + `OnValidate`로 에디터에서 조기 검출 |
 
 ---
 
