@@ -17,21 +17,7 @@ MonoBehaviour:
   _availableAppVersions: []
   _availableRegions:
   - kr
-  _availableScenes:
-  - Name: Multiplay Prototype
-    ScenePath: Assets/Scenes/MultiplayPrototype.unity
-    Preview: {fileID: 0}
-    RuntimeConfig:
-      Seed: 0
-      Map:
-        Id:
-          Value: 363481078872077106
-      SimulationConfig:
-        Id:
-          Value: 163983649200099817
-      SystemsConfig:
-        Id:
-          Value: 378553162747903325
+  _availableScenes: []
   _machineId: {fileID: 0}
   _codeGenerator: {fileID: 11400000, guid: e38f1fac5a1a5c94da2b4ef21bd48419, type: 2}
   DefaultScenePreview: {fileID: 0}
