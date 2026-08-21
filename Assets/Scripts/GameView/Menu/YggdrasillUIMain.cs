@@ -47,7 +47,7 @@ namespace QuantumUser.View.Menu
             }
             catch (Exception ex)
             {
-                Debug.LogError($"싱글 플레이 실행 중 오류 발생: {ex}");
+                Debug.LogError($"싱글 플레이 실행 중 오류 발생: {ex}", this);
             }
         }
 
