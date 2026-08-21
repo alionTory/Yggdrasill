@@ -46,10 +46,17 @@ namespace QuantumUser.View.Menu
             this.LogError();
         }
 
-        public virtual async Task OnDisconnectPressed()
+        public virtual async void OnDisconnectPressed()
         {
-            await Connection.DisconnectAsync(ConnectFailReason.UserRequest);
-            Controller.Show<YggdrasillUIMain>();
+            try
+            {
+                await Connection.DisconnectAsync(ConnectFailReason.UserRequest);
+                Controller.Show<YggdrasillUIMain>();
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e, this);
+            }
         }
 
 
@@ -116,7 +123,7 @@ namespace QuantumUser.View.Menu
                     sBuilder.AppendLine(username);
                     playerCount += string.IsNullOrEmpty(username) ? 0 : 1;
                 }
-                
+
                 playerListUI.SetText(sBuilder.ToString(), $"{playerCount}", $"/{Connection.MaxPlayerCount}");
             }
             else
