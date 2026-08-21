@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,13 +6,12 @@ using Photon.Deterministic;
 using Photon.Realtime;
 using Quantum;
 using Quantum.Menu;
-using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace QuantumUser.View.Menu
 {
-    public class YggdrasillSingleplayRunner : IHasInvariants
+    public class YggdrasillSingleplayRunner : MonoBehaviour, IHasInvariants
     {
         private QuantumRunner? _runner;
 
@@ -45,7 +43,7 @@ namespace QuantumUser.View.Menu
         /// <summary>
         /// Register to get notified on session runner shutdowns to handle unexpected errors.
         /// </summary>
-        public event Action<ShutdownCause, SessionRunner> SessionShutdownEvent;
+        public event Action<ShutdownCause, SessionRunner>? SessionShutdownEvent;
 
         /// <summary>
         /// Is added as callback for <see cref="SessionRunner.Arguments.OnShutdown"/>.
