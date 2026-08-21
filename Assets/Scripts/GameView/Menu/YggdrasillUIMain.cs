@@ -4,14 +4,9 @@ using UnityEngine;
 
 namespace QuantumUser.View.Menu
 {
-    public class YggdrasillUIMain : QuantumMenuUIScreen
+    public class YggdrasillUIMain : YggdrasillMenuUIScreen
     {
         
-        /// <summary>
-        /// 비-소유 연결 관리 객체
-        /// </summary>
-        public YggdrasillMenuConnection? ConnectionManager { get; set; }
-
         public override void Awake()
         {
             base.Awake();
