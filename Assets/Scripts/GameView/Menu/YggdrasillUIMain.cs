@@ -1,4 +1,5 @@
-﻿using Quantum.Menu;
+﻿using System.Threading.Tasks;
+using Quantum.Menu;
 using UnityEngine;
 
 namespace QuantumUser.View.Menu
@@ -24,7 +25,7 @@ namespace QuantumUser.View.Menu
             ConnectionArgs.SetDefaults(Config);
         }
 
-        public virtual async Awaitable OnSinglePlayButtonPressed()
+        public virtual async Task OnSinglePlayButtonPressed()
         {
             Contract.RequireNotNull(ConnectionManager);
             
