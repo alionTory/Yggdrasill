@@ -147,11 +147,11 @@ namespace QuantumUser.View.Menu
             try
             {
                 await ConnectPhotonRoom(connectArgs);
+                
                 phase = ConnectionPhase.WaitingOpponent;
-
                 await WaitForOpponentAsync(connectArgs.MaxPlayerCount);
+                
                 phase = ConnectionPhase.StartingRunner;
-
                 await StartSessionRunnerAsync(connectArgs);
                 _runner.Game.AddPlayer(0, connectArgs.RuntimePlayers[0]);
 
