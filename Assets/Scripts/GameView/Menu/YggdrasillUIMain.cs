@@ -1,12 +1,29 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Quantum.Menu;
 using UnityEngine;
 
 namespace QuantumUser.View.Menu
 {
-    public class YggdrasillUIMain : YggdrasillMenuUIScreen
+    [RequireComponent(typeof(YggdrasillSingleplayRunner))]
+    public class YggdrasillUIMain : QuantumMenuUIScreen, IValidatable
     {
-        
+        [SerializeField] private YggdrasillSingleplayRunner singlePlayRunner = null!;
+
+        public List<string> Validate()
+        {
+            var result = new List<string>();
+            IValidatable.CheckNotNull(singlePlayRunner, result);
+            return result;
+        }
+
+        private void OnValidate()
+        {
+            if (singlePlayRunner == null) TryGetComponent(out singlePlayRunner);
+            this.LogError();
+        }
+
         public override void Awake()
         {
             base.Awake();
@@ -20,18 +37,33 @@ namespace QuantumUser.View.Menu
             ConnectionArgs.SetDefaults(Config);
         }
 
-        public virtual async Task OnSinglePlayButtonPressed()
+        public virtual async void OnSinglePlayButtonPressed()
         {
-            Contract.RequireNotNull(ConnectionManager);
-            
-            Controller.Show<QuantumMenuUILoading>();
-            var connectionResult = await ConnectionManager.StartLocalAsync(ConnectionArgs);
-            await Controller.HandleConnectionResult(connectionResult, Controller);
+            try
+            {
+                Controller.Show<QuantumMenuUILoading>();
+                var connectionResult = await singlePlayRunner.StartLocalAsync(ConnectionArgs);
+                await Controller.HandleConnectionResult(connectionResult, Controller);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"싱글 플레이 실행 중 오류 발생: {ex}");
+            }
         }
-        
+
         public virtual void OnMultiplayButtonPressed()
         {
             Controller.Show<YggdrasillUIMultiplay>();
+        }
+
+        public virtual void OnSettingsButtonPressed()
+        {
+            Controller.Show<QuantumMenuUISettings>();
+        }
+
+        public virtual void OnQuitButtonPressed()
+        {
+            Application.Quit();
         }
     }
 }

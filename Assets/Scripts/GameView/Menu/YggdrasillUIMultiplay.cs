@@ -5,41 +5,36 @@ using UnityEngine.UI;
 
 namespace QuantumUser.View.Menu
 {
-    public class YggdrasillUIMultiplay : YggdrasillMenuUIScreen
+    public class YggdrasillUIMultiplay : QuantumMenuUIScreen
     {
         [SerializeField] private InputField invitationCodeField = null!;
 
         public virtual async Task OnAutoMatchingButtonPressed()
         {
-            Contract.RequireNotNull(ConnectionManager);
             Controller.Show<QuantumMenuUILoading>();
 
             ConnectionArgs.Session = null;
             ConnectionArgs.Creating = true;
-            var result = await ConnectionManager.StartOnlineAsync(ConnectionArgs);
+            var result = await Connection.ConnectAsync(ConnectionArgs);
 
             await Controller.HandleConnectionResult(result, Controller);
         }
 
         public virtual async Task OnPrivateRoomCreateButtonPressed()
         {
-            Contract.RequireNotNull(ConnectionManager);
-            
             var code = Config.CodeGenerator.Create();
             Controller.Show<QuantumMenuUILoading>();
             Controller.Get<QuantumMenuUILoading>().SetStatusText($"참가 코드: {code}");
 
             ConnectionArgs.Session = code;
             ConnectionArgs.Creating = true;
-            var result = await ConnectionManager.StartOnlineAsync(ConnectionArgs);
+            var result = await Connection.ConnectAsync(ConnectionArgs);
 
             await Controller.HandleConnectionResult(result, Controller);
         }
 
         public virtual async Task OnPrivateRoomParticipateButtonPressed()
         {
-            Contract.RequireNotNull(ConnectionManager);
-            
             var code = invitationCodeField.text.ToUpperInvariant();
             if (!Config.CodeGenerator.IsValid(code))
             {
@@ -51,7 +46,7 @@ namespace QuantumUser.View.Menu
 
                 ConnectionArgs.Session = code;
                 ConnectionArgs.Creating = false;
-                var result = await ConnectionManager.StartOnlineAsync(ConnectionArgs);
+                var result = await Connection.ConnectAsync(ConnectionArgs);
 
                 await Controller.HandleConnectionResult(result, Controller);
             }
