@@ -32,6 +32,11 @@ namespace QuantumUser.View.Menu
         /// 게임이 온라인으로 실행 중인지 여부를 나타냄.
         /// </summary>
         public bool IsOnline { get; private set; } = false;
+        
+        /// <summary>
+        /// 비공개 방 접속 시 참가 코드
+        /// </summary>
+        public string? InvitationCode { get; private set; } = null;
 
         public override RealtimeClient? Client => _client;
         public override string? SessionName => _client?.CurrentRoom?.Name;
@@ -65,6 +70,7 @@ namespace QuantumUser.View.Menu
             Contract.Invariant(!IsOnline || IsGameRunning,
                 $"{nameof(IsConnected)}가 true, 즉 온라인으로 게임이 실행 중이라면, {nameof(IsGameRunning)}도 true여야 한다.");
             Contract.Invariant(IsOnline == (Client != null));
+            Contract.Invariant(IsOnline || (InvitationCode == null), $"{nameof(IsOnline)}가 false이면, {nameof(InvitationCode)}는 null이어야 한다.");
         }
 
         /// <summary>
@@ -214,6 +220,8 @@ namespace QuantumUser.View.Menu
             ReportProgress("매치메이킹 중...");
             _client = await MatchmakingExtensions.ConnectToRoomAsync(matchmakingArguments);
             IsOnline = true;
+            if(!string.IsNullOrEmpty(connectArgs.Session))
+                InvitationCode = connectArgs.Session;
         }
 
         /// <summary>
@@ -307,6 +315,7 @@ namespace QuantumUser.View.Menu
         /// ensure: !<see cref="IsGameRunning"/> <br/>
         /// ensure: <see cref="Client"/> == null <br/>
         /// ensure: !<see cref="IsOnline"/> <br/>
+        /// ensure: <see cref="InvitationCode"/> == null <br/>
         /// </remarks>
         private async Task<ConnectResult> HandleConnectionFail(Exception exception, ConnectionPhase phase)
         {
@@ -360,6 +369,7 @@ namespace QuantumUser.View.Menu
         /// ensure: !<see cref="IsGameRunning"/> <br/>
         /// ensure: <see cref="Client"/> == null <br/>
         /// ensure: !<see cref="IsOnline"/> <br/>
+        /// ensure: <see cref="InvitationCode"/> == null <br/>
         /// </remarks>
         private async Task CleanupAsync()
         {
@@ -377,6 +387,7 @@ namespace QuantumUser.View.Menu
                 await _client.DisconnectAsync();
             _client = null;
             IsOnline = false;
+            InvitationCode = null;
         }
     }
 }
