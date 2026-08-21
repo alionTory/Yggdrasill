@@ -11,6 +11,7 @@ namespace QuantumUser.View.Menu
 
         public virtual async Task OnAutoMatchingButtonPressed()
         {
+            Contract.RequireNotNull(ConnectionManager);
             Controller.Show<QuantumMenuUILoading>();
 
             ConnectionArgs.Session = null;
@@ -22,6 +23,8 @@ namespace QuantumUser.View.Menu
 
         public virtual async Task OnPrivateRoomCreateButtonPressed()
         {
+            Contract.RequireNotNull(ConnectionManager);
+            
             var code = Config.CodeGenerator.Create();
             Controller.Show<QuantumMenuUILoading>();
             Controller.Get<QuantumMenuUILoading>().SetStatusText($"참가 코드: {code}");
@@ -35,6 +38,8 @@ namespace QuantumUser.View.Menu
 
         public virtual async Task OnPrivateRoomParticipateButtonPressed()
         {
+            Contract.RequireNotNull(ConnectionManager);
+            
             var code = invitationCodeField.text.ToUpperInvariant();
             if (!Config.CodeGenerator.IsValid(code))
             {
