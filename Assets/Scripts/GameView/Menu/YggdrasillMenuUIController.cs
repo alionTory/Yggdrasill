@@ -1,10 +1,72 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Quantum.Menu;
+using UnityEngine;
 
 namespace QuantumUser.View.Menu
 {
-    public class YggdrasillMenuUIController : QuantumMenuUIController
+    [RequireComponent(typeof(YggdrasillMenuConnection))]
+    public class YggdrasillMenuUIController : QuantumMenuUIController, IValidatable
     {
+        [SerializeField] private YggdrasillMenuConnection connectionManager = null!;
+
+        public List<string> Validate()
+        {
+            var result = new List<string>();
+            IValidatable.CheckNotNull(connectionManager, result);
+            return result;
+        }
+
+        private void OnValidate()
+        {
+            if(connectionManager==null) TryGetComponent(out connectionManager);
+            if(Connection==null) Connection = connectionManager;
+            this.LogError();
+        }
+
+        protected override void Awake()
+        {
+            _screenLookup = new Dictionary<Type, QuantumMenuUIScreen>();
+
+            foreach (var screen in _screens)
+            {
+                screen.Config = _config;
+                screen.Config.Init();
+                screen.Connection = Connection;
+                screen.ConnectionArgs = ConnectArgs;
+                screen.Controller = this;
+
+                var t = screen.GetType();
+                while (true)
+                {
+                    _screenLookup.Add(t, screen);
+                    if (t.BaseType == null || typeof(QuantumMenuUIScreen).IsAssignableFrom(t) == false ||
+                        t.BaseType == typeof(QuantumMenuUIScreen))
+                    {
+                        break;
+                    }
+
+                    t = t.BaseType;
+                }
+
+                if (screen is YggdrasillMenuUIScreen yggdrasillScreen)
+                {
+                    yggdrasillScreen.ConnectionManager = connectionManager;
+                }
+
+                if (screen is QuantumMenuUIPopup popupHandler)
+                {
+                    _popupHandler = popupHandler;
+                }
+            }
+
+            foreach (var screen in _screens)
+            {
+                screen.Init();
+            }
+        }
+
         public override async Task HandleConnectionResult(ConnectResult result, QuantumMenuUIController controller)
         {
             if (result.CustomResultHandling) return;
@@ -19,7 +81,7 @@ namespace QuantumUser.View.Menu
                 if (result.WaitForCleanup != null) await Task.WhenAll(result.WaitForCleanup, popup);
                 else
                     await popup;
-                Show<YggdrasillUIMain>(); // ← 요구사항: OK 누르면 초기 화면
+                Show<YggdrasillUIMain>();
             }
         }
     }
