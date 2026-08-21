@@ -20,7 +20,7 @@ namespace QuantumUser.View.Menu
         /// <summary>
         /// 게임 내 플레이어 리스트가 표시되는 GUI.
         /// </summary>
-        [SerializeField, HideInInspector] private YggdrasillMenuUIPlayerList playerListUI = null!;
+        [SerializeField, InlineHelp] private YggdrasillMenuUIPlayerList playerListUI = null!;
 
         /// <summary>
         /// In what frequency are the usernames refreshed.
@@ -43,7 +43,6 @@ namespace QuantumUser.View.Menu
         private void OnValidate()
         {
             if (menuCamera == null) menuCamera = FindAnyObjectByType<Camera>();
-            if (playerListUI == null) TryGetComponent(out playerListUI);
             this.LogError();
         }
 
