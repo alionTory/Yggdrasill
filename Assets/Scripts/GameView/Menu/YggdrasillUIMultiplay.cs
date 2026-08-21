@@ -5,14 +5,9 @@ using UnityEngine.UI;
 
 namespace QuantumUser.View.Menu
 {
-    public class YggdrasillUIMultiplay : QuantumMenuUIScreen
+    public class YggdrasillUIMultiplay : YggdrasillMenuUIScreen
     {
         [SerializeField] private InputField invitationCodeField = null!;
-
-        /// <summary>
-        /// 비-소유 연결 관리 객체
-        /// </summary>
-        public YggdrasillMenuConnection? ConnectionManager { get; set; }
 
         public virtual async Task OnAutoMatchingButtonPressed()
         {
