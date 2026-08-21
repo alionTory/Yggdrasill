@@ -13,7 +13,7 @@ using UnityEngine.Events;
 
 namespace QuantumUser.View.Menu
 {
-    public class YggdrasillMenuConnection : IHasInvariants
+    public class YggdrasillSingleplayRunner : IHasInvariants
     {
         private QuantumRunner? _runner;
 
