@@ -36,7 +36,7 @@ namespace Quantum
         public unsafe void Execute(Frame frame)
         {
             var seedlingPrefab =
-                frame.FindAsset<EntityPrototype>("QuantumUser/Resources/Prefabs/SeedlingEntityPrototype");
+                frame.FindAsset<EntityPrototype>("Resources/Prefabs/SeedlingEntityPrototype");
             EntityRef seedling = frame.Create(seedlingPrefab);
             Transform2D* transform = frame.Unsafe.GetPointer<Transform2D>(seedling);
             transform->Position = WorldPosition;
