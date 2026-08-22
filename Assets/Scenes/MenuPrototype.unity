@@ -306,6 +306,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf79d769d23541f7b5beed46af2e7c44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: GameView::QuantumUser.View.Menu.YggdrasillUISinglePlay
+--- !u!114 &682904644 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6368892851222879294, guid: 623caa4de99c29a4d83351d8da9d502e, type: 3}
+  m_PrefabInstance: {fileID: 1513253047}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c3107a31964418cbe5493f82ae4ad44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameView::QuantumUser.View.Menu.YggdrasillSingleplayRunner
 --- !u!114 &800190250 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8854979106777518369, guid: 49f915c0e914e4d45813ce0d351d15b5, type: 3}
@@ -613,11 +624,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4039561197434561952, guid: 75410ea232aedce4f96bc6c3093e3d57, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 404.9444
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4039561197434561952, guid: 75410ea232aedce4f96bc6c3093e3d57, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 39.581036
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4039561197434561952, guid: 75410ea232aedce4f96bc6c3093e3d57, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -662,6 +673,30 @@ PrefabInstance:
     - target: {fileID: 4915006030706539919, guid: 75410ea232aedce4f96bc6c3093e3d57, type: 3}
       propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
       value: 1801810542
+      objectReference: {fileID: 0}
+    - target: {fileID: 5042657821496435097, guid: 75410ea232aedce4f96bc6c3093e3d57, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5042657821496435097, guid: 75410ea232aedce4f96bc6c3093e3d57, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5042657821496435097, guid: 75410ea232aedce4f96bc6c3093e3d57, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 630
+      objectReference: {fileID: 0}
+    - target: {fileID: 5042657821496435097, guid: 75410ea232aedce4f96bc6c3093e3d57, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 5042657821496435097, guid: 75410ea232aedce4f96bc6c3093e3d57, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 428.4511
+      objectReference: {fileID: 0}
+    - target: {fileID: 5042657821496435097, guid: 75410ea232aedce4f96bc6c3093e3d57, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -632
       objectReference: {fileID: 0}
     - target: {fileID: 5487224919704782101, guid: 75410ea232aedce4f96bc6c3093e3d57, type: 3}
       propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
@@ -874,11 +909,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9080202634340887961, guid: 623caa4de99c29a4d83351d8da9d502e, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -554.5067
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9080202634340887961, guid: 623caa4de99c29a4d83351d8da9d502e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -500.52188
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9080202634340887961, guid: 623caa4de99c29a4d83351d8da9d502e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1085,6 +1120,10 @@ PrefabInstance:
       propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
       value: 1801810542
       objectReference: {fileID: 0}
+    - target: {fileID: 6863459907540104679, guid: 1eb54e1f0b31d14469b9c08f1de15b0b, type: 3}
+      propertyPath: singlePlayRunner
+      value: 
+      objectReference: {fileID: 682904644}
     - target: {fileID: 6883745676662680407, guid: 1eb54e1f0b31d14469b9c08f1de15b0b, type: 3}
       propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
       value: 1801810542
@@ -1149,7 +1188,8 @@ PrefabInstance:
       propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
       value: 1801810542
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 952429388404768386, guid: 1eb54e1f0b31d14469b9c08f1de15b0b, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
