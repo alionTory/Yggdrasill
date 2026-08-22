@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Quantum.Menu;
 using UnityEngine;
 
@@ -40,15 +41,34 @@ namespace QuantumUser.View.Menu
         {
             try
             {
-                Controller.Show<YggdrasillUISinglePlay>();
+                Controller.Show<QuantumMenuUILoading>();
                 var connectionResult = await singlePlayRunner.StartLocalAsync(ConnectionArgs);
-                await Controller.HandleConnectionResult(connectionResult, Controller);
+                await ((YggdrasillMenuUIController) Controller).HandleLocalConnectionResult(connectionResult);
             }
             catch (Exception ex)
             {
                 Debug.LogError($"싱글 플레이 실행 중 오류 발생: {ex}", this);
             }
         }
+        
+        private async Task HandleConnectionResult(ConnectResult result, QuantumMenuUIController controller) {
+            if (result.CustomResultHandling) {
+                return;
+            } 
+      
+            if (result.Success) {
+                controller.Show<YggdrasillUISinglePlay>();
+            } else if (result.FailReason != ConnectFailReason.ApplicationQuit) {
+                var popup = controller.PopupAsync(result.DebugMessage, "Connection Failed");
+                if (result.WaitForCleanup != null) {
+                    await Task.WhenAll(result.WaitForCleanup, popup);
+                } else {
+                    await popup;
+                }
+                controller.Show<QuantumMenuUIMain>();
+            }
+        }
+
 
         public virtual void OnMultiplayButtonPressed()
         {
