@@ -23,35 +23,18 @@ namespace QuantumUser.View.Menu
             }
             else if (result.FailReason != ConnectFailReason.ApplicationQuit)
             {
-                await HandleFail(result);
-            }
-        }
+                var popup = PopupAsync(result.DebugMessage, "Connection Failed");
+                if (result.WaitForCleanup != null)
+                {
+                    await Task.WhenAll(result.WaitForCleanup, popup);
+                }
+                else
+                {
+                    await popup;
+                }
 
-        public override async Task HandleConnectionResult(ConnectResult result, QuantumMenuUIController controller)
-        {
-            if (result.Success)
-            {
-                Show<QuantumMenuUIGameplay>();
+                Show<QuantumMenuUIMain>();
             }
-            else if (result.FailReason != ConnectFailReason.ApplicationQuit)
-            {
-                await HandleFail(result);
-            }
-        }
-
-        private async Task HandleFail(ConnectResult result)
-        {
-            var popup = PopupAsync(result.DebugMessage, "Connection Failed");
-            if (result.WaitForCleanup != null)
-            {
-                await Task.WhenAll(result.WaitForCleanup, popup);
-            }
-            else
-            {
-                await popup;
-            }
-
-            Show<YggdrasillUIMain>();
         }
     }
 }

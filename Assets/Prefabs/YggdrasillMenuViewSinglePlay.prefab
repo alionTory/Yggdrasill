@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5836020121098760811}
   - component: {fileID: -3485072856006381108}
   - component: {fileID: 4039415674987975770}
+  - component: {fileID: 1312763252644435808}
   m_Layer: 5
   m_Name: YggdrasillMenuViewSinglePlay
   m_TagString: Untagged
@@ -89,7 +90,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 1
+  m_IgnoreReversedGraphics: 0
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
@@ -133,6 +134,21 @@ MonoBehaviour:
   menuCamera: {fileID: 0}
   playerListUI: {fileID: 5448322192307251098}
   updateUsernameRateInSeconds: 2
+--- !u!114 &1312763252644435808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4661524608685665804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6cd40020bc5474fb498dab3b1c382f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GameView::QuantumUser.View.Menu.YggdrasillMenuUIPlayerList
+  playersText: {fileID: 0}
+  playersCountText: {fileID: 0}
+  playersMaxCountText: {fileID: 0}
 --- !u!1001 &328430294728770461
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -287,7 +303,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1219545790234463509, guid: 83324800691fbbd43bc5a978d6df0475, type: 3}
       propertyPath: m_Value
-      value: 1
+      value: 1.0000004
       objectReference: {fileID: 0}
     - target: {fileID: 1365649651487224395, guid: 83324800691fbbd43bc5a978d6df0475, type: 3}
       propertyPath: m_AnchorMax.y

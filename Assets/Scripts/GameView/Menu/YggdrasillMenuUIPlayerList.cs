@@ -23,8 +23,10 @@ namespace QuantumUser.View.Menu
             return result;
         }
 
-        private void OnValidate()
+        private void Reset()
         {
+            // 단일 오브젝트를 넘어서는 직렬화 필드 참조는 OnValidate 호출 시점에 로드되지 않을 수 있음.
+            // 따라서 OnValidate 대신 Reset에서 필드를 채우고 검증 로그 출력.
             if (playersText == null)
                 transform.Find("Scroll View/Viewport/Content/PlayerName")?.TryGetComponent(out playersText);
             if (playersCountText == null)
@@ -37,17 +39,17 @@ namespace QuantumUser.View.Menu
         /// <summary>
         /// The list of players.
         /// </summary>
-        [SerializeField, HideInInspector] private TMP_Text playersText = null!;
+        [SerializeField] private TMP_Text playersText = null!;
 
         /// <summary>
         /// The current player count.
         /// </summary>
-        [SerializeField, HideInInspector] private TMP_Text playersCountText = null!;
+        [SerializeField] private TMP_Text playersCountText = null!;
 
         /// <summary>
         /// The max player count.
         /// </summary>
-        [SerializeField, HideInInspector] private TMP_Text playersMaxCountText = null!;
+        [SerializeField] private TMP_Text playersMaxCountText = null!;
 
         public void SetText(string players, string playersCount, string playersMaxCount)
         {

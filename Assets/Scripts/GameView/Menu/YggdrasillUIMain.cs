@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace QuantumUser.View.Menu
 {
-    [RequireComponent(typeof(YggdrasillSingleplayRunner))]
     public class YggdrasillUIMain : QuantumMenuUIScreen, IValidatable
     {
         [SerializeField] private YggdrasillSingleplayRunner singlePlayRunner = null!;
@@ -18,9 +17,8 @@ namespace QuantumUser.View.Menu
             return result;
         }
 
-        private void OnValidate()
+        private void Reset()
         {
-            if (singlePlayRunner == null) TryGetComponent(out singlePlayRunner);
             this.LogError();
         }
 

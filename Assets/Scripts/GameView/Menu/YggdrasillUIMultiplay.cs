@@ -76,7 +76,7 @@ namespace QuantumUser.View.Menu
 
         public virtual void OnBackButtonPressed()
         {
-            Controller.Show<YggdrasillUIMain>();
+            Controller.Show<QuantumMenuUIMain>();
         }
     }
 }

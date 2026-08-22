@@ -9,9 +9,11 @@ using UnityEngine;
 
 namespace QuantumUser.View.Menu
 {
-    [RequireComponent(typeof(YggdrasillMenuUIPlayerList))]
+    [RequireComponent(typeof(YggdrasillMenuUIPlayerList), typeof(YggdrasillSingleplayRunner))]
     public class YggdrasillUISinglePlay : QuantumMenuUIScreen, IValidatable
     {
+        [SerializeField] private YggdrasillSingleplayRunner singlePlayRunner = null!;
+
         /// <summary>
         /// Toggles this camera on/off when entering or leaving the game screen.
         /// </summary>
@@ -37,12 +39,15 @@ namespace QuantumUser.View.Menu
             var result = new List<string>();
             IValidatable.CheckNotNull(menuCamera, result);
             IValidatable.CheckNotNull(playerListUI, result);
+            IValidatable.CheckNotNull(singlePlayRunner, result);
             return result;
         }
 
         private void OnValidate()
         {
             if (menuCamera == null) menuCamera = FindAnyObjectByType<Camera>();
+            if (playerListUI == null) TryGetComponent(out playerListUI);
+            if (singlePlayRunner == null) TryGetComponent(out singlePlayRunner);
             this.LogError();
         }
 
@@ -50,8 +55,8 @@ namespace QuantumUser.View.Menu
         {
             try
             {
-                await Connection.DisconnectAsync(ConnectFailReason.UserRequest);
-                Controller.Show<YggdrasillUIMain>();
+                await singlePlayRunner.DisconnectAsync();
+                Controller.Show<QuantumMenuUIMain>();
             }
             catch (Exception e)
             {

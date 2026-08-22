@@ -212,7 +212,6 @@ GameObject:
   - component: {fileID: 3126240472180808604}
   - component: {fileID: 949098203445964656}
   - component: {fileID: 5282977835832923878}
-  - component: {fileID: 952429388404768386}
   - component: {fileID: 6863459907540104679}
   m_Layer: 5
   m_Name: YggdrasillMenuViewMain
@@ -319,18 +318,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &952429388404768386
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8142521529678333143}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c3107a31964418cbe5493f82ae4ad44, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: GameView::QuantumUser.View.Menu.YggdrasillSingleplayRunner
 --- !u!114 &6863459907540104679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -346,7 +333,7 @@ MonoBehaviour:
   _isModal: 0
   _plugins:
   - {fileID: 8363946788431071579}
-  singlePlayRunner: {fileID: 952429388404768386}
+  singlePlayRunner: {fileID: 0}
 --- !u!1001 &132156956723410470
 PrefabInstance:
   m_ObjectHideFlags: 0
