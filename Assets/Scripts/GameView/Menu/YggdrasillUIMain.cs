@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Quantum.Menu;
 using UnityEngine;
 
@@ -41,7 +40,7 @@ namespace QuantumUser.View.Menu
         {
             try
             {
-                Controller.Show<QuantumMenuUILoading>();
+                Controller.Show<YggdrasillUISinglePlay>();
                 var connectionResult = await singlePlayRunner.StartLocalAsync(ConnectionArgs);
                 await Controller.HandleConnectionResult(connectionResult, Controller);
             }
