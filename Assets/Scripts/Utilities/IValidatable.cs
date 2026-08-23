@@ -70,7 +70,13 @@ namespace QuantumUser.View
         public static void LogErrorDelayed<T>(this T obj) where T : Object, IValidatable
         {
 #if UNITY_EDITOR
-            EditorApplication.delayCall += obj.LogError;
+            /*
+             * 프리팹 에셋 자체에 대해서는 에러 로그를 출력하지 않아야 함.
+             * 유니티는 씬에 배치된 프리팹 뿐만 아니라 프리팹 에셋 자체에 대해서도 OnValidate를 호출하는데,
+             * 프리팹 에셋에는 프리팹 외부 컴포넌트에 대한 참조가 존재할 수 없기 때문.
+             */
+            if (!PrefabUtility.IsPartOfPrefabAsset(obj))
+                EditorApplication.delayCall += obj.LogError;
 #endif
         }
     }

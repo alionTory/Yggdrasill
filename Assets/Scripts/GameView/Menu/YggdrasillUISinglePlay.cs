@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace QuantumUser.View.Menu
 {
-    [RequireComponent(typeof(YggdrasillMenuUIPlayerList), typeof(YggdrasillSingleplayRunner))]
+    [RequireComponent(typeof(YggdrasillSingleplayRunner))]
     public class YggdrasillUISinglePlay : QuantumMenuUIScreen, IValidatable
     {
         [SerializeField] private YggdrasillSingleplayRunner singlePlayRunner = null!;
@@ -16,7 +16,7 @@ namespace QuantumUser.View.Menu
         /// <summary>
         /// Toggles this camera on/off when entering or leaving the game screen.
         /// </summary>
-        [SerializeField, HideInInspector] private Camera menuCamera = null!;
+        [SerializeField, InlineHelp] private Camera menuCamera = null!;
 
         /// <summary>
         /// 게임 내 플레이어 리스트가 표시되는 GUI.
@@ -49,7 +49,6 @@ namespace QuantumUser.View.Menu
 
         private void OnValidate()
         {
-            if (playerListUI == null) TryGetComponent(out playerListUI);
             if (singlePlayRunner == null) TryGetComponent(out singlePlayRunner);
             this.LogErrorDelayed();
         }
