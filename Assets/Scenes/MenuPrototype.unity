@@ -799,6 +799,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: -34
       objectReference: {fileID: 0}
+    - target: {fileID: 4039415674987975770, guid: 623caa4de99c29a4d83351d8da9d502e, type: 3}
+      propertyPath: menuCamera
+      value: 
+      objectReference: {fileID: 676738161}
     - target: {fileID: 4661524608685665804, guid: 623caa4de99c29a4d83351d8da9d502e, type: 3}
       propertyPath: m_Name
       value: YggdrasillMenuViewSinglePlay
