@@ -45,6 +45,27 @@ namespace QuantumUser.View
     public static class ValidateExtensions
     {
         /// <summary>
+        /// <see cref="value"/>가 null이면 <see cref="errorMessages"/>에 에러 메시지 문자열을 추가한다. <br/>
+        /// 단, <paramref name="obj"/>가 프리팹 에셋이면 아무 동작 없이 바로 리턴한다.
+        /// </summary>
+        /// <remarks>
+        /// 프리팹 에셋의 경우, 에셋 자체의 필드 값이 null이지만, (정적으로) 씬에 배치된 이후에는 null이 아니여야 하는 조건이 존재할 수 있다. <br/>
+        /// 이 메서드는 해당 경우에 사용하기 위한 용도이다.
+        /// </remarks>
+        [Conditional("UNITY_EDITOR")]
+        public static void CheckNotNullIfInScene<T, V>(this T obj, V? value, List<string> errorMessages,
+            [CallerArgumentExpression("value")] string? valueName = null)
+            where T : Object, IValidatable
+            where V : UnityEngine.Object
+        {
+#if UNITY_EDITOR
+            if (!PrefabUtility.IsPartOfPrefabAsset(obj))
+                IValidatable.CheckNotNull(value, errorMessages, valueName);
+#endif
+        }
+
+
+        /// <summary>
         /// 검증을 수행하고, 검증에 실패하면 에러 로그를 출력한다.
         /// </summary>
         /// <remarks>
@@ -71,11 +92,10 @@ namespace QuantumUser.View
         {
 #if UNITY_EDITOR
             /*
-             * 프리팹 에셋 자체에 대해서는 에러 로그를 출력하지 않아야 함.
-             * 유니티는 씬에 배치된 프리팹 뿐만 아니라 프리팹 에셋 자체에 대해서도 OnValidate를 호출하는데,
-             * 프리팹 에셋에는 프리팹 외부 컴포넌트에 대한 참조가 존재할 수 없기 때문.
+             * play mode 시작 시에는 delayCall로 실행해도 가짜 null 에러가 뜨는 현상이 관찰되었음.
+             * 따라서 play mode 시에는 로그를 출력하지 않도록 !Application.isPlaying 조건을 줌.
              */
-            if (!PrefabUtility.IsPartOfPrefabAsset(obj))
+            if (!Application.isPlaying)
                 EditorApplication.delayCall += obj.LogError;
 #endif
         }

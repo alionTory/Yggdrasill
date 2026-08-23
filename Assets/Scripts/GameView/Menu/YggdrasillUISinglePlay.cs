@@ -36,7 +36,7 @@ namespace QuantumUser.View.Menu
         public List<string> Validate()
         {
             var result = new List<string>();
-            IValidatable.CheckNotNull(menuCamera, result);
+            this.CheckNotNullIfInScene(menuCamera, result);
             IValidatable.CheckNotNull(playerListUI, result);
             IValidatable.CheckNotNull(singlePlayRunner, result);
             return result;
@@ -120,18 +120,18 @@ namespace QuantumUser.View.Menu
         /// </summary>
         private void UpdateUsernames()
         {
-            if (Connection.Usernames != null && Connection.Usernames.Count > 0)
+            if (singlePlayRunner.Usernames != null && singlePlayRunner.Usernames.Count > 0)
             {
                 playerListUI.gameObject.SetActive(true);
                 var sBuilder = new StringBuilder();
                 var playerCount = 0;
-                foreach (var username in Connection.Usernames)
+                foreach (var username in singlePlayRunner.Usernames)
                 {
                     sBuilder.AppendLine(username);
                     playerCount += string.IsNullOrEmpty(username) ? 0 : 1;
                 }
 
-                playerListUI.SetText(sBuilder.ToString(), $"{playerCount}", $"/{Connection.MaxPlayerCount}");
+                playerListUI.SetText(sBuilder.ToString(), $"{playerCount}", $"/{singlePlayRunner.MaxPlayerCount}");
             }
             else
             {

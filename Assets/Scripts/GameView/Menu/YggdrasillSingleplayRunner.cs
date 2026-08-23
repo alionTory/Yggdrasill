@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
@@ -6,6 +7,7 @@ using Photon.Deterministic;
 using Photon.Realtime;
 using Quantum;
 using Quantum.Menu;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -31,6 +33,38 @@ namespace QuantumUser.View.Menu
         /// A Unity event that can be used to receive progress updates in text form.
         /// </summary>
         private UnityEvent<string>? _onProgress;
+
+        /// <summary>
+        /// Return the max player count for the Photon room.
+        /// </summary>
+        public int MaxPlayerCount => _runner?.Session.PlayerCount ?? 0;
+    
+        /// <summary>
+        /// Return a list a Photon client names also connected to the room.
+        /// </summary>
+        public List<string>? Usernames {
+            get
+            {
+                var frame = _runner?.Game?.Frames?.Verified;
+                if (frame != null) {
+                    var result = new List<string>(frame.MaxPlayerCount);
+                    for (int i = 0; i < frame.MaxPlayerCount; i++) {
+                        var isPlayerConnected = (frame.GetPlayerInputFlags(i) & DeterministicInputFlags.PlayerNotPresent) == 0;
+                        if (isPlayerConnected) {
+                            var playerNickname = frame.GetPlayerData(i)?.PlayerNickname;
+                            if (string.IsNullOrEmpty(playerNickname)) {
+                                playerNickname = $"Player{i:02}";
+                            }
+                            result.Add(playerNickname);
+                        } else {
+                            result.Add(null);
+                        }
+                    }
+                    return result;
+                }
+                return null;
+            }
+        }
 
         /// <summary>
         /// Reports progress to the progress event.

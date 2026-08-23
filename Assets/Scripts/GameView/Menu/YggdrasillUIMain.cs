@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Quantum.Menu;
+using UnityEditor;
 using UnityEngine;
 
 namespace QuantumUser.View.Menu
@@ -13,7 +14,7 @@ namespace QuantumUser.View.Menu
         public List<string> Validate()
         {
             var result = new List<string>();
-            IValidatable.CheckNotNull(singlePlayRunner, result);
+            this.CheckNotNullIfInScene(singlePlayRunner, result);
             return result;
         }
 
@@ -41,28 +42,37 @@ namespace QuantumUser.View.Menu
             {
                 Controller.Show<QuantumMenuUILoading>();
                 var connectionResult = await singlePlayRunner.StartLocalAsync(ConnectionArgs);
-                await ((YggdrasillMenuUIController) Controller).HandleLocalConnectionResult(connectionResult);
+                await ((YggdrasillMenuUIController)Controller).HandleLocalConnectionResult(connectionResult);
             }
             catch (Exception ex)
             {
                 Debug.LogError($"싱글 플레이 실행 중 오류 발생: {ex}", this);
             }
         }
-        
-        private async Task HandleConnectionResult(ConnectResult result, QuantumMenuUIController controller) {
-            if (result.CustomResultHandling) {
+
+        private async Task HandleConnectionResult(ConnectResult result, QuantumMenuUIController controller)
+        {
+            if (result.CustomResultHandling)
+            {
                 return;
-            } 
-      
-            if (result.Success) {
+            }
+
+            if (result.Success)
+            {
                 controller.Show<YggdrasillUISinglePlay>();
-            } else if (result.FailReason != ConnectFailReason.ApplicationQuit) {
+            }
+            else if (result.FailReason != ConnectFailReason.ApplicationQuit)
+            {
                 var popup = controller.PopupAsync(result.DebugMessage, "Connection Failed");
-                if (result.WaitForCleanup != null) {
+                if (result.WaitForCleanup != null)
+                {
                     await Task.WhenAll(result.WaitForCleanup, popup);
-                } else {
+                }
+                else
+                {
                     await popup;
                 }
+
                 controller.Show<QuantumMenuUIMain>();
             }
         }
