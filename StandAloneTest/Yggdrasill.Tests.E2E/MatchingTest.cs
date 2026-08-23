@@ -27,7 +27,7 @@ public class MatchingTest
     public async Task AutoMatchingTest(int clientCount)
     {
         TestContext.WriteLine("애플리케이션 시작");
-        _applications = await ApplicationRunners.StartRunners(clientCount);
+        _applications = await ApplicationRunners.StartRunners(clientCount, photonAppVersion: _photonAppVersion);
 
         // 멀티플레이 메뉴 진입 및 자동 매칭 버튼 클릭
         await _applications.WhenAll(app => app.Click(GameObjectId.MultiPlayButton));

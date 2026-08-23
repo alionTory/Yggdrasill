@@ -42,11 +42,11 @@ public static class ApplicationRunners
     /// <paramref name="count"/>개의 <see cref="ApplicationRunner"/>으로 구성된 리스트를 생성한다.
     /// </summary>
     /// <param name="count">0 이상이여야 함.</param>
-    public static async Task<ImmutableList<ApplicationRunner>> StartRunners(int count)
+    public static async Task<ImmutableList<ApplicationRunner>> StartRunners(int count, string? photonAppVersion = null)
     {
         var applications = await Task.WhenAll(
             Enumerable.Range(0, count)
-                .Select(_ => ApplicationRunner.StartAsync())
+                .Select(_ => ApplicationRunner.StartAsync(photonAppVersion: photonAppVersion))
         );
         return applications.ToImmutableList();
     }

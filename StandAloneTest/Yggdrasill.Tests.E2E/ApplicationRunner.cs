@@ -93,12 +93,12 @@ namespace Tests.E2eTests
             return raw.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
         }
 
-        public static async Task<ApplicationRunner> StartAsync()
+        public static async Task<ApplicationRunner> StartAsync(string? photonAppVersion = null)
         {
             var result = new ApplicationRunner();
             try
             {
-                await result.InitializeAsync();
+                await result.InitializeAsync(photonAppVersion);
                 return result;
             }
             catch (Exception)
@@ -113,7 +113,7 @@ namespace Tests.E2eTests
         {
         }
 
-        private async Task InitializeAsync()
+        private async Task InitializeAsync(string? photonAppVersion)
         {
             _port = GetFreePort();
             TestContext.Progress.WriteLine($"포트 {_port}에서 게임 애플리케이션 시작 중.");
@@ -137,6 +137,13 @@ namespace Tests.E2eTests
                     "-",
                 }
             };
+
+            if (photonAppVersion != null)
+            {
+                processInfo.ArgumentList.Add(ITestHookApi.PhotonAppVersionCommandLineArgumentName);
+                processInfo.ArgumentList.Add(photonAppVersion);
+            }
+            
             foreach (var argument in ExtraGameArguments())
                 processInfo.ArgumentList.Add(argument);
 
