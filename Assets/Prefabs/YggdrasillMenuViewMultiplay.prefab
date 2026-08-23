@@ -671,6 +671,10 @@ PrefabInstance:
       value: JoinButton
       objectReference: {fileID: 0}
     - target: {fileID: 386289513751760935, guid: 2ddc93568e52b8e48ae5cf473cb7c7b7, type: 3}
+      propertyPath: m_text
+      value: "\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014"
+      objectReference: {fileID: 0}
+    - target: {fileID: 386289513751760935, guid: 2ddc93568e52b8e48ae5cf473cb7c7b7, type: 3}
       propertyPath: m_fontStyle
       value: 16
       objectReference: {fileID: 0}
@@ -876,7 +880,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8979907433223591044, guid: 2ddc93568e52b8e48ae5cf473cb7c7b7, type: 3}
       propertyPath: m_CharacterLimit
-      value: 6
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8979907433223591044, guid: 2ddc93568e52b8e48ae5cf473cb7c7b7, type: 3}
       propertyPath: m_CharacterValidation
