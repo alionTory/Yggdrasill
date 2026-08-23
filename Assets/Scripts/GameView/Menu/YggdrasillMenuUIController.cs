@@ -1,8 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
-using Quantum;
+﻿using System.Threading.Tasks;
 using Quantum.Menu;
-using UnityEngine;
 
 namespace QuantumUser.View.Menu
 {

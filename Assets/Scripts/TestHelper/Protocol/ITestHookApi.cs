@@ -10,6 +10,11 @@ namespace Tests.E2eTests
         /// </summary>
         public const string PortCommandLineArgumentName = "--test-hook-port";
         
+        /// <summary>
+        /// 게임 프로세스 실행 시, photon 매치메이킹의 AppVersion 값을 덮어쓸 수 있는 명령행 인수의 이름.
+        /// </summary>
+        public const string PhotonAppVersionCommandLineArgumentName = "--test-hook-app-version";
+        
         public Task ClickObject(GameObjectId gameObjectId);
         
         /// <summary>

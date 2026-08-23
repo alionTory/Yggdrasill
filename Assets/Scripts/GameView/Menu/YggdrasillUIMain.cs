@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Quantum.Menu;
+using Tests.E2eTests;
 using UnityEditor;
 using UnityEngine;
 
@@ -34,7 +35,23 @@ namespace QuantumUser.View.Menu
         {
             base.Init();
             ConnectionArgs.SetDefaults(Config);
+            ConnectionArgs.AppVersion = ResolveAppVersion();
         }
+        
+        /// <summary>
+        /// 게임 버전을 구한다.
+        /// </summary>
+        /// <remarks>
+        /// 기본적으로 <see cref="Application.version"/>값을 사용한다. <br/>
+        /// 단, <see cref="ITestHookApi.PhotonAppVersionCommandLineArgumentName"/> 명령행 인수가 있으면, 해당 인수로 주어진 값을 대신 사용한다.
+        /// </remarks>
+        private static string ResolveAppVersion() {
+            var args = System.Environment.GetCommandLineArgs();
+            for (int i = 0; i < args.Length - 1; i++)
+                if (args[i] == ITestHookApi.PhotonAppVersionCommandLineArgumentName) return args[i + 1];
+            return Application.version;
+        }
+
 
         public virtual async void OnSinglePlayButtonPressed()
         {
