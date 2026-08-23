@@ -651,13 +651,56 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 237713985560705650, guid: 2ddc93568e52b8e48ae5cf473cb7c7b7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3835479081455781203}
+    - targetCorrespondingSourceObject: {fileID: 237713985560705650, guid: 2ddc93568e52b8e48ae5cf473cb7c7b7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4606084504762889899}
   m_SourcePrefab: {fileID: 100100000, guid: 2ddc93568e52b8e48ae5cf473cb7c7b7, type: 3}
 --- !u!224 &2549449816141485735 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8032280180022476915, guid: 2ddc93568e52b8e48ae5cf473cb7c7b7, type: 3}
   m_PrefabInstance: {fileID: 5483435315570595540}
   m_PrefabAsset: {fileID: 0}
+--- !u!224 &4541446184997166954 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8295461616882141630, guid: 2ddc93568e52b8e48ae5cf473cb7c7b7, type: 3}
+  m_PrefabInstance: {fileID: 5483435315570595540}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5716638861721218214 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 237713985560705650, guid: 2ddc93568e52b8e48ae5cf473cb7c7b7, type: 3}
+  m_PrefabInstance: {fileID: 5483435315570595540}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3835479081455781203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5716638861721218214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d28c053e99e4a76aae58f608384bb6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: TestHelper.CallDebug::Tests.E2eTests.TestId
+  id: 3
+--- !u!114 &4606084504762889899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5716638861721218214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 753bacd3935c4de9b93515a245b2aa71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: TestHelper.CalledByDebug::Tests.E2eTests.ClickPointProvider.UGuiClickPointProvider
+  rectTransform: {fileID: 4541446184997166954}
+  canvas: {fileID: 494486387937566829}
 --- !u!1001 &6194775775913181509
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -889,24 +932,110 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7897333265802781584, guid: 2ddc93568e52b8e48ae5cf473cb7c7b7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6832528246825464603}
+    - targetCorrespondingSourceObject: {fileID: 7897333265802781584, guid: 2ddc93568e52b8e48ae5cf473cb7c7b7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8061843330712919908}
+    - targetCorrespondingSourceObject: {fileID: 237713985560705650, guid: 2ddc93568e52b8e48ae5cf473cb7c7b7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4142159148729439766}
+    - targetCorrespondingSourceObject: {fileID: 237713985560705650, guid: 2ddc93568e52b8e48ae5cf473cb7c7b7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7067446451513545896}
   m_SourcePrefab: {fileID: 100100000, guid: 2ddc93568e52b8e48ae5cf473cb7c7b7, type: 3}
+--- !u!224 &2803250922445457659 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8295461616882141630, guid: 2ddc93568e52b8e48ae5cf473cb7c7b7, type: 3}
+  m_PrefabInstance: {fileID: 6194775775913181509}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2983434111918446017 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8979907433223591044, guid: 2ddc93568e52b8e48ae5cf473cb7c7b7, type: 3}
   m_PrefabInstance: {fileID: 6194775775913181509}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 4062446409671828181}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &4062446409671828181 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7897333265802781584, guid: 2ddc93568e52b8e48ae5cf473cb7c7b7, type: 3}
+  m_PrefabInstance: {fileID: 6194775775913181509}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6832528246825464603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4062446409671828181}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 753bacd3935c4de9b93515a245b2aa71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: TestHelper.CalledByDebug::Tests.E2eTests.ClickPointProvider.UGuiClickPointProvider
+  rectTransform: {fileID: 4494121119224895532}
+  canvas: {fileID: 494486387937566829}
+--- !u!114 &8061843330712919908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4062446409671828181}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d28c053e99e4a76aae58f608384bb6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: TestHelper.CallDebug::Tests.E2eTests.TestId
+  id: 5
 --- !u!224 &4215413211822194998 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8032280180022476915, guid: 2ddc93568e52b8e48ae5cf473cb7c7b7, type: 3}
   m_PrefabInstance: {fileID: 6194775775913181509}
   m_PrefabAsset: {fileID: 0}
+--- !u!224 &4494121119224895532 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 7756905996449683817, guid: 2ddc93568e52b8e48ae5cf473cb7c7b7, type: 3}
+  m_PrefabInstance: {fileID: 6194775775913181509}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6247834239585024823 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 237713985560705650, guid: 2ddc93568e52b8e48ae5cf473cb7c7b7, type: 3}
+  m_PrefabInstance: {fileID: 6194775775913181509}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4142159148729439766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6247834239585024823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d28c053e99e4a76aae58f608384bb6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: TestHelper.CallDebug::Tests.E2eTests.TestId
+  id: 4
+--- !u!114 &7067446451513545896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6247834239585024823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 753bacd3935c4de9b93515a245b2aa71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: TestHelper.CalledByDebug::Tests.E2eTests.ClickPointProvider.UGuiClickPointProvider
+  rectTransform: {fileID: 2803250922445457659}
+  canvas: {fileID: 494486387937566829}
 --- !u!1001 &7116490507364703594
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1038,8 +1167,46 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6130347513068761031, guid: 8ed3504b30edde649b77d18615490bad, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2129641692723904463}
+    - targetCorrespondingSourceObject: {fileID: 6130347513068761031, guid: 8ed3504b30edde649b77d18615490bad, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4979353244133568849}
   m_SourcePrefab: {fileID: 100100000, guid: 8ed3504b30edde649b77d18615490bad, type: 3}
+--- !u!1 &4022142160768873133 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6130347513068761031, guid: 8ed3504b30edde649b77d18615490bad, type: 3}
+  m_PrefabInstance: {fileID: 7116490507364703594}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2129641692723904463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4022142160768873133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 753bacd3935c4de9b93515a245b2aa71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: TestHelper.CalledByDebug::Tests.E2eTests.ClickPointProvider.UGuiClickPointProvider
+  rectTransform: {fileID: 5152791990472606049}
+  canvas: {fileID: 494486387937566829}
+--- !u!114 &4979353244133568849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4022142160768873133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d28c053e99e4a76aae58f608384bb6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: TestHelper.CallDebug::Tests.E2eTests.TestId
+  id: 2
 --- !u!224 &5152791990472606049 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2684355842642320395, guid: 8ed3504b30edde649b77d18615490bad, type: 3}

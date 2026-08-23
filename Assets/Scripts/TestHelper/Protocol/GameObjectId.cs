@@ -13,7 +13,8 @@ namespace Tests.E2eTests
         AutoMatchingButton,
         PrivateRoomCreateButton,
         PrivateRoomParticipateButton,
-        QuickPlayButton,
+        InvitationCodeInputField,
+        InvitationCodeReadField,
         Tilemap,
     }
 }

@@ -24,6 +24,14 @@ namespace Tests.E2eTests
         /// 여기서 "씬 로드"의 정의: 씬 내 모든 활성 초기 오브젝트의 Awake와 OnEnable이 완료된 시점.
         /// </remarks>
         public Task WaitUntilSceneLoad(SceneId sceneId, CancellationToken cancellationToken);
+        
+        /// <summary>
+        /// 현재 클라이언트가 접속한 룸의 참가 코드를 반환한다.
+        /// </summary>
+        /// <remarks>
+        /// 참가 코드가 아직 생성되지 않은 상태라면 예외가 발생한다.
+        /// </remarks>
+        public Task<string> GetInvitationCode(CancellationToken cancellationToken);
 
         /// <summary>
         /// 격자(타일맵)의 <paramref name="column"/>열 <paramref name="row"/>행 칸의 중앙에 해당하는 화면 좌표를 클릭한다.

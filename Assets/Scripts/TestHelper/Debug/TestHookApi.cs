@@ -3,10 +3,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using Tests.E2eTests.ClickPointProvider;
+using TMPro;
 
 namespace Tests.E2eTests
 {
-    public class TestHookApi:ITestHookApi
+    public class TestHookApi : ITestHookApi
     {
         public virtual async Task ClickObject(GameObjectId gameObjectId)
         {
@@ -36,6 +37,15 @@ namespace Tests.E2eTests
                     if (loadedScene.isLoaded) sceneLoaded = true;
                 }
             }
+        }
+
+        public Task<string> GetInvitationCode(CancellationToken cancellationToken)
+        {
+            var gameObject = GameObjectRegistryForTest.Get(GameObjectId.InvitationCodeReadField);
+            if (gameObject.TryGetComponent(out TMP_Text invitationCodeText))
+                return Task.FromResult(invitationCodeText.text);
+            else
+                return Task.FromException<string>(new Exception("초대 코드 게임 오브젝트에 TMP_Text 컴포넌트가 없음."));
         }
 
         public virtual async Task ClickTile(int column, int row)
