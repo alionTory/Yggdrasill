@@ -19,6 +19,11 @@ namespace Tests.E2eTests
             await VirtualDevice.ClickAt(clickPoint);
         }
 
+        public virtual async Task InputText(string text)
+        {
+            await VirtualDevice.InputText(text);
+        }
+
         public virtual async Task WaitUntilSceneLoad(SceneId sceneId, CancellationToken cancellationToken)
         {
             var scene = SceneList.Get(sceneId).scene;

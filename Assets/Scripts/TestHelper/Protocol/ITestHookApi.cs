@@ -11,6 +11,11 @@ namespace Tests.E2eTests
         public const string PortCommandLineArgumentName = "--test-hook-port";
         
         public Task ClickObject(GameObjectId gameObjectId);
+        
+        /// <summary>
+        /// 현재 포커스된 GUI 요소에 <paramref name="text"/>를 입력한다.
+        /// </summary>
+        public Task InputText(string text);
 
         /// <summary>
         /// <paramref name="sceneId"/>에 해당하는 씬이 로드될 때까지 대기한다.
