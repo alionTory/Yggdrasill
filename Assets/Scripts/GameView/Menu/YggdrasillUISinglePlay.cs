@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 using Quantum;
 using Quantum.Menu;
 using UnityEngine;
@@ -43,12 +42,16 @@ namespace QuantumUser.View.Menu
             return result;
         }
 
-        private void OnValidate()
+        private void Reset()
         {
             if (menuCamera == null) menuCamera = FindAnyObjectByType<Camera>();
+        }
+
+        private void OnValidate()
+        {
             if (playerListUI == null) TryGetComponent(out playerListUI);
             if (singlePlayRunner == null) TryGetComponent(out singlePlayRunner);
-            this.LogError();
+            this.LogErrorDelayed();
         }
 
         public virtual async void OnDisconnectPressed()

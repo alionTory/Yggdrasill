@@ -17,9 +17,9 @@ namespace QuantumUser.View.Menu
             return result;
         }
 
-        private void Reset()
+        private void OnValidate()
         {
-            this.LogError();
+            this.LogErrorDelayed();
         }
 
         public override void Awake()
