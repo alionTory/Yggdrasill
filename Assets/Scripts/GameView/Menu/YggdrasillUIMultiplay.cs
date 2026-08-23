@@ -55,7 +55,7 @@ namespace QuantumUser.View.Menu
                 var code = invitationCodeField.text.ToUpperInvariant();
                 if (!Config.CodeGenerator.IsValid(code))
                 {
-                    await Controller.PopupAsync("참가 코드 형식이 올바르지 않습니다.", "참가 실패");
+                    await Controller.PopupAsync($"참가 코드 \"{code}\"의 형식이 올바르지 않습니다.", "참가 실패");
                 }
                 else
                 {

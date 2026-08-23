@@ -91,12 +91,18 @@ namespace QuantumUser.View
         public static void LogErrorDelayed<T>(this T obj) where T : Object, IValidatable
         {
 #if UNITY_EDITOR
-            /*
-             * play mode 시작 시에는 delayCall로 실행해도 가짜 null 에러가 뜨는 현상이 관찰되었음.
-             * 따라서 play mode 시에는 로그를 출력하지 않도록 !Application.isPlaying 조건을 줌.
-             */
-            if (!Application.isPlaying)
-                EditorApplication.delayCall += obj.LogError;
+            EditorApplication.delayCall += () =>
+            {
+                /*
+                 * Unity 에디터는 play 모드 진입 시 다음 절차를 수행함.
+                 * 1. 도메인 리로드 후 edit mode 씬을 복원(역직렬화). 이 시점에 씬 오브젝트들의 OnValidate()가 호출됨.
+                 * 2. Unity가 play mode용 씬을 로드하면서, OnValidate를 받았던 edit mode 오브젝트들을 파괴.
+                 * 3. delayCall 실행. 이때 파괴된 오브젝트에 대해 LogError가 호출될 수 있음.
+                 * 이를 방지하기 위해 null 검사 필요.
+                 */
+                if (obj != null)
+                    obj.LogError();
+            };
 #endif
         }
     }
