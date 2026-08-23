@@ -223,13 +223,6 @@ namespace Tests.E2eTests
             }
         }
 
-        public async Task ClickQuickPlayButton()
-        {
-            TestContext.WriteLine("Quick Play 버튼 클릭 시도 중.");
-            await _testHookApi.ClickObject(GameObjectId.QuickPlayButton);
-            TestContext.WriteLine("Quick Play 버튼 클릭 완료");
-        }
-
         /**
          * 게임 오브젝트를 클릭한다.
          */
