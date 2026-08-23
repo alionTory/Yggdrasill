@@ -12,6 +12,7 @@ public class MatchingTest
 {
     private string _photonAppVersion = Guid.NewGuid().ToString();
     private IEnumerable<ApplicationRunner>? _applications = null;
+    private static readonly TimeSpan _photonServerTimeout = TimeSpan.FromSeconds(10);
 
     // 동기화 테스트에 쓰일 타일 번호
     const int tileRow = 1;
@@ -40,7 +41,7 @@ public class MatchingTest
         {
             try
             {
-                await application.WaitUntilGameEntrance(TimeSpan.FromSeconds(10));
+                await application.WaitUntilGameEntrance(_photonServerTimeout);
                 matchedClients.Add(application);
             }
             catch (OperationCanceledException ex)
@@ -99,14 +100,16 @@ public class MatchingTest
         await twoApplications.WhenAll(app => app.Click(GameObjectId.MultiPlayButton));
 
         await twoApplications[0].Click(GameObjectId.PrivateRoomCreateButton);
-        var invitationCode = await twoApplications[0].GetInvitationCode(TimeSpan.FromSeconds(1));
+        await twoApplications[0].WaitGameObjectLoad(GameObjectId.InvitationCodeReadField, _photonServerTimeout);
+        var invitationCode = await twoApplications[0].GetInvitationCode();
         Assert.That(invitationCode, Is.Not.Null, "비공개 방 생성 시 참가 코드도 생성되어야 함.");
 
+        await twoApplications[1].Click(GameObjectId.InvitationCodeInputField);
+        await twoApplications[1].InputText(invitationCode);
         await twoApplications[1].Click(GameObjectId.PrivateRoomParticipateButton);
-        await twoApplications[1].SubmitPrivateRoomInvitationCode(invitationCode);
 
         // 매칭 여부 검증 - 게임 씬 입장 여부 확인
-        await twoApplications.WhenAll(app => app.WaitUntilGameEntrance(TimeSpan.FromSeconds(10)));
+        await twoApplications.WhenAll(app => app.WaitUntilGameEntrance(_photonServerTimeout));
 
         // 매칭 여부 검증 - 동기화 체크
         await twoApplications.WhenAll(async app =>

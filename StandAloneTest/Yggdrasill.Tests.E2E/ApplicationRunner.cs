@@ -231,6 +231,23 @@ namespace Tests.E2eTests
             await _testHookApi.ClickObject(gameObjectId);
         }
 
+        public async Task InputText(string text)
+        {
+            await _testHookApi.InputText(text);
+        }
+
+        /// <summary>
+        /// 게임 오브젝트가 씬에 생성될 때까지 대기한다.
+        /// </summary>
+        public async Task WaitGameObjectLoad(GameObjectId id, TimeSpan? timeout = null)
+        {
+            timeout ??= TimeSpan.FromSeconds(10);
+            TestContext.WriteLine($"게임 오브젝트 {id}가 생성되기를 기다리는 중.");
+            using var cancellationTokenSource = new CancellationTokenSource(timeout.Value);
+            await _testHookApi.WaitGameObjectLoad(id, cancellationTokenSource.Token);
+            TestContext.WriteLine($"게임 오브젝트 {id} 생성 확인 완료.");
+        }
+
         /// <summary>
         /// 게임 클라이언트가 멀티플레이 게임 시뮬레이션에 진입할 때까지 대기한다. <br/>
         /// </summary>
@@ -241,6 +258,11 @@ namespace Tests.E2eTests
             using var cancellationTokenSource = new CancellationTokenSource(timeout);
             await _testHookApi.WaitUntilSceneLoad(SceneId.MultiplayPrototype, cancellationTokenSource.Token);
             TestContext.WriteLine("게임 씬 입장 완료.");
+        }
+
+        public async Task<string> GetInvitationCode()
+        {
+            return await _testHookApi.GetInvitationCode();
         }
 
         /// <summary>

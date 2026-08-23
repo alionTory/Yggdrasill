@@ -15,6 +15,8 @@ namespace Tests.E2eTests
         /// </summary>
         public const string PhotonAppVersionCommandLineArgumentName = "--test-hook-app-version";
         
+        public Task WaitGameObjectLoad(GameObjectId gameObjectId, CancellationToken cancellationToken);
+        
         public Task ClickObject(GameObjectId gameObjectId);
         
         /// <summary>
@@ -36,7 +38,7 @@ namespace Tests.E2eTests
         /// <remarks>
         /// 참가 코드가 아직 생성되지 않은 상태라면 예외가 발생한다.
         /// </remarks>
-        public Task<string> GetInvitationCode(CancellationToken cancellationToken);
+        public Task<string> GetInvitationCode();
 
         /// <summary>
         /// 격자(타일맵)의 <paramref name="column"/>열 <paramref name="row"/>행 칸의 중앙에 해당하는 화면 좌표를 클릭한다.

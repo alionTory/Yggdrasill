@@ -44,6 +44,17 @@ namespace Tests.E2eTests
         }
 
         /// <summary>
+        /// 레지스트리에서 <see cref="id"/>에 대응되는 게임 오브젝트를 조회한다. <br/>
+        /// </summary>
+        /// <returns>
+        /// 레지스트리에 <see cref="id"/>가 존재하면 true, 존재하지 않으면 false 반환. <br/>
+        /// </returns>
+        public static bool TryGet(GameObjectId id, out GameObject result)
+        {
+            return _map.TryGetValue(id, out result);
+        }
+
+        /// <summary>
         /// 현재 씬의 격자(타일맵)를 조회한다.
         /// </summary>
         /// <exception cref="Exception">

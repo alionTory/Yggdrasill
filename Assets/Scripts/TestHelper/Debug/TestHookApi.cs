@@ -9,6 +9,14 @@ namespace Tests.E2eTests
 {
     public class TestHookApi : ITestHookApi
     {
+        public virtual async Task WaitGameObjectLoad(GameObjectId gameObjectId, CancellationToken cancellationToken)
+        {
+            while (!GameObjectRegistryForTest.TryGet(gameObjectId, out var gameObject))
+            {
+                await Awaitable.NextFrameAsync(cancellationToken);
+            }
+        }
+
         public virtual async Task ClickObject(GameObjectId gameObjectId)
         {
             var gameObject = GameObjectRegistryForTest.Get(gameObjectId);
@@ -38,8 +46,8 @@ namespace Tests.E2eTests
                 }
             }
         }
-
-        public Task<string> GetInvitationCode(CancellationToken cancellationToken)
+        
+        public Task<string> GetInvitationCode()
         {
             var gameObject = GameObjectRegistryForTest.Get(GameObjectId.InvitationCodeReadField);
             if (gameObject.TryGetComponent(out TMP_Text invitationCodeText))
