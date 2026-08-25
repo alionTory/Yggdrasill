@@ -7,7 +7,6 @@ using Photon.Deterministic;
 using Photon.Realtime;
 using Quantum;
 using Quantum.Menu;
-using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Events;
 

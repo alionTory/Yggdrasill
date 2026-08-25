@@ -1866,7 +1866,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d28c053e99e4a76aae58f608384bb6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: TestHelper::Tests.E2eTests.TestId
-  id: 1
+  id: 7
 --- !u!1 &1913726826
 GameObject:
   m_ObjectHideFlags: 0

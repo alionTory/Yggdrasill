@@ -1,5 +1,6 @@
 <RunSettings>
   <TestRunParameters>
     <Parameter name="BuildPath" value="Builds/Windows-Development/Yggdrasill.exe" />
+    <Parameter name="PhotonAppVersion" value="dev1.0.0" />
   </TestRunParameters>
 </RunSettings>

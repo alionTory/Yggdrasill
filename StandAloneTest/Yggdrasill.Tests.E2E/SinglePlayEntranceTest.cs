@@ -9,7 +9,7 @@ public class SinglePlayEntranceTest
 {
     private ApplicationRunner _applicationRunner = null!;
 
-    [OneTimeSetUp]
+    [SetUp]
     public async Task Setup()
     {
         _applicationRunner = await ApplicationRunner.StartAsync();
@@ -28,7 +28,7 @@ public class SinglePlayEntranceTest
         await _applicationRunner.IsSeedlingExistInTileUntilTimeout(tileColumn, tileRow, TimeSpan.FromSeconds(1));
     }
 
-    [OneTimeTearDown]
+    [TearDown]
     public void TearDown()
     {
         _applicationRunner?.Dispose();

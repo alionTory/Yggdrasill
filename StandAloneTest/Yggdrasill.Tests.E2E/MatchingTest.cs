@@ -10,7 +10,7 @@ namespace Tests.E2eTests;
 
 public class MatchingTest
 {
-    private string _photonAppVersion = Guid.NewGuid().ToString();
+    private string _photonAppVersion = ApplicationRunner.GetCustomPhotonAppVersion();
     private IEnumerable<ApplicationRunner>? _applications = null;
     private static readonly TimeSpan _photonServerTimeout = TimeSpan.FromSeconds(10);
 
@@ -90,7 +90,7 @@ public class MatchingTest
     }
 
     [Test]
-    public async Task PrivateRoomMathcingTest()
+    public async Task PrivateRoomMatchingTest()
     {
         TestContext.WriteLine("애플리케이션 시작");
         var twoApplications = await ApplicationRunners.StartRunners(2);
@@ -100,9 +100,8 @@ public class MatchingTest
         await twoApplications.WhenAll(app => app.Click(GameObjectId.MultiPlayButton));
 
         await twoApplications[0].Click(GameObjectId.PrivateRoomCreateButton);
-        await twoApplications[0].WaitGameObjectLoad(GameObjectId.InvitationCodeReadField, _photonServerTimeout);
+        await twoApplications[0].WaitUntilGameEntrance(_photonServerTimeout);
         var invitationCode = await twoApplications[0].GetInvitationCode();
-        Assert.That(invitationCode, Is.Not.Null, "비공개 방 생성 시 참가 코드도 생성되어야 함.");
 
         await twoApplications[1].Click(GameObjectId.InvitationCodeInputField);
         await twoApplications[1].InputText(invitationCode);

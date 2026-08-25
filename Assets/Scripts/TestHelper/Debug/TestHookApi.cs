@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Quantum.Menu;
 using UnityEngine;
 using Tests.E2eTests.ClickPointProvider;
 using TMPro;
@@ -46,14 +47,16 @@ namespace Tests.E2eTests
                 }
             }
         }
-        
+
         public Task<string> GetInvitationCode()
         {
-            var gameObject = GameObjectRegistryForTest.Get(GameObjectId.InvitationCodeReadField);
-            if (gameObject.TryGetComponent(out TMP_Text invitationCodeText))
-                return Task.FromResult(invitationCodeText.text);
+            var connection = UnityEngine.Object.FindAnyObjectByType<QuantumMenuConnectionBehaviour>();
+            if(connection == null)
+                return Task.FromException<string>(new Exception($"{nameof(QuantumMenuConnectionBehaviour)} 오브젝트가 씬에 없음."));
+            else if(string.IsNullOrEmpty(connection.SessionName))
+                return Task.FromException<string>(new Exception($"{nameof(QuantumMenuConnectionBehaviour)} 오브젝트의 {nameof(connection.SessionName)}이 null 또는 빈 문자열임."));
             else
-                return Task.FromException<string>(new Exception("초대 코드 게임 오브젝트에 TMP_Text 컴포넌트가 없음."));
+                return Task.FromResult(connection.SessionName);
         }
 
         public virtual async Task ClickTile(int column, int row)

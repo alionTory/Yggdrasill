@@ -68,7 +68,7 @@ namespace Tests.E2eTests
                     $"(리포지터리 루트 기준으로) 게임 빌드 실행 파일의 상대 경로를 지정하는 테스트 파라미터 {BuildPathParameterName}가 주어지지 않았습니다.");
             return Path.Combine(RepositoryRoot(), TestContext.Parameters[BuildPathParameterName]);
         }
-
+        
         private static int GetFreePort()
         {
             var listener = new TcpListener(IPAddress.Loopback, 0);
@@ -77,7 +77,7 @@ namespace Tests.E2eTests
             listener.Stop();
             return port;
         }
-
+        
         /// <summary>
         /// 게임 프로세스에 덧붙일 명령행 인수를 환경 변수에서 읽는다.
         /// </summary>
@@ -91,6 +91,14 @@ namespace Tests.E2eTests
                 return Array.Empty<string>();
 
             return raw.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        }
+
+        public static string GetCustomPhotonAppVersion()
+        {
+            var result = TestContext.Parameters["PhotonAppVersion"];
+            if (result == null)
+                throw new Exception("테스트 실행을 위해 PhotonAppVersion 테스트 인수가 주어져야 합니다.");
+            return result;
         }
 
         public static async Task<ApplicationRunner> StartAsync(string? photonAppVersion = null)
@@ -241,7 +249,7 @@ namespace Tests.E2eTests
         /// </summary>
         public async Task WaitGameObjectLoad(GameObjectId id, TimeSpan? timeout = null)
         {
-            timeout ??= TimeSpan.FromSeconds(10);
+            timeout ??= TimeSpan.FromSeconds(1);
             TestContext.WriteLine($"게임 오브젝트 {id}가 생성되기를 기다리는 중.");
             using var cancellationTokenSource = new CancellationTokenSource(timeout.Value);
             await _testHookApi.WaitGameObjectLoad(id, cancellationTokenSource.Token);

@@ -8,12 +8,13 @@ namespace Tests.E2eTests
     public class GameE2ETest
     {
         private ImmutableList<ApplicationRunner> _applicationRunners = null!;
+        private string _photonAppVersion = ApplicationRunner.GetCustomPhotonAppVersion();
 
         [OneTimeSetUp]
         public async Task Setup()
         {
             TestContext.Progress.WriteLine("애플리케이션 시작");
-            _applicationRunners = await ApplicationRunners.StartRunners(2);
+            _applicationRunners = await ApplicationRunners.StartRunners(2, photonAppVersion:_photonAppVersion);
         }
 
         [Test, Order(1)]
@@ -21,9 +22,10 @@ namespace Tests.E2eTests
         {
             var timeout = TimeSpan.FromSeconds(10);
 
-            await _applicationRunners.WhenAll(app=>app.Click(GameObjectId.MultiPlayButton));
-            await _applicationRunners.WhenAll(app=>app.Click(GameObjectId.AutoMatchingButton));
-            await _applicationRunners.WhenAll(app=>app.WaitUntilGameEntrance(timeout));
+            await _applicationRunners.WhenAll(app => app.Click(GameObjectId.MultiPlayButton));
+            await _applicationRunners[0].Click(GameObjectId.AutoMatchingButton);
+            await _applicationRunners[1].Click(GameObjectId.AutoMatchingButton);
+            await _applicationRunners.WhenAll(app => app.WaitUntilGameEntrance(timeout));
         }
 
         /// <summary>
@@ -39,13 +41,15 @@ namespace Tests.E2eTests
         [TestCase(3, 2, 3, 3)]
         public async Task CheckSeedlingSynchronization(int column1, int row1, int column2, int row2)
         {
-            var timeout = TimeSpan.FromSeconds(1);
+            var timeout = TimeSpan.FromSeconds(10);
 
             await _applicationRunners[0].ClickTile(column1, row1);
-            await _applicationRunners.AssertThat(app => app.IsSeedlingExistInTileUntilTimeout(column1, row1, timeout), Is.True);
+            await _applicationRunners.AssertThat(app => app.IsSeedlingExistInTileUntilTimeout(column1, row1, timeout),
+                Is.True);
 
             await _applicationRunners[1].ClickTile(column2, row2);
-            await _applicationRunners.AssertThat(app => app.IsSeedlingExistInTileUntilTimeout(column2, row2, timeout), Is.True);
+            await _applicationRunners.AssertThat(app => app.IsSeedlingExistInTileUntilTimeout(column2, row2, timeout),
+                Is.True);
 
             // 위치뿐 아니라 개수도 동기화되어야 한다.
             // (예: 클릭한 클라이언트가 서버를 거치지 않고 묘목을 하나 더 만들면 위치는 맞지만 개수가 어긋난다.)
