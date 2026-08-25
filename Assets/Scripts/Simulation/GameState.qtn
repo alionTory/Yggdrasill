@@ -1,0 +1,12 @@
+enum GameState{
+    Pending,
+    Running,
+}
+
+synced event GameStateChanged {
+    GameState NewState;
+}
+
+global{
+    GameState CurrentGameState;
+}
