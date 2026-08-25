@@ -2,12 +2,13 @@
 
 namespace Quantum
 {
-    public class GameStateSystem:SystemMainThread, ISignalOnPlayerAdded
+    public class GameStateSystem:SystemMainThread
     {
+        private readonly FrameAdapter _frameAdapter = new();
         public override void OnInit(Frame f)
         {
-            var frameAdapter = new FrameAdapter(f);
-            Initialize(frameAdapter);
+            _frameAdapter.SetFrame(f);
+            Initialize(_frameAdapter);
         }
 
         public void Initialize(FrameAdapter frame)
@@ -15,15 +16,11 @@ namespace Quantum
             HandleGameStateChange(frame, GameState.Pending);
         }
 
-        public void OnPlayerAdded(Frame f, PlayerRef player, bool firstTime)
-        {
-            var frameAdapter = new FrameAdapter(f);
-            Log.Info($"OnPlayerAdded. playercount: {frameAdapter.PlayerCount},  minimumplayercount: {frameAdapter.MinimumPlayerCount}, next gamestate: {frameAdapter.GameState.Next(frameAdapter.PlayerCount, frameAdapter.MinimumPlayerCount)}");
-            UpdateGameState(frameAdapter);
-        }
 
         public override void Update(Frame f)
         {
+            _frameAdapter.SetFrame(f);
+            UpdateGameState(_frameAdapter);
         }
 
         public void UpdateGameState(FrameAdapter frame)

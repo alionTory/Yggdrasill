@@ -4,7 +4,7 @@
     {
         private Frame _frame;
 
-        public FrameAdapter(Frame frame)
+        public virtual void SetFrame(Frame frame)
         {
             _frame = frame;
         }
