@@ -245,6 +245,15 @@ namespace Tests.E2eTests
         }
 
         /// <summary>
+        /// <paramref name="textFieldId"/>가 가진 TMP_TextField에 <paramref name="text"/>를 입력한다. <br/>
+        /// </summary>
+        /// <param name="textFieldId">TMP_TextField를 가진 게임 오브젝트 id여야 한다.</param>
+        public async Task InputToTextField(GameObjectId textFieldId, string text)
+        {
+            await _testHookApi.InputToTextField(textFieldId, text);
+        }
+
+        /// <summary>
         /// 게임 오브젝트가 씬에 생성될 때까지 대기한다.
         /// </summary>
         /// <param name="timeout">

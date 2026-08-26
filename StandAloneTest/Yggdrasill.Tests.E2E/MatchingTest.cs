@@ -32,7 +32,11 @@ public class MatchingTest
 
         // 멀티플레이 메뉴 진입 및 자동 매칭 버튼 클릭
         await _applications.WhenAll(app => app.Click(GameObjectId.MultiPlayButton));
-        await _applications.WhenAll(app => app.Click(GameObjectId.AutoMatchingButton));
+        foreach (var application in _applications)
+        {
+            await application.Click(GameObjectId.AutoMatchingButton);
+            await Task.Delay(TimeSpan.FromSeconds(1));
+        }
 
         // 매칭 여부 검증 - 게임 씬 입장 여부 확인
         ApplicationRunner? notMatchedClient = null;
@@ -104,8 +108,7 @@ public class MatchingTest
         TestContext.WriteLine($"초대 코드: {invitationCode}");
 
         await twoApplications[1].Click(GameObjectId.InvitationCodeInputField);
-        await twoApplications[1].InputText(invitationCode);
-        await Task.Delay(TimeSpan.FromSeconds(10));
+        await twoApplications[1].InputToTextField(GameObjectId.InvitationCodeInputField, invitationCode);
         await twoApplications[1].Click(GameObjectId.PrivateRoomParticipateButton);
 
         // 매칭 여부 검증 - 게임 시뮬레이션 시작 여부 확인
