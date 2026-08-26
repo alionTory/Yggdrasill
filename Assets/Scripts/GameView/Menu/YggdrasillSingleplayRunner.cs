@@ -9,6 +9,7 @@ using Quantum;
 using Quantum.Menu;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 namespace QuantumUser.View.Menu
 {
@@ -26,6 +27,15 @@ namespace QuantumUser.View.Menu
         /// </summary>
         private CancellationToken? _linkedCancellationToken;
 
+        /// <summary>
+        /// 이 러너가 로드한 맵 씬의 이름.
+        /// </summary>
+        /// <remarks>
+        /// 씬을 러너가 직접 로드한 경우, Quantum의 자동 씬 로더는 이 씬을 정리하지 않는다. <br/>
+        /// 따라서 <see cref="CleanupAsync"/>에서 직접 언로드해야 한다. <br/>
+        /// </remarks>
+        private string? _loadedSceneName = null;
+
         public bool IsGameRunning { get; private set; } = false;
 
         /// <summary>
@@ -37,30 +47,41 @@ namespace QuantumUser.View.Menu
         /// Return the max player count for the Photon room.
         /// </summary>
         public int MaxPlayerCount => _runner?.Session.PlayerCount ?? 0;
-    
+
         /// <summary>
         /// Return a list a Photon client names also connected to the room.
         /// </summary>
-        public List<string>? Usernames {
+        public List<string?>? Usernames
+        {
             get
             {
                 var frame = _runner?.Game?.Frames?.Verified;
-                if (frame != null) {
-                    var result = new List<string>(frame.MaxPlayerCount);
-                    for (int i = 0; i < frame.MaxPlayerCount; i++) {
-                        var isPlayerConnected = (frame.GetPlayerInputFlags(i) & DeterministicInputFlags.PlayerNotPresent) == 0;
-                        if (isPlayerConnected) {
+                if (frame != null)
+                {
+                    var result = new List<string?>(frame.MaxPlayerCount);
+                    for (int i = 0; i < frame.MaxPlayerCount; i++)
+                    {
+                        var isPlayerConnected =
+                            (frame.GetPlayerInputFlags(i) & DeterministicInputFlags.PlayerNotPresent) == 0;
+                        if (isPlayerConnected)
+                        {
                             var playerNickname = frame.GetPlayerData(i)?.PlayerNickname;
-                            if (string.IsNullOrEmpty(playerNickname)) {
+                            if (string.IsNullOrEmpty(playerNickname))
+                            {
                                 playerNickname = $"Player{i:02}";
                             }
+
                             result.Add(playerNickname);
-                        } else {
+                        }
+                        else
+                        {
                             result.Add(null);
                         }
                     }
+
                     return result;
                 }
+
                 return null;
             }
         }
@@ -92,21 +113,8 @@ namespace QuantumUser.View.Menu
             Contract.Invariant(IsGameRunning == (_runner != null));
             Contract.Invariant(IsGameRunning == (_cancellation != null));
             Contract.Invariant(IsGameRunning == (_linkedCancellationToken != null));
+            Contract.Invariant(IsGameRunning == (_loadedSceneName != null));
         }
-
-        private static RuntimeConfig BuildRuntimeConfig(QuantumMenuConnectArgs args)
-        {
-            // 씬 에셋의 RuntimeConfig를 JSON 왕복으로 깊은 복사 (원본 에셋 오염 방지)
-            var config = JsonUtility.FromJson<RuntimeConfig>(
-                JsonUtility.ToJson(args.Scene.RuntimeConfig));
-
-            // 시드가 0이면 새로 생성
-            if (config.Seed == 0)
-                config.Seed = Guid.NewGuid().GetHashCode();
-
-            return config;
-        }
-
 
         /// <summary>
         /// 게임 시뮬레이션을 오프라인으로 시작한다.
@@ -123,10 +131,13 @@ namespace QuantumUser.View.Menu
             SetAuthValues(connectArgs);
             SetCancellationToken();
 
+            var runtimeConfig = BuildRuntimeConfig(connectArgs);
+
             ConnectResult result;
             try
             {
-                await StartSessionRunnerAsync(connectArgs);
+                await LoadSceneAsync(runtimeConfig);
+                await StartSessionRunnerAsync(connectArgs, runtimeConfig);
 
                 for (int i = 0; i < connectArgs.MaxPlayerCount; i++)
                     _runner.Game.AddPlayer(i, new RuntimePlayer { PlayerNickname = $"Player{i + 1}" });
@@ -154,6 +165,41 @@ namespace QuantumUser.View.Menu
             _linkedCancellationToken = AsyncSetup.CreateLinkedSource(_cancellation.Token).Token;
         }
 
+        private static RuntimeConfig BuildRuntimeConfig(QuantumMenuConnectArgs args)
+        {
+            // 씬 에셋의 RuntimeConfig를 JSON 왕복으로 깊은 복사 (원본 에셋 오염 방지)
+            var config = JsonUtility.FromJson<RuntimeConfig>(
+                JsonUtility.ToJson(args.Scene.RuntimeConfig));
+
+            // 시드가 0이면 새로 생성
+            if (config.Seed == 0)
+                config.Seed = Guid.NewGuid().GetHashCode();
+
+            return config;
+        }
+
+        /// <summary>
+        /// <paramref name="runtimeConfig"/>가 가리키는 맵의 유니티 씬을 로드하고 활성 씬으로 지정한다.
+        /// </summary>
+        /// <exception cref="Exception"><paramref name="runtimeConfig"/>에서 씬을 찾을 수 없으면 예외 발생.</exception>
+        [MemberNotNull(nameof(_loadedSceneName))]
+        private async Task LoadSceneAsync(RuntimeConfig runtimeConfig)
+        {
+            Contract.RequireNotNull(_linkedCancellationToken);
+
+            if (!QuantumUnityDB.TryGetGlobalAsset(runtimeConfig.Map, out Quantum.Map map))
+                throw new Exception($"맵 에셋 {runtimeConfig.Map}을 찾을 수 없음.");
+
+            if (string.IsNullOrEmpty(map.Scene))
+                throw new Exception($"맵 에셋에 씬이 지정되지 않음.");
+
+            ReportProgress("씬을 불러오는 중...");
+
+            await SceneManager.LoadSceneAsync(map.Scene, LoadSceneMode.Additive);
+            _loadedSceneName = map.Scene;
+            SceneManager.SetActiveScene(SceneManager.GetSceneByName(map.Scene));
+        }
+
         /// <summary>
         /// <see cref="SessionRunner"/>를 로컬로 실행한다.
         /// </summary>
@@ -161,7 +207,7 @@ namespace QuantumUser.View.Menu
         /// ensure: <see cref="IsGameRunning"/>
         /// </remarks>
         [MemberNotNull(nameof(_runner))]
-        private async Task StartSessionRunnerAsync(QuantumMenuConnectArgs connectArgs)
+        private async Task StartSessionRunnerAsync(QuantumMenuConnectArgs connectArgs, RuntimeConfig runtimeConfig)
         {
             Contract.RequireNotNull(_linkedCancellationToken);
 
@@ -170,7 +216,7 @@ namespace QuantumUser.View.Menu
                 RunnerFactory = QuantumRunnerUnityFactory.DefaultFactory,
                 GameParameters = QuantumRunnerUnityFactory.CreateGameParameters,
                 ClientId = connectArgs.AuthValues.UserId,
-                RuntimeConfig = BuildRuntimeConfig(connectArgs),
+                RuntimeConfig = runtimeConfig,
                 SessionConfig = connectArgs.SessionConfig?.Config ??
                                 QuantumDeterministicSessionConfigAsset.DefaultConfig,
                 GameMode = DeterministicGameMode.Local,
@@ -186,7 +232,6 @@ namespace QuantumUser.View.Menu
             _runner = (QuantumRunner)await SessionRunner.StartAsync(sessionRunnerArgs);
             IsGameRunning = true;
         }
-
 
 
         /// <summary>
@@ -241,6 +286,7 @@ namespace QuantumUser.View.Menu
         /// ensure: <see cref="_cancellation"/> == null <br/>
         /// ensure: <see cref="_linkedCancellationToken"/> == null <br/>
         /// ensure: <see cref="_runner"/> == null <br/>
+        /// ensure: <see cref="_loadedSceneName"/> == null <br/>
         /// ensure: !<see cref="IsGameRunning"/> <br/>
         /// </remarks>
         private async Task CleanupAsync()
@@ -253,7 +299,30 @@ namespace QuantumUser.View.Menu
             if (_runner != null)
                 await _runner.ShutdownAsync();
             _runner = null;
+
+            await UnloadSceneAsync();
+
             IsGameRunning = false;
+        }
+
+        /// <summary>
+        /// <see cref="_loadedSceneName"/>에 해당하는 씬을 언로드한다.
+        /// </summary>
+        /// <remarks>
+        /// ensure: <see cref="_loadedSceneName"/> == null
+        /// </remarks>
+        private async Task UnloadSceneAsync()
+        {
+            try
+            {
+                await SceneManager.UnloadSceneAsync(_loadedSceneName);
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
+
+            _loadedSceneName = null;
         }
     }
 }
