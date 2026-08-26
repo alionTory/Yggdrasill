@@ -1,10 +1,12 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Quantum;
 using Quantum.Menu;
 using UnityEngine;
 using Tests.E2eTests.ClickPointProvider;
 using TMPro;
+using UnityEngine.UIElements;
 
 namespace Tests.E2eTests
 {
@@ -34,6 +36,19 @@ namespace Tests.E2eTests
             await VirtualDevice.InputText(text);
         }
 
+        public virtual async Task InputToTextField(GameObjectId textFieldId, string text)
+        {
+            var gameObject = GameObjectRegistryForTest.Get(textFieldId);
+            if(gameObject.TryGetComponent<TMP_InputField>(out var inputField))
+            {
+                await VirtualDevice.InputToTextField(inputField, text);
+            }
+            else
+            {
+                throw new Exception($"{textFieldId}에 TMP_InputField 컴포넌트가 없음.");
+            }
+        }
+
         public virtual async Task WaitUntilSceneLoad(SceneId sceneId, CancellationToken cancellationToken)
         {
             var scene = SceneList.Get(sceneId).scene;
@@ -48,13 +63,35 @@ namespace Tests.E2eTests
             }
         }
 
+        public virtual async Task WaitUntilSimulationRunning(CancellationToken cancellationToken)
+        {
+            var frameAdapter = new FrameAdapter();
+            var isSimulationRunning = false;
+            while (true)
+            {
+                var frame = QuantumRunner.Default?.Game?.Frames?.Verified;
+                if (frame != null)
+                {
+                    frameAdapter.SetFrame(frame);
+                    if (frameAdapter.GameState == GameState.Running)
+                        isSimulationRunning = true;
+                }
+                
+                if (isSimulationRunning) break;
+                
+                await Awaitable.NextFrameAsync(cancellationToken);
+            }
+        }
+
         public Task<string> GetInvitationCode()
         {
             var connection = UnityEngine.Object.FindAnyObjectByType<QuantumMenuConnectionBehaviour>();
-            if(connection == null)
-                return Task.FromException<string>(new Exception($"{nameof(QuantumMenuConnectionBehaviour)} 오브젝트가 씬에 없음."));
-            else if(string.IsNullOrEmpty(connection.SessionName))
-                return Task.FromException<string>(new Exception($"{nameof(QuantumMenuConnectionBehaviour)} 오브젝트의 {nameof(connection.SessionName)}이 null 또는 빈 문자열임."));
+            if (connection == null)
+                return Task.FromException<string>(
+                    new Exception($"{nameof(QuantumMenuConnectionBehaviour)} 오브젝트가 씬에 없음."));
+            else if (string.IsNullOrEmpty(connection.SessionName))
+                return Task.FromException<string>(new Exception(
+                    $"{nameof(QuantumMenuConnectionBehaviour)} 오브젝트의 {nameof(connection.SessionName)}이 null 또는 빈 문자열임."));
             else
                 return Task.FromResult(connection.SessionName);
         }

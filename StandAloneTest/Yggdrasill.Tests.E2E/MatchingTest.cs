@@ -41,7 +41,7 @@ public class MatchingTest
         {
             try
             {
-                await application.WaitUntilGameEntrance(_photonServerTimeout);
+                await application.WaitUntilSimulationRunning();
                 matchedClients.Add(application);
             }
             catch (OperationCanceledException ex)
@@ -68,19 +68,18 @@ public class MatchingTest
          클라이언트 하나가 타일을 클릭하면, 나머지 클라이언트들 중 하나에서 동일한 타일에 묘목이 나타나야 함.
          */
         var syncNotVerifiedClients = matchedClients.ToHashSet();
-        var syncCheckTimeout = TimeSpan.FromSeconds(1);
         while (0 < syncNotVerifiedClients.Count)
         {
             // 클라이언트 하나를 뽑아 타일을 클릭하도록 함.
             var clientToBeCheckedSync = syncNotVerifiedClients.First();
             syncNotVerifiedClients.Remove(clientToBeCheckedSync);
             await clientToBeCheckedSync.ClickTile(tileColumn, tileRow);
-            await clientToBeCheckedSync.IsSeedlingExistInTileUntilTimeout(tileColumn, tileRow, syncCheckTimeout);
+            await clientToBeCheckedSync.IsSeedlingExistInTileUntilTimeout(tileColumn, tileRow);
 
             // 나머지 클라이언트들 중 동기화된 것을 찾음.
             var synchronizedClient = (
                 await syncNotVerifiedClients.WhereAsync(app =>
-                    app.IsSeedlingExistInTileUntilTimeout(tileColumn, tileRow, syncCheckTimeout)
+                    app.IsSeedlingExistInTileUntilTimeout(tileColumn, tileRow)
                 )
             ).ToArray();
 
@@ -100,15 +99,17 @@ public class MatchingTest
         await twoApplications.WhenAll(app => app.Click(GameObjectId.MultiPlayButton));
 
         await twoApplications[0].Click(GameObjectId.PrivateRoomCreateButton);
-        await twoApplications[0].WaitUntilGameEntrance(_photonServerTimeout);
+        await twoApplications[0].WaitUntilSceneLoad(SceneId.MultiplayPrototype);
         var invitationCode = await twoApplications[0].GetInvitationCode();
+        TestContext.WriteLine($"초대 코드: {invitationCode}");
 
         await twoApplications[1].Click(GameObjectId.InvitationCodeInputField);
         await twoApplications[1].InputText(invitationCode);
+        await Task.Delay(TimeSpan.FromSeconds(10));
         await twoApplications[1].Click(GameObjectId.PrivateRoomParticipateButton);
 
-        // 매칭 여부 검증 - 게임 씬 입장 여부 확인
-        await twoApplications.WhenAll(app => app.WaitUntilGameEntrance(_photonServerTimeout));
+        // 매칭 여부 검증 - 게임 시뮬레이션 시작 여부 확인
+        await twoApplications.WhenAll(app => app.WaitUntilSimulationRunning());
 
         // 매칭 여부 검증 - 동기화 체크
         await twoApplications.WhenAll(async app =>
@@ -119,7 +120,7 @@ public class MatchingTest
         await twoApplications[0].ClickTile(tileColumn, tileRow);
         await twoApplications.WhenAll(async app =>
             Assert.That(
-                await app.IsSeedlingExistInTileUntilTimeout(tileColumn, tileRow, TimeSpan.FromSeconds(1)),
+                await app.IsSeedlingExistInTileUntilTimeout(tileColumn, tileRow),
                 Is.True, "묘목이 동기화되어야 함.")
         );
     }

@@ -23,6 +23,14 @@ namespace Tests.E2eTests
         /// 현재 포커스된 GUI 요소에 <paramref name="text"/>를 입력한다.
         /// </summary>
         public Task InputText(string text);
+        
+        /// <summary>
+        /// 주어진 <paramref name="textFieldId"/>에 해당하는 TMP_TextField에 <paramref name="text"/>를 입력한다.
+        /// </summary>
+        /// <remarks>
+        /// TMP_TextField 에는 <see cref="InputText"/>가 안 통하므로, 대신 이 메서드를 사용할 것.
+        /// </remarks>
+        public Task InputToTextField(GameObjectId textFieldId, string text);
 
         /// <summary>
         /// <paramref name="sceneId"/>에 해당하는 씬이 로드될 때까지 대기한다.
@@ -69,6 +77,15 @@ namespace Tests.E2eTests
         /// 묘목이 나타나기 전에 <paramref name="cancellationToken"/>이 취소되면 예외 발생.
         /// </exception>
         public Task WaitUntilSeedlingExistInTile(int column, int row, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// 게임 시뮬레이션이 실행 중임이 확인될 때까지 대기한다.
+        /// </summary>
+        /// <remarks>
+        /// 게임 시뮬레이션 씬이 로드되고, 시뮬레이션이 Running 상태여야 한다. <br/>
+        /// 예를 들어 인원 수 부족으로 Pending 상태인 경우, 시뮬레이션이 실행 중이 아닌 것으로 간주한다.
+        /// </remarks>
+        public Task WaitUntilSimulationRunning(CancellationToken cancellationToken);
 
         /// <summary>
         /// 현재 이 클라이언트에 존재하는 묘목의 총 개수를 반환한다.

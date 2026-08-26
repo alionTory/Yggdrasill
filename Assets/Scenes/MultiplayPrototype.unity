@@ -794,7 +794,11 @@ MonoBehaviour:
       Id:
         Value: 0
     PlayerNickname: 
-  MaxPlayerCount: 0
+  - PlayerAvatar:
+      Id:
+        Value: 0
+    PlayerNickname: 
+  MaxPlayerCount: 2
   SimulationSpeedMultiplier: 1
   DisplaySaveAndReloadButton: 0
   PreloadAddressables: 0

@@ -68,7 +68,7 @@ namespace Tests.E2eTests
                     $"(리포지터리 루트 기준으로) 게임 빌드 실행 파일의 상대 경로를 지정하는 테스트 파라미터 {BuildPathParameterName}가 주어지지 않았습니다.");
             return Path.Combine(RepositoryRoot(), TestContext.Parameters[BuildPathParameterName]);
         }
-        
+
         private static int GetFreePort()
         {
             var listener = new TcpListener(IPAddress.Loopback, 0);
@@ -77,7 +77,7 @@ namespace Tests.E2eTests
             listener.Stop();
             return port;
         }
-        
+
         /// <summary>
         /// 게임 프로세스에 덧붙일 명령행 인수를 환경 변수에서 읽는다.
         /// </summary>
@@ -151,7 +151,7 @@ namespace Tests.E2eTests
                 processInfo.ArgumentList.Add(ITestHookApi.PhotonAppVersionCommandLineArgumentName);
                 processInfo.ArgumentList.Add(photonAppVersion);
             }
-            
+
             foreach (var argument in ExtraGameArguments())
                 processInfo.ArgumentList.Add(argument);
 
@@ -247,6 +247,9 @@ namespace Tests.E2eTests
         /// <summary>
         /// 게임 오브젝트가 씬에 생성될 때까지 대기한다.
         /// </summary>
+        /// <param name="timeout">
+        /// 기본값은 1초.
+        /// </param>
         public async Task WaitGameObjectLoad(GameObjectId id, TimeSpan? timeout = null)
         {
             timeout ??= TimeSpan.FromSeconds(1);
@@ -257,15 +260,34 @@ namespace Tests.E2eTests
         }
 
         /// <summary>
-        /// 게임 클라이언트가 멀티플레이 게임 시뮬레이션에 진입할 때까지 대기한다. <br/>
+        /// 지정된 씬이 로드될 때까지 대기한다.
         /// </summary>
-        /// <param name="timeout">대기 시간. 이 시간을 넘으면 예외 발생.</param>
-        public async Task WaitUntilGameEntrance(TimeSpan timeout)
+        /// <param name="timeout">
+        /// 기본값은 10초.
+        /// </param>
+        public async Task WaitUntilSceneLoad(SceneId id, TimeSpan? timeout = null)
         {
-            TestContext.WriteLine("게임 씬 입장을 기다리는 중.");
-            using var cancellationTokenSource = new CancellationTokenSource(timeout);
-            await _testHookApi.WaitUntilSceneLoad(SceneId.MultiplayPrototype, cancellationTokenSource.Token);
-            TestContext.WriteLine("게임 씬 입장 완료.");
+            timeout ??= TimeSpan.FromSeconds(10);
+            TestContext.WriteLine($"씬 {id}가 생성되기를 기다리는 중.");
+            using var cancellationTokenSource = new CancellationTokenSource(timeout.Value);
+            await _testHookApi.WaitUntilSceneLoad(id, cancellationTokenSource.Token);
+            TestContext.WriteLine($"씬 {id} 생성 확인 완료.");
+        }
+
+        /// <summary>
+        /// 게임 시뮬레이션이 실행 중임이 확인될 때까지 대기한다. <br/>
+        /// </summary>
+        /// <param name="timeout">
+        /// 대기 시간. 이 시간을 넘으면 예외 발생.<br/>
+        /// 기본값은 5초.
+        /// </param>
+        public async Task WaitUntilSimulationRunning(TimeSpan? timeout = null)
+        {
+            timeout ??= TimeSpan.FromSeconds(10);
+            TestContext.WriteLine("게임 시뮬레이션이 실행될 때까지 기다리는 중.");
+            using var cancellationTokenSource = new CancellationTokenSource(timeout.Value);
+            await _testHookApi.WaitUntilSimulationRunning(cancellationTokenSource.Token);
+            TestContext.WriteLine("게임 시뮬레이션 실행 확인됨..");
         }
 
         public async Task<string> GetInvitationCode()
@@ -304,13 +326,15 @@ namespace Tests.E2eTests
         /// <param name="column">가장 왼쪽 열의 칸이 1.</param>
         /// <param name="row">가장 아래 행의 칸이 1.</param>
         /// <param name="timeout">
-        /// 대기 시간. 묘목은 서버를 거쳐 생성되므로 즉시 나타나지 않는다.
-        /// 이 시간 안에 묘목이 나타나면 true, 나타나지 않으면 false를 리턴한다.
+        /// 대기 시간. 묘목은 서버를 거쳐 생성되므로 즉시 나타나지 않는다. <br/>
+        /// 이 시간 안에 묘목이 나타나면 true, 나타나지 않으면 false를 리턴한다. <br/>
+        /// 기본값은 1초.
         /// </param>
-        public async Task<bool> IsSeedlingExistInTileUntilTimeout(int column, int row, TimeSpan timeout)
+        public async Task<bool> IsSeedlingExistInTileUntilTimeout(int column, int row, TimeSpan? timeout = null)
         {
+            timeout ??= TimeSpan.FromSeconds(1);
             TestContext.WriteLine($"타일 ({column}, {row})에 묘목이 생성되기를 기다리는 중.");
-            using var cancellationTokenSource = new CancellationTokenSource(timeout);
+            using var cancellationTokenSource = new CancellationTokenSource(timeout.Value);
             try
             {
                 await _testHookApi.WaitUntilSeedlingExistInTile(column, row, cancellationTokenSource.Token);

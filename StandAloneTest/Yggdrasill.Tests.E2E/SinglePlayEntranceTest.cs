@@ -23,9 +23,9 @@ public class SinglePlayEntranceTest
     public async Task SinglePlayEntrance(int tileColumn, int tileRow)
     {
         await _applicationRunner.Click(GameObjectId.SinglePlayButton);
-        await _applicationRunner.WaitUntilGameEntrance(TimeSpan.FromSeconds(5));
+        await _applicationRunner.WaitUntilSimulationRunning();
         await _applicationRunner.ClickTile(tileColumn, tileRow);
-        await _applicationRunner.IsSeedlingExistInTileUntilTimeout(tileColumn, tileRow, TimeSpan.FromSeconds(1));
+        await _applicationRunner.IsSeedlingExistInTileUntilTimeout(tileColumn, tileRow);
     }
 
     [TearDown]

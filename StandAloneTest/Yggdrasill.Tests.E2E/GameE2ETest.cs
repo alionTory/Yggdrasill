@@ -20,12 +20,10 @@ namespace Tests.E2eTests
         [Test, Order(1)]
         public async Task GameEntranceByQuickPlayButton()
         {
-            var timeout = TimeSpan.FromSeconds(10);
-
             await _applicationRunners.WhenAll(app => app.Click(GameObjectId.MultiPlayButton));
             await _applicationRunners[0].Click(GameObjectId.AutoMatchingButton);
             await _applicationRunners[1].Click(GameObjectId.AutoMatchingButton);
-            await _applicationRunners.WhenAll(app => app.WaitUntilGameEntrance(timeout));
+            await _applicationRunners.WhenAll(app => app.WaitUntilSimulationRunning());
         }
 
         /// <summary>
