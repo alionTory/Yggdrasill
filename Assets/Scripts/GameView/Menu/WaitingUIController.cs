@@ -1,27 +1,47 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using Quantum;
 using UnityEngine;
 
 namespace QuantumUser.View.Menu
 {
-    public class WaitingUIController :MonoBehaviour
+    /// <summary>
+    /// 시뮬레이션 상태가 "대기 중"이면 <see cref="waitingUI"/> 게임 오브젝트를 활성화하고, 그렇지 않으면 비활성화한다.
+    /// </summary>
+    public class WaitingUIController : QuantumSceneViewComponent, IValidatable
     {
-        private void Awake()
+        public GameObject waitingUI = null!;
+
+        private FrameAdapter _frameAdapter = new();
+
+        public List<string> Validate()
         {
-            QuantumEvent.Subscribe<EventGameStateChanged>(this, Toggle);
-        }
-        
-        private void Toggle(EventGameStateChanged eventGameStateChanged)
-        {
-            if (eventGameStateChanged.NewState == GameState.Pending)
-                gameObject.SetActive(true);
-            else if(eventGameStateChanged.NewState == GameState.Running)
-                gameObject.SetActive(false);
+            var result = new List<string>();
+            IValidatable.CheckNotNull(waitingUI, result);
+            return result;
         }
 
-        private void OnDestroy()
+        public override void OnInitialize()
         {
-            QuantumEvent.UnsubscribeListener(this);
+            QuantumEvent.Subscribe<EventGameStateChanged>(this, Toggle, onlyIfActiveAndEnabled: true);
+        }
+
+        public override void OnActivate(Frame frame)
+        {
+            _frameAdapter.SetFrame(frame);
+            ApplyGameStateToUI(_frameAdapter.GameState);
+        }
+
+        public void Toggle(EventGameStateChanged eventGameStateChanged)
+        {
+            ApplyGameStateToUI(eventGameStateChanged.NewState);
+        }
+
+        private void ApplyGameStateToUI(GameState newState)
+        {
+            if (newState == GameState.Pending)
+                waitingUI.SetActive(true);
+            else if (newState == GameState.Running)
+                waitingUI.SetActive(false);
         }
     }
 }
