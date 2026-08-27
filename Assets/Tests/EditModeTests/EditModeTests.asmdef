@@ -9,7 +9,9 @@
         "Quantum.Menu",
         "UnityEngine.UI",
         "Photon.Realtime",
-        "GameView"
+        "GameView",
+        "Utilities",
+        "Eflatun.SceneReference"
     ],
     "includePlatforms": [
         "Editor"
