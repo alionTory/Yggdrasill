@@ -1,6 +1,6 @@
 {
-    "name": "TestHelper.Protocol",
-    "rootNamespace": "",
+    "name": "Yggdrasill.TestHooks.Protocol",
+    "rootNamespace": "Yggdrasill.TestHooks.Protocol",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -4,11 +4,12 @@ using System.Threading.Tasks;
 using Quantum;
 using Quantum.Menu;
 using UnityEngine;
-using Tests.E2eTests.ClickPointProvider;
+using Yggdrasill.TestHooks.ClickPoints;
 using TMPro;
 using UnityEngine.UIElements;
+using Yggdrasill.TestHooks.Protocol;
 
-namespace Tests.E2eTests
+namespace Yggdrasill.TestHooks
 {
     public class TestHookApi : ITestHookApi
     {

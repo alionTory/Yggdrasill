@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using StreamJsonRpc;
+using Yggdrasill.TestHooks.Protocol;
 
 namespace Tests.E2eTests
 {

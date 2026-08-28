@@ -2,6 +2,7 @@
 using System.Collections.Immutable;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using Yggdrasill.TestHooks.Protocol;
 
 namespace Tests.E2eTests
 {

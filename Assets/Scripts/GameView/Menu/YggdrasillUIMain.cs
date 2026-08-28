@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Quantum.Menu;
-using Tests.E2eTests;
+using Yggdrasill.TestHooks.Protocol;
 using UnityEditor;
 using UnityEngine;
 

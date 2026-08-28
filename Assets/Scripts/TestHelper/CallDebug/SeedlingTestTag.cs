@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Tests.E2eTests
+namespace Yggdrasill.TestHooks.Tags
 {
     /// <summary>
     /// 이 스크립트가 부착된 게임 오브젝트는 생성 시 묘목으로서 <see cref="SeedlingRegistryForTest"/>에 등록되어 조회 가능해진다.

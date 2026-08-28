@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using Yggdrasill.TestHooks.Protocol;
 
 namespace Tests.E2eTests;
 

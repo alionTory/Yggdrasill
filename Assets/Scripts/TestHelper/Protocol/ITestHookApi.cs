@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Tests.E2eTests
+namespace Yggdrasill.TestHooks.Protocol
 {
     public interface ITestHookApi
     {

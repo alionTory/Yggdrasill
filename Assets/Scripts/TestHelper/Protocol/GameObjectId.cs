@@ -1,4 +1,4 @@
-namespace Tests.E2eTests
+namespace Yggdrasill.TestHooks.Protocol
 {
     /// <summary>
     /// E2E 테스트가 조작할 수 있는 게임 오브젝트의 식별자.

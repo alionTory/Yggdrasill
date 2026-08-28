@@ -2,7 +2,7 @@
 using QuantumUser.View;
 using UnityEngine;
 
-namespace Tests.E2eTests.ClickPointProvider
+namespace Yggdrasill.TestHooks.ClickPoints
 {
     [RequireComponent(typeof(RectTransform))]
     public class UGuiClickPointProvider : MonoBehaviour, IClickPointProvider, IValidatable

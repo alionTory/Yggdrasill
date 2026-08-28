@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Tests.E2eTests.ClickPointProvider
+namespace Yggdrasill.TestHooks.ClickPoints
 {
     public interface IClickPointProvider
     {

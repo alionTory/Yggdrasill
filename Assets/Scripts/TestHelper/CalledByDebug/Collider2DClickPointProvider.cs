@@ -4,7 +4,7 @@ using QuantumUser.View;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Tests.E2eTests.ClickPointProvider
+namespace Yggdrasill.TestHooks.ClickPoints
 {
     [RequireComponent(typeof(Collider2D))]
     public class Collider2DClickPointProvider : MonoBehaviour, IClickPointProvider, IValidatable
