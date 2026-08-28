@@ -50,7 +50,9 @@ runs:
         StandAloneTest/Yggdrasill.Tests.sln
         --logger "trx;LogFileName=e2e.trx"
         --results-directory TestResults
-        -- "TestRunParameters.Parameter(name=\"BuildPath\", value=\"$BUILD_PATH\")"
+        --
+        "TestRunParameters.Parameter(name=\"BuildPath\", value=\"$BUILD_PATH\")"
+        "TestRunParameters.Parameter(name=\"PhotonAppVersion\", value=\"dev1.0.0\")"
 
     - name: Upload test results
       if: always()
