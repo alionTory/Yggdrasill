@@ -11,11 +11,13 @@ namespace Yggdrasill.Tests.EditMode
     public readonly struct ValidationIssue
     {
         public readonly UnityEngine.Object Context;
+        public readonly string ContextName;
         public readonly string Message;
 
         public ValidationIssue(UnityEngine.Object context, string message)
         {
             Context = context;
+            ContextName = Context.ToString();
             Message = message;
         }
 
@@ -26,7 +28,7 @@ namespace Yggdrasill.Tests.EditMode
 
         public override string ToString()
         {
-            return $"객체 {Context.name} 에서 검증 실패:" + Environment.NewLine + Message;
+            return $"객체 {ContextName} 에서 검증 실패:" + Environment.NewLine + Message;
         }
     }
 
@@ -110,7 +112,7 @@ namespace Yggdrasill.Tests.EditMode
             foreach (var sceneInfo in SceneList.All)
             {
                 // 이미 열려 있으면(사용자가 편집 중) 다시 열지 않고 그대로 사용
-                bool openedInEditor = sceneInfo.scene.TryGetLoadedScene(out var openedScene);
+                bool openedInEditor = sceneInfo.scene.TryGetLoadedScene(out var openedScene) && openedScene.isLoaded;
 
                 if (!openedInEditor)
                     openedScene = EditorSceneManager.OpenScene(sceneInfo.scene.Path, OpenSceneMode.Additive);
