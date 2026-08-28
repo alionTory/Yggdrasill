@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using Quantum;
 using UnityEngine;
+using Yggdrasill.Utilities;
 
-namespace QuantumUser.View.Menu
+namespace Yggdrasill.GameView.Menu
 {
     /// <summary>
     /// 시뮬레이션 상태가 "대기 중"이면 <see cref="waitingUI"/> 게임 오브젝트를 활성화하고, 그렇지 않으면 비활성화한다.

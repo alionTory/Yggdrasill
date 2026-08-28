@@ -5,8 +5,9 @@ using System.Text;
 using Quantum;
 using Quantum.Menu;
 using UnityEngine;
+using Yggdrasill.Utilities;
 
-namespace QuantumUser.View.Menu
+namespace Yggdrasill.GameView.Menu
 {
     [RequireComponent(typeof(YggdrasillSingleplayRunner))]
     public class YggdrasillUISinglePlay : QuantumMenuUIScreen, IValidatable

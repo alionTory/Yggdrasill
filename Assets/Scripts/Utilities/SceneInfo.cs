@@ -2,7 +2,7 @@
 using Eflatun.SceneReference;
 using Quantum;
 
-namespace QuantumUser.View
+namespace Yggdrasill.Utilities
 {
     [Serializable]
     public class SceneInfo

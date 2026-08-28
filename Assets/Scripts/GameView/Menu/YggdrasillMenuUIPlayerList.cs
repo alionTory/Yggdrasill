@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using QuantumUser.View;
+using Yggdrasill.Utilities;
 using TMPro;
 using UnityEngine;
 
 
-namespace QuantumUser.View.Menu
+namespace Yggdrasill.GameView.Menu
 {
     /// <summary>
     /// 플레이어 리스트 UI를 관리한다.

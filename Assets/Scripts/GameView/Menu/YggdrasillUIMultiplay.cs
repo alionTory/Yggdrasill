@@ -3,8 +3,9 @@ using System.Threading.Tasks;
 using Quantum.Menu;
 using TMPro;
 using UnityEngine;
+using Yggdrasill.Utilities;
 
-namespace QuantumUser.View.Menu
+namespace Yggdrasill.GameView.Menu
 {
     public class YggdrasillUIMultiplay : QuantumMenuUIScreen
     {

@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 
-namespace QuantumUser.View
+namespace Yggdrasill.Utilities
 {
     public static class Contract
     {

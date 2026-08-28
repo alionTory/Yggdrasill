@@ -5,7 +5,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Text;
 using System.Threading.Tasks;
-using QuantumUser.View;
+using Yggdrasill.Utilities;
 using StreamJsonRpc;
 using Yggdrasill.TestHooks.Protocol;
 using UnityEngine;

@@ -8,6 +8,7 @@ using Yggdrasill.TestHooks.ClickPoints;
 using TMPro;
 using UnityEngine.UIElements;
 using Yggdrasill.TestHooks.Protocol;
+using Yggdrasill.Utilities;
 
 namespace Yggdrasill.TestHooks
 {

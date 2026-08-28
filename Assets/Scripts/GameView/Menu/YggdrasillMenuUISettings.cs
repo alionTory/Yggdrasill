@@ -1,6 +1,6 @@
 ﻿using Quantum.Menu;
 
-namespace QuantumUser.View.Menu
+namespace Yggdrasill.GameView.Menu
 {
     public class YggdrasillMenuUISettings : QuantumMenuUISettings
     {

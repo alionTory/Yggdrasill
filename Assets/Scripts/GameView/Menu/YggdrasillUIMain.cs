@@ -5,8 +5,9 @@ using Quantum.Menu;
 using Yggdrasill.TestHooks.Protocol;
 using UnityEditor;
 using UnityEngine;
+using Yggdrasill.Utilities;
 
-namespace QuantumUser.View.Menu
+namespace Yggdrasill.GameView.Menu
 {
     public class YggdrasillUIMain : QuantumMenuUIScreen, IValidatable
     {

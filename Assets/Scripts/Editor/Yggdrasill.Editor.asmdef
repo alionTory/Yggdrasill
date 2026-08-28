@@ -1,6 +1,6 @@
 {
-    "name": "Editor",
-    "rootNamespace": "",
+    "name": "Yggdrasill.Editor",
+    "rootNamespace": "Yggdrasill.Editor",
     "references": [
         "GUID:d629280cd7692bc4aa0841f7fb16ad13",
         "GUID:caca889fed6088d40b22c2d7e2909c31",

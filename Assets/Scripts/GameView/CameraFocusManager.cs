@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Yggdrasill.Utilities;
 
-namespace QuantumUser.View
+namespace Yggdrasill.GameView
 {
 
 	[RequireComponent(typeof(Camera))]

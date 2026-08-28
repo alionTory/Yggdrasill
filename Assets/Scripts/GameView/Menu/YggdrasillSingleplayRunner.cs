@@ -10,8 +10,9 @@ using Quantum.Menu;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using Yggdrasill.Utilities;
 
-namespace QuantumUser.View.Menu
+namespace Yggdrasill.GameView.Menu
 {
     public class YggdrasillSingleplayRunner : MonoBehaviour, IHasInvariants
     {

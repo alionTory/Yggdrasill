@@ -9,8 +9,8 @@
         "Quantum.Menu",
         "UnityEngine.UI",
         "Photon.Realtime",
-        "GameView",
-        "Utilities",
+        "Yggdrasill.GameView",
+        "Yggdrasill.Utilities",
         "Eflatun.SceneReference"
     ],
     "includePlatforms": [

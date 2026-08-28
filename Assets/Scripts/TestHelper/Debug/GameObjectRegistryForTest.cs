@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Yggdrasill.TestHooks.Protocol;
+using Yggdrasill.GameView;
 
 namespace Yggdrasill.TestHooks
 {

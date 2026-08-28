@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using QuantumUser.View;
+using Yggdrasill.Utilities;
 using UnityEngine;
 
 namespace Yggdrasill.TestHooks.ClickPoints
