@@ -329,7 +329,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dd6e9b44af084edc8933086f85f39b5c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: GameView::QuantumUser.View.Menu.YggdrasillUIMain
+  m_EditorClassIdentifier: Yggdrasill.GameView::Yggdrasill.GameView.Menu.YggdrasillUIMain
   _isModal: 0
   _plugins:
   - {fileID: 8363946788431071579}
@@ -468,11 +468,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8761562018423937092, guid: fbeaf029f8a63d241b4791501a13eccf, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: QuantumUser.View.Menu.YggdrasillUIMain, GameView
+      value: Yggdrasill.GameView.Menu.YggdrasillUIMain, Yggdrasill.GameView
       objectReference: {fileID: 0}
     - target: {fileID: 8761562018423937092, guid: fbeaf029f8a63d241b4791501a13eccf, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: QuantumUser.View.Menu.YggdrasillUIMain, GameView
+      value: Yggdrasill.GameView.Menu.YggdrasillUIMain, Yggdrasill.GameView
       objectReference: {fileID: 0}
     - target: {fileID: 8761562018423937092, guid: fbeaf029f8a63d241b4791501a13eccf, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
@@ -727,7 +727,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3679976672339705594, guid: 8ed3504b30edde649b77d18615490bad, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: QuantumUser.View.Menu.YggdrasillUIMain, GameView
+      value: Yggdrasill.GameView.Menu.YggdrasillUIMain, Yggdrasill.GameView
       objectReference: {fileID: 0}
     - target: {fileID: 3679976672339705594, guid: 8ed3504b30edde649b77d18615490bad, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -821,11 +821,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3299228075148112361, guid: b4ed34c0626cfc54fa94bd3fb37246e0, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: QuantumUser.View.Menu.YggdrasillUIMain, GameView
+      value: Yggdrasill.GameView.Menu.YggdrasillUIMain, Yggdrasill.GameView
       objectReference: {fileID: 0}
     - target: {fileID: 3299228075148112361, guid: b4ed34c0626cfc54fa94bd3fb37246e0, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: QuantumUser.View.Menu.YggdrasillUIMain, GameView
+      value: Yggdrasill.GameView.Menu.YggdrasillUIMain, Yggdrasill.GameView
       objectReference: {fileID: 0}
     - target: {fileID: 3299228075148112361, guid: b4ed34c0626cfc54fa94bd3fb37246e0, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
@@ -1099,7 +1099,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3679976672339705594, guid: 8ed3504b30edde649b77d18615490bad, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: QuantumUser.View.Menu.YggdrasillUIMain, GameView
+      value: Yggdrasill.GameView.Menu.YggdrasillUIMain, Yggdrasill.GameView
       objectReference: {fileID: 0}
     - target: {fileID: 3679976672339705594, guid: 8ed3504b30edde649b77d18615490bad, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName

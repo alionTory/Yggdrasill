@@ -422,7 +422,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8031660c2e1489e93cfe44ea16fdfde, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: GameView::QuantumUser.View.CameraFocusManager
+  m_EditorClassIdentifier: Yggdrasill.GameView::Yggdrasill.GameView.CameraFocusManager
   targetPoint: {x: 0, y: 0}
   viewportPosition: {x: 0, y: 0}
   camera: {fileID: 253529692}
@@ -934,7 +934,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab735998984d4c529ccf63b42d03539c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: GameView::QuantumUser.View.Menu.WaitingUIController
+  m_EditorClassIdentifier: Yggdrasill.GameView::Yggdrasill.GameView.Menu.WaitingUIController
   Updater: {fileID: 0}
   UseFindUpdater: 0
   waitingUI: {fileID: 587618052}
@@ -2110,7 +2110,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4180ec5f4eb94cd9a8ac71bcedceb252, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: GameView::TilemapView
+  m_EditorClassIdentifier: Yggdrasill.GameView::Yggdrasill.GameView.TilemapView
   tilemap: {fileID: 1161862292}
 --- !u!19719996 &1161862294
 TilemapCollider2D:
@@ -2161,7 +2161,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d28c053e99e4a76aae58f608384bb6f, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: TestHelper::Tests.E2eTests.TestId
+  m_EditorClassIdentifier: Yggdrasill.TestHooks.Tags::Yggdrasill.TestHooks.Tags.TestId
   id: 7
 --- !u!1 &1652611284
 GameObject:

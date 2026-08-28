@@ -223,7 +223,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e5330af9da3a4a2d98f4d37992e14929, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: GameView::QuantumUser.View.Menu.YggdrasillUIMultiplay
+  m_EditorClassIdentifier: Yggdrasill.GameView::Yggdrasill.GameView.Menu.YggdrasillUIMultiplay
 --- !u!224 &3039915966343794623 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4039561197434561952, guid: 75410ea232aedce4f96bc6c3093e3d57, type: 3}
@@ -514,7 +514,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 753bacd3935c4de9b93515a245b2aa71, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: TestHelper.CalledByDebug::Tests.E2eTests.ClickPointProvider.UGuiClickPointProvider
+  m_EditorClassIdentifier: Yggdrasill.TestHooks.ClickPoints::Yggdrasill.TestHooks.ClickPoints.UGuiClickPointProvider
   rectTransform: {fileID: 5674378014287492362}
   canvas: {fileID: 2199064635896431038}
 --- !u!114 &1926637731792208218
@@ -528,7 +528,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d28c053e99e4a76aae58f608384bb6f, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: TestHelper.CallDebug::Tests.E2eTests.TestId
+  m_EditorClassIdentifier: Yggdrasill.TestHooks.Tags::Yggdrasill.TestHooks.Tags.TestId
   id: 1
 --- !u!224 &5674378014287492362 stripped
 RectTransform:
@@ -551,7 +551,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d28c053e99e4a76aae58f608384bb6f, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: TestHelper.CallDebug::Tests.E2eTests.TestId
+  m_EditorClassIdentifier: Yggdrasill.TestHooks.Tags::Yggdrasill.TestHooks.Tags.TestId
   id: 0
 --- !u!114 &2023789319088230059
 MonoBehaviour:
@@ -564,7 +564,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 753bacd3935c4de9b93515a245b2aa71, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: TestHelper.CalledByDebug::Tests.E2eTests.ClickPointProvider.UGuiClickPointProvider
+  m_EditorClassIdentifier: Yggdrasill.TestHooks.ClickPoints::Yggdrasill.TestHooks.ClickPoints.UGuiClickPointProvider
   rectTransform: {fileID: 2969809786244625369}
   canvas: {fileID: 2199064635896431038}
 --- !u!114 &7699447736174800837 stripped
@@ -577,7 +577,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dd6e9b44af084edc8933086f85f39b5c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: GameView::QuantumUser.View.Menu.YggdrasillUIMain
+  m_EditorClassIdentifier: Yggdrasill.GameView::Yggdrasill.GameView.Menu.YggdrasillUIMain
 --- !u!1001 &7393762870687987200
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -738,7 +738,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d0c95e40c9f34aa394ad8c3bd2c30266, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: GameView::QuantumUser.View.Menu.YggdrasillMenuUIController
+  m_EditorClassIdentifier: Yggdrasill.GameView::Yggdrasill.GameView.Menu.YggdrasillMenuUIController
   _config: {fileID: 11400000, guid: df41f7e039bb7624094bc854b512738f, type: 2}
   Connection: {fileID: 2350103502022510088}
   _screens:
@@ -1013,7 +1013,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8c3107a31964418cbe5493f82ae4ad44, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: GameView::QuantumUser.View.Menu.YggdrasillSingleplayRunner
+  m_EditorClassIdentifier: Yggdrasill.GameView::Yggdrasill.GameView.Menu.YggdrasillSingleplayRunner
 --- !u!114 &5210941505225071086 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4039415674987975770, guid: 623caa4de99c29a4d83351d8da9d502e, type: 3}
@@ -1024,4 +1024,4 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cf79d769d23541f7b5beed46af2e7c44, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: GameView::QuantumUser.View.Menu.YggdrasillUISinglePlay
+  m_EditorClassIdentifier: Yggdrasill.GameView::Yggdrasill.GameView.Menu.YggdrasillUISinglePlay

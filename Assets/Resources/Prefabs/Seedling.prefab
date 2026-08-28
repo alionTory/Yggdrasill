@@ -310,7 +310,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 75c7fc24c7edcb542b12f79550af36d8, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: TestHelper::Tests.E2eTests.SeedlingTestTag
+  m_EditorClassIdentifier: Yggdrasill.TestHooks.Tags::Yggdrasill.TestHooks.Tags.SeedlingTestTag
 --- !u!1 &6078121452423821438
 GameObject:
   m_ObjectHideFlags: 0

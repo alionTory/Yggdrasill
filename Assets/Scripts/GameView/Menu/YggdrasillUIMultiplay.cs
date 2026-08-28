@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Quantum.Menu;
 using TMPro;
 using UnityEngine;
-using Yggdrasill.Utilities;
 
 namespace Yggdrasill.GameView.Menu
 {

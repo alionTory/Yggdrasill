@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fa014e1a6db907f4fab5c99805ce696a, type: 3}
   m_Name: SceneListConfig
-  m_EditorClassIdentifier: GameView::QuantumUser.View.SceneList
+  m_EditorClassIdentifier: Yggdrasill.Editor::Yggdrasill.Editor.SceneListConfigSchema
   scenes:
   - scene:
       asset: {fileID: 102900000, guid: 21e27de20aca94240b1bcad8cc23e615, type: 3}
