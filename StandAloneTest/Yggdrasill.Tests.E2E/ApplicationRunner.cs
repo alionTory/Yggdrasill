@@ -11,7 +11,7 @@ using NUnit.Framework;
 using StreamJsonRpc;
 using Yggdrasill.TestHooks.Protocol;
 
-namespace Tests.E2eTests
+namespace Yggdrasill.Tests.E2E
 {
     public class ApplicationRunner : IDisposable
     {

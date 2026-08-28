@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using Yggdrasill.TestHooks.Protocol;
 
-namespace Tests.E2eTests;
+namespace Yggdrasill.Tests.E2E;
 
 public class MatchingTest
 {

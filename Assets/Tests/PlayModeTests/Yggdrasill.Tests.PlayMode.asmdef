@@ -1,6 +1,6 @@
 {
-    "name": "PlauModeTests",
-    "rootNamespace": "",
+    "name": "Yggdrasill.Tests.PlayMode",
+    "rootNamespace": "Yggdrasill.Tests.PlayMode",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",

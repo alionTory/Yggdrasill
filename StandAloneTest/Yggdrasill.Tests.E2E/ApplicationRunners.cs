@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
 
-namespace Tests.E2eTests;
+namespace Yggdrasill.Tests.E2E;
 
 /// <summary>
 /// 병렬 실행 중 발생한 모든 예외 정보를 담고 있다.

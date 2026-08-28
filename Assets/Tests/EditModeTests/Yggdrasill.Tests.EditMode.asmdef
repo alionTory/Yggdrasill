@@ -1,6 +1,6 @@
 {
-    "name": "EditModeTests",
-    "rootNamespace": "",
+    "name": "Yggdrasill.Tests.EditMode",
+    "rootNamespace": "Yggdrasill.Tests.EditMode",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
