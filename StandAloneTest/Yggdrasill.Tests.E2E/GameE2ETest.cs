@@ -2,7 +2,7 @@
 using System.Collections.Immutable;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using Yggdrasill.TestHooks.Protocol;
+using Yggdrasill.TestHelper.Protocol;
 
 namespace Yggdrasill.Tests.E2E
 {
