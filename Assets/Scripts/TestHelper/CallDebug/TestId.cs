@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+#if DEBUG
 using Yggdrasill.TestHelper.Debug;
+#endif
 using Yggdrasill.TestHelper.Protocol;
 
 namespace Yggdrasill.TestHelper.CallDebug
