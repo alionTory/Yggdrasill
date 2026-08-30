@@ -1,7 +1,8 @@
 using System.Threading;
 using System.Threading.Tasks;
+using Yggdrasill.TestHelper.Protocol;
 
-namespace Yggdrasill.TestHooks.Protocol
+namespace Yggdrasill.TestHelper.Protocol
 {
     public interface ITestHookApi
     {

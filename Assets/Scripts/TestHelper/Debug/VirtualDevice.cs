@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 
-namespace Yggdrasill.TestHooks.Debug
+namespace Yggdrasill.TestHelper.Debug
 {
     public static class VirtualDevice
     {

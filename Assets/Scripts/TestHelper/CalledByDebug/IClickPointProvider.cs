@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Yggdrasill.TestHooks.CalledByDebug
+namespace Yggdrasill.TestHelper.CalledByDebug
 {
     public interface IClickPointProvider
     {

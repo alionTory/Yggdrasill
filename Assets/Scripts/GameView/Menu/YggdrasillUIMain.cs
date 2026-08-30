@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Quantum.Menu;
-using Yggdrasill.TestHooks.Protocol;
-using UnityEditor;
+using Yggdrasill.TestHelper.Protocol;
 using UnityEngine;
 using Yggdrasill.Utilities;
 

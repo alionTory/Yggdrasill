@@ -1,6 +1,5 @@
 using UnityEngine;
-using Yggdrasill.TestHooks;
-using Yggdrasill.TestHooks.Debug;
+using Yggdrasill.TestHelper.Debug;
 
 namespace Yggdrasill.TestHelper.CallDebug
 {

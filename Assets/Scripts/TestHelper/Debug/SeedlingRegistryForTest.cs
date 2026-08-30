@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Yggdrasill.GameView;
 
-namespace Yggdrasill.TestHooks.Debug
+namespace Yggdrasill.TestHelper.Debug
 {
     /// <summary>
     /// E2E 테스트를 위해 현재 씬에 존재하는 묘목 뷰를 등록하고 조회할 수 있는 레지스트리이다.

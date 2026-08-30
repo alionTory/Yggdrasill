@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using Yggdrasill.Utilities;
 
-namespace Yggdrasill.TestHooks.CalledByDebug
+namespace Yggdrasill.TestHelper.CalledByDebug
 {
     [RequireComponent(typeof(Collider2D))]
     public class Collider2DClickPointProvider : MonoBehaviour, IClickPointProvider, IValidatable

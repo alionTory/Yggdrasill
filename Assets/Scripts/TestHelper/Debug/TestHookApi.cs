@@ -5,11 +5,11 @@ using Quantum;
 using Quantum.Menu;
 using TMPro;
 using UnityEngine;
-using Yggdrasill.TestHooks.CalledByDebug;
-using Yggdrasill.TestHooks.Protocol;
+using Yggdrasill.TestHelper.CalledByDebug;
+using Yggdrasill.TestHelper.Protocol;
 using Yggdrasill.Utilities;
 
-namespace Yggdrasill.TestHooks.Debug
+namespace Yggdrasill.TestHelper.Debug
 {
     public class TestHookApi : ITestHookApi
     {

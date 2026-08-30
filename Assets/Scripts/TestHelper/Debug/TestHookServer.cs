@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 using StreamJsonRpc;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Yggdrasill.TestHooks.Protocol;
+using Yggdrasill.TestHelper.Protocol;
 using Yggdrasill.Utilities;
 
-namespace Yggdrasill.TestHooks.Debug
+namespace Yggdrasill.TestHelper.Debug
 {
     public class TestHookServer : MonoBehaviour
     {

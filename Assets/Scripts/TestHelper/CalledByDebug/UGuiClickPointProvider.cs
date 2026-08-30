@@ -2,7 +2,7 @@
 using UnityEngine;
 using Yggdrasill.Utilities;
 
-namespace Yggdrasill.TestHooks.CalledByDebug
+namespace Yggdrasill.TestHelper.CalledByDebug
 {
     [RequireComponent(typeof(RectTransform))]
     public class UGuiClickPointProvider : MonoBehaviour, IClickPointProvider, IValidatable
