@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using Yggdrasill.Utilities;
 using UnityEngine;
+using Yggdrasill.Utilities;
 
-namespace Yggdrasill.TestHooks.ClickPoints
+namespace Yggdrasill.TestHooks.CalledByDebug
 {
     [RequireComponent(typeof(RectTransform))]
     public class UGuiClickPointProvider : MonoBehaviour, IClickPointProvider, IValidatable

@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using Yggdrasill.Utilities;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Yggdrasill.Utilities;
 
-namespace Yggdrasill.TestHooks.ClickPoints
+namespace Yggdrasill.TestHooks.CalledByDebug
 {
     [RequireComponent(typeof(Collider2D))]
     public class Collider2DClickPointProvider : MonoBehaviour, IClickPointProvider, IValidatable

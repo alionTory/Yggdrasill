@@ -1,0 +1,20 @@
+﻿<Solution>
+  <Project Path="Photon.Realtime.csproj" />
+  <Project Path="Yggdrasill.TestHooks.Protocol.csproj" />
+  <Project Path="Quantum.Unity.Editor.csproj" />
+  <Project Path="Quantum.Menu.csproj" />
+  <Project Path="Unity.PlayerPrefsEditor.Editor.csproj" />
+  <Project Path="Quantum.Simulation.csproj" />
+  <Project Path="Quantum.Unity.csproj" />
+  <Project Path="Yggdrasill.GameView.csproj" />
+  <Project Path="Quantum.Menu.Editor.csproj" />
+  <Project Path="Yggdrasill.TestHelper.CallDebug.csproj" />
+  <Project Path="Yggdrasill.TestHooks.csproj" />
+  <Project Path="Quantum.Unity.Editor.CodeGen.csproj" />
+  <Project Path="Yggdrasill.Utilities.csproj" />
+  <Project Path="Yggdrasill.Tests.EditMode.csproj" />
+  <Project Path="Yggdrasill.Editor.csproj" />
+  <Project Path="Yggdrasill.TestHooks.ClickPoints.csproj" />
+  <Project Path="Unity.PlayerPrefsEditor.EditorResources.csproj" />
+  <Project Path="Unity.PlayerPrefsEditor.Samples.SampleScene.csproj" />
+</Solution>

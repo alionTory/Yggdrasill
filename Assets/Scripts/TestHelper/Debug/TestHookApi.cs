@@ -3,14 +3,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Quantum;
 using Quantum.Menu;
-using UnityEngine;
-using Yggdrasill.TestHooks.ClickPoints;
 using TMPro;
-using UnityEngine.UIElements;
+using UnityEngine;
+using Yggdrasill.TestHooks.CalledByDebug;
 using Yggdrasill.TestHooks.Protocol;
 using Yggdrasill.Utilities;
 
-namespace Yggdrasill.TestHooks
+namespace Yggdrasill.TestHooks.Debug
 {
     public class TestHookApi : ITestHookApi
     {

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Yggdrasill.TestHooks.Protocol;
 using Yggdrasill.GameView;
+using Yggdrasill.TestHooks.Protocol;
 
-namespace Yggdrasill.TestHooks
+namespace Yggdrasill.TestHooks.Debug
 {
     /// <summary>
     /// E2E 테스트를 위해 GameObject를 등록하고 조회할 수 있는 레지스트리이다.

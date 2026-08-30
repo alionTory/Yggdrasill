@@ -1,6 +1,6 @@
 {
-    "name": "Yggdrasill.TestHooks",
-    "rootNamespace": "Yggdrasill.TestHooks",
+    "name": "Yggdrasill.TestHooks.Debug",
+    "rootNamespace": "Yggdrasill.TestHooks.Debug",
     "references": [
         "GUID:563ec5f017b641829d88ae8abd97599a",
         "GUID:d629280cd7692bc4aa0841f7fb16ad13",

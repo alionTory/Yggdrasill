@@ -3,16 +3,14 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using System.Text;
 using System.Threading.Tasks;
-using Yggdrasill.Utilities;
 using StreamJsonRpc;
-using Yggdrasill.TestHooks.Protocol;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Debug = UnityEngine.Debug;
+using Yggdrasill.TestHooks.Protocol;
+using Yggdrasill.Utilities;
 
-namespace Yggdrasill.TestHooks
+namespace Yggdrasill.TestHooks.Debug
 {
     public class TestHookServer : MonoBehaviour
     {
@@ -69,7 +67,7 @@ namespace Yggdrasill.TestHooks
             }
             else
             {
-                Debug.Log("TestHookServer 게임 오브젝트가 생성되었으나, 포트 번호가 주어지지 않아 서버를 열지 않습니다.");
+                UnityEngine.Debug.Log("TestHookServer 게임 오브젝트가 생성되었으나, 포트 번호가 주어지지 않아 서버를 열지 않습니다.");
             }
         }
 
@@ -87,20 +85,20 @@ namespace Yggdrasill.TestHooks
             Contract.RequireNotNull(_cts);
             _listener = new TcpListener(IPAddress.Loopback, _port.Value);
             _listener.Start();
-            Debug.Log($"[HOOK] listening on 127.0.0.1:{_port}");
+            UnityEngine.Debug.Log($"[HOOK] listening on 127.0.0.1:{_port}");
             try
             {
-                Debug.Log("[HOOK] 클라이언트 연결 대기 중...");
+                UnityEngine.Debug.Log("[HOOK] 클라이언트 연결 대기 중...");
                 _client = await _listener.AcceptTcpClientAsync();
-                Debug.Log("[HOOK] 클라이언트 연결 완료.");
+                UnityEngine.Debug.Log("[HOOK] 클라이언트 연결 완료.");
             }
             catch (ObjectDisposedException)
             {
-                Debug.Log("[HOOK] 클라이언트 연결 취소됨.");
+                UnityEngine.Debug.Log("[HOOK] 클라이언트 연결 취소됨.");
             }
             catch (SocketException) when (_cts.IsCancellationRequested)
             {
-                Debug.Log("[HOOK] 클라이언트 연결 취소됨.");
+                UnityEngine.Debug.Log("[HOOK] 클라이언트 연결 취소됨.");
             }
         }
 
@@ -124,7 +122,7 @@ namespace Yggdrasill.TestHooks
             }
             catch (Exception ex)
             {
-                Debug.LogWarning($"[HOOK] 세션 비정상 종료: {ex.Message}");
+                UnityEngine.Debug.LogWarning($"[HOOK] 세션 비정상 종료: {ex.Message}");
             }
         }
 

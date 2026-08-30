@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
+using Yggdrasill.TestHooks;
+using Yggdrasill.TestHooks.Debug;
 using Yggdrasill.TestHooks.Protocol;
 
-namespace Yggdrasill.TestHooks.Tags
+namespace Yggdrasill.TestHelper.CallDebug
 {
     /// <summary>
     /// 이 스크립트가 부착된 게임 오브젝트는 생성 시 <see cref="GameObjectRegistryForTest"/>에 등록되어 조회 가능해진다.
