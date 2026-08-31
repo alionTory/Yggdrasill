@@ -49,6 +49,7 @@ runs:
         dotnet test
         StandAloneTest/Yggdrasill.Tests.sln
         --logger "trx;LogFileName=e2e.trx"
+        --logger "console;verbosity=detailed"
         --results-directory TestResults
         --
         "TestRunParameters.Parameter(name=\"BuildPath\", value=\"$BUILD_PATH\")"
