@@ -289,7 +289,7 @@ namespace Yggdrasill.Tests.E2E
         /// </summary>
         /// <param name="timeout">
         /// 대기 시간. 이 시간을 넘으면 예외 발생.<br/>
-        /// 기본값은 5초.
+        /// 기본값은 10초.
         /// </param>
         public async Task WaitUntilSimulationRunning(TimeSpan? timeout = null)
         {
