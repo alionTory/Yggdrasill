@@ -34,7 +34,7 @@ public class MatchingTest
         foreach (var application in _applications)
         {
             await application.Click(GameObjectId.AutoMatchingButton);
-            await Task.Delay(TimeSpan.FromSeconds(1));
+            await application.WaitUntilSceneLoad(SceneId.MultiplayPrototype);
         }
 
         // 매칭 여부 검증 - 게임 씬 입장 여부 확인
