@@ -23,7 +23,7 @@ namespace Yggdrasill.Tests.E2E
         {
             await _applicationRunners.WhenAll(app => app.Click(GameObjectId.MultiPlayButton));
             await _applicationRunners[0].Click(GameObjectId.AutoMatchingButton);
-            await Task.Delay(TimeSpan.FromSeconds(1));
+            await _applicationRunners[0].WaitUntilSceneLoad(SceneId.MultiplayPrototype);
             await _applicationRunners[1].Click(GameObjectId.AutoMatchingButton);
             await _applicationRunners.WhenAll(app => app.WaitUntilSimulationRunning());
         }
