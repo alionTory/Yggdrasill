@@ -19,7 +19,7 @@ namespace Yggdrasill.Tests.E2E
         }
 
         [Test, Order(1)]
-        public async Task GameEntranceByQuickPlayButton()
+        public async Task GameEntranceByAutoMatching()
         {
             await _applicationRunners.WhenAll(app => app.Click(GameObjectId.MultiPlayButton));
             await _applicationRunners[0].Click(GameObjectId.AutoMatchingButton);
@@ -34,7 +34,7 @@ namespace Yggdrasill.Tests.E2E
         /// - "같은 방에 입장한 플레이어들은 묘목의 개수와 위치가 동기화된다."
         /// </summary>
         /// <remarks>
-        /// <see cref="GameEntranceByQuickPlayButton"/>이 두 클라이언트를 같은 방에 입장시킨 상태를 전제로 한다.
+        /// <see cref="GameEntranceByAutoMatching"/>이 두 클라이언트를 같은 방에 입장시킨 상태를 전제로 한다.
         /// </remarks>
         [Order(2)]
         [TestCase(1, 1, 3, 4)]
