@@ -112,7 +112,7 @@ namespace Yggdrasill.Tests.E2E
             }
             catch (Exception)
             {
-                TestContext.Progress.WriteLine("ApplicationRunner 초기화 실패");
+                Log.Write("ApplicationRunner 초기화 실패");
                 result.Dispose();
                 throw;
             }
@@ -125,7 +125,7 @@ namespace Yggdrasill.Tests.E2E
         private async Task InitializeAsync(string? photonAppVersion)
         {
             _port = GetFreePort();
-            TestContext.Progress.WriteLine($"포트 {_port}에서 게임 애플리케이션 시작 중.");
+            Log.Write($"포트 {_port}에서 게임 애플리케이션 시작 중.");
 
             var processInfo = new ProcessStartInfo()
             {
@@ -158,23 +158,15 @@ namespace Yggdrasill.Tests.E2E
 
             _process = new Process { StartInfo = processInfo };
 
-            // 게임 프로세스 로그를 테스트 드라이버 로그에 전달.
-            //
-            // 여기서 TestContext.Out (또는 Out 생략)을 쓰면 안 된다.
-            // TestContext.Out은 BeginOutputReadLine을 호출한 시점에서 실행 중인 테스트 컨텍스트를 물려받는다.
-            // 이는 로그가 기록되지 않도록 만들 수 있다. 예를 들어, 게임 프로세스가 [OneTimeSetUp]에서 시작한다면,
-            // 그 컨텍스트는 개별 테스트가 아니라 픽스처이고, 픽스처 수준 출력은 .trx 파일에 기록되지 않아 로그가 통째로 사라진다.
-            //
-            // 대신 현재 실행 중인 테스트의 컨텍스트에 귀속되지 않는 TestContext.Progress를 써야 한다.
             _process.OutputDataReceived += (_, e) =>
             {
                 if (!string.IsNullOrEmpty(e.Data))
-                    TestContext.Progress.WriteLine($"[게임 프로세스 {_port}] {e.Data}");
+                    Log.Write($"[게임 프로세스 {_port}] {e.Data}");
             };
             _process.ErrorDataReceived += (_, e) =>
             {
                 if (!string.IsNullOrEmpty(e.Data))
-                    TestContext.Progress.WriteLine($"[게임 프로세스 {_port} - stderr!] {e.Data}");
+                    Log.Write($"[게임 프로세스 {_port} - stderr!] {e.Data}");
             };
 
             _process.Start();
@@ -189,7 +181,7 @@ namespace Yggdrasill.Tests.E2E
 
         private async Task TcpConnectAsync()
         {
-            TestContext.Progress.WriteLine("TCP 연결 시도 시작...");
+            Log.Write("TCP 연결 시도 시작...");
             _tcpClient = new TcpClient();
 
             bool canceled = false;
@@ -224,7 +216,7 @@ namespace Yggdrasill.Tests.E2E
             if (!canceled)
             {
                 Assert.That(connected, Is.True);
-                TestContext.Progress.WriteLine("TCP 연결 성공.");
+                Log.Write("TCP 연결 성공.");
             }
             else
             {
@@ -263,10 +255,10 @@ namespace Yggdrasill.Tests.E2E
         public async Task WaitGameObjectLoad(GameObjectId id, TimeSpan? timeout = null)
         {
             timeout ??= TimeSpan.FromSeconds(1);
-            TestContext.WriteLine($"게임 오브젝트 {id}가 생성되기를 기다리는 중.");
+            Log.Write($"게임 오브젝트 {id}가 생성되기를 기다리는 중.");
             using var cancellationTokenSource = new CancellationTokenSource(timeout.Value);
             await _testHookApi.WaitGameObjectLoad(id, cancellationTokenSource.Token);
-            TestContext.WriteLine($"게임 오브젝트 {id} 생성 확인 완료.");
+            Log.Write($"게임 오브젝트 {id} 생성 확인 완료.");
         }
 
         /// <summary>
@@ -278,10 +270,10 @@ namespace Yggdrasill.Tests.E2E
         public async Task WaitUntilSceneLoad(SceneId id, TimeSpan? timeout = null)
         {
             timeout ??= TimeSpan.FromSeconds(10);
-            TestContext.WriteLine($"씬 {id}가 생성되기를 기다리는 중.");
+            Log.Write($"씬 {id}가 생성되기를 기다리는 중.");
             using var cancellationTokenSource = new CancellationTokenSource(timeout.Value);
             await _testHookApi.WaitUntilSceneLoad(id, cancellationTokenSource.Token);
-            TestContext.WriteLine($"씬 {id} 생성 확인 완료.");
+            Log.Write($"씬 {id} 생성 확인 완료.");
         }
 
         /// <summary>
@@ -294,10 +286,10 @@ namespace Yggdrasill.Tests.E2E
         public async Task WaitUntilSimulationRunning(TimeSpan? timeout = null)
         {
             timeout ??= TimeSpan.FromSeconds(10);
-            TestContext.WriteLine("게임 시뮬레이션이 실행될 때까지 기다리는 중.");
+            Log.Write("게임 시뮬레이션이 실행될 때까지 기다리는 중.");
             using var cancellationTokenSource = new CancellationTokenSource(timeout.Value);
             await _testHookApi.WaitUntilSimulationRunning(cancellationTokenSource.Token);
-            TestContext.WriteLine("게임 시뮬레이션 실행 확인됨..");
+            Log.Write("게임 시뮬레이션 실행 확인됨..");
         }
 
         public async Task<string> GetInvitationCode()
@@ -312,9 +304,9 @@ namespace Yggdrasill.Tests.E2E
         /// <param name="row">가장 아래 행의 칸이 1.</param>
         public async Task ClickTile(int column, int row)
         {
-            TestContext.WriteLine($"타일 ({column}, {row}) 클릭 시도 중.");
+            Log.Write($"타일 ({column}, {row}) 클릭 시도 중.");
             await _testHookApi.ClickTile(column, row);
-            TestContext.WriteLine($"타일 ({column}, {row}) 클릭 완료.");
+            Log.Write($"타일 ({column}, {row}) 클릭 완료.");
         }
 
         /// <summary>
@@ -343,17 +335,17 @@ namespace Yggdrasill.Tests.E2E
         public async Task<bool> IsSeedlingExistInTileUntilTimeout(int column, int row, TimeSpan? timeout = null)
         {
             timeout ??= TimeSpan.FromSeconds(1);
-            TestContext.WriteLine($"타일 ({column}, {row})에 묘목이 생성되기를 기다리는 중.");
+            Log.Write($"타일 ({column}, {row})에 묘목이 생성되기를 기다리는 중.");
             using var cancellationTokenSource = new CancellationTokenSource(timeout.Value);
             try
             {
                 await _testHookApi.WaitUntilSeedlingExistInTile(column, row, cancellationTokenSource.Token);
-                TestContext.WriteLine($"타일 ({column}, {row})에 묘목 존재 확인.");
+                Log.Write($"타일 ({column}, {row})에 묘목 존재 확인.");
                 return true;
             }
             catch (OperationCanceledException)
             {
-                TestContext.WriteLine($"타임아웃. 타일 ({column}, {row})에 묘목이 존재하지 않음.");
+                Log.Write($"타임아웃. 타일 ({column}, {row})에 묘목이 존재하지 않음.");
                 return false;
             }
         }

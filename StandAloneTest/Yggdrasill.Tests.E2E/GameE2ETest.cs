@@ -14,7 +14,7 @@ namespace Yggdrasill.Tests.E2E
         [OneTimeSetUp]
         public async Task Setup()
         {
-            TestContext.Progress.WriteLine("애플리케이션 시작");
+            Log.Write("애플리케이션 시작");
             _applicationRunners = await ApplicationRunners.StartRunners(2, photonAppVersion:_photonAppVersion);
         }
 

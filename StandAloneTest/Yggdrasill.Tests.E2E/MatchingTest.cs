@@ -26,7 +26,7 @@ public class MatchingTest
     [TestCase(4)]
     public async Task AutoMatchingTest(int clientCount)
     {
-        TestContext.WriteLine("애플리케이션 시작");
+        Log.Write("애플리케이션 시작");
         _applications = await ApplicationRunners.StartRunners(clientCount, photonAppVersion: _photonAppVersion);
 
         // 멀티플레이 메뉴 진입 및 자동 매칭 버튼 클릭
@@ -94,7 +94,7 @@ public class MatchingTest
     [Test]
     public async Task PrivateRoomMatchingTest()
     {
-        TestContext.WriteLine("애플리케이션 시작");
+        Log.Write("애플리케이션 시작");
         var twoApplications = await ApplicationRunners.StartRunners(2);
         this._applications = twoApplications;
 
@@ -104,7 +104,7 @@ public class MatchingTest
         await twoApplications[0].Click(GameObjectId.PrivateRoomCreateButton);
         await twoApplications[0].WaitUntilSceneLoad(SceneId.MultiplayPrototype);
         var invitationCode = await twoApplications[0].GetInvitationCode();
-        TestContext.WriteLine($"초대 코드: {invitationCode}");
+        Log.Write($"초대 코드: {invitationCode}");
 
         await twoApplications[1].Click(GameObjectId.InvitationCodeInputField);
         await twoApplications[1].InputToTextField(GameObjectId.InvitationCodeInputField, invitationCode);
