@@ -21,4 +21,12 @@ public static class Log
         TestContext.Progress.WriteLine(message);
         TestContext.Out.WriteLine(message);
     }
+
+    /// <summary>
+    /// 실시간 출력 스트림에만 로그를 출력.
+    /// </summary>
+    public static void Progress(string message)
+    {
+        TestContext.Progress.WriteLine(message);
+    }
 }

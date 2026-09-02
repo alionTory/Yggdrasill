@@ -36,6 +36,22 @@ namespace Yggdrasill.Tests.E2E
 
         private static readonly string BuildPath = GetBuildPath();
 
+        private TimeoutCaller _timeoutCaller = new()
+        {
+            Timeout = TimeSpan.FromMinutes(1),
+        };
+        
+        /// <summary>
+        /// 게임 프로세스와의 통신 시의 하드 타임아웃을 설정한다.
+        /// </summary>
+        /// <remarks>
+        /// 기본 하드 타임아웃은 1분.
+        /// </remarks>
+        public void SetHardTimeout(TimeSpan timeout)
+        {
+            _timeoutCaller.Timeout = timeout;
+        }
+
         /// <summary>
         /// 리포지터리 루트 디렉터리의 절대 경로를 반환한다.
         /// </summary>
@@ -177,6 +193,8 @@ namespace Yggdrasill.Tests.E2E
 
             _jsonRpc = JsonRpc.Attach(_tcpClient.GetStream());
             _testHookApi = _jsonRpc.Attach<ITestHookApi>();
+            
+            _timeoutCaller.TimeoutMessage = $"게임 프로세스 {_port}에서 하드 타임아웃 발생.";
         }
 
         private async Task TcpConnectAsync()
@@ -229,12 +247,12 @@ namespace Yggdrasill.Tests.E2E
          */
         public async Task Click(GameObjectId gameObjectId)
         {
-            await _testHookApi.ClickObject(gameObjectId);
+            await _timeoutCaller.CallAsync(async () => await _testHookApi.ClickObject(gameObjectId));
         }
 
         public async Task InputText(string text)
         {
-            await _testHookApi.InputText(text);
+            await _timeoutCaller.CallAsync(async () => await _testHookApi.InputText(text));
         }
 
         /// <summary>
@@ -243,7 +261,7 @@ namespace Yggdrasill.Tests.E2E
         /// <param name="textFieldId">TMP_TextField를 가진 게임 오브젝트 id여야 한다.</param>
         public async Task InputToTextField(GameObjectId textFieldId, string text)
         {
-            await _testHookApi.InputToTextField(textFieldId, text);
+            await _timeoutCaller.CallAsync(async () => await _testHookApi.InputToTextField(textFieldId, text));
         }
 
         /// <summary>
@@ -257,7 +275,7 @@ namespace Yggdrasill.Tests.E2E
             timeout ??= TimeSpan.FromSeconds(1);
             Log.Write($"게임 오브젝트 {id}가 생성되기를 기다리는 중.");
             using var cancellationTokenSource = new CancellationTokenSource(timeout.Value);
-            await _testHookApi.WaitGameObjectLoad(id, cancellationTokenSource.Token);
+            await _timeoutCaller.CallAsync(async () => await _testHookApi.WaitGameObjectLoad(id, cancellationTokenSource.Token));
             Log.Write($"게임 오브젝트 {id} 생성 확인 완료.");
         }
 
@@ -272,7 +290,7 @@ namespace Yggdrasill.Tests.E2E
             timeout ??= TimeSpan.FromSeconds(10);
             Log.Write($"씬 {id}가 생성되기를 기다리는 중.");
             using var cancellationTokenSource = new CancellationTokenSource(timeout.Value);
-            await _testHookApi.WaitUntilSceneLoad(id, cancellationTokenSource.Token);
+            await _timeoutCaller.CallAsync(async () => await _testHookApi.WaitUntilSceneLoad(id, cancellationTokenSource.Token));
             Log.Write($"씬 {id} 생성 확인 완료.");
         }
 
@@ -288,13 +306,13 @@ namespace Yggdrasill.Tests.E2E
             timeout ??= TimeSpan.FromSeconds(10);
             Log.Write("게임 시뮬레이션이 실행될 때까지 기다리는 중.");
             using var cancellationTokenSource = new CancellationTokenSource(timeout.Value);
-            await _testHookApi.WaitUntilSimulationRunning(cancellationTokenSource.Token);
+            await _timeoutCaller.CallAsync(async () => await _testHookApi.WaitUntilSimulationRunning(cancellationTokenSource.Token));
             Log.Write("게임 시뮬레이션 실행 확인됨..");
         }
 
         public async Task<string> GetInvitationCode()
         {
-            return await _testHookApi.GetInvitationCode();
+            return await _timeoutCaller.CallAsync(async () => await _testHookApi.GetInvitationCode());
         }
 
         /// <summary>
@@ -305,7 +323,7 @@ namespace Yggdrasill.Tests.E2E
         public async Task ClickTile(int column, int row)
         {
             Log.Write($"타일 ({column}, {row}) 클릭 시도 중.");
-            await _testHookApi.ClickTile(column, row);
+            await _timeoutCaller.CallAsync(async () => await _testHookApi.ClickTile(column, row));
             Log.Write($"타일 ({column}, {row}) 클릭 완료.");
         }
 
@@ -319,7 +337,7 @@ namespace Yggdrasill.Tests.E2E
         /// </returns>
         public async Task<bool> IsSeedlingExistInTile(int column, int row)
         {
-            return await _testHookApi.IsSeedlingExistInTile(column, row);
+            return await _timeoutCaller.CallAsync(async () => await _testHookApi.IsSeedlingExistInTile(column, row));
         }
 
         /// <summary>
@@ -339,7 +357,7 @@ namespace Yggdrasill.Tests.E2E
             using var cancellationTokenSource = new CancellationTokenSource(timeout.Value);
             try
             {
-                await _testHookApi.WaitUntilSeedlingExistInTile(column, row, cancellationTokenSource.Token);
+                await _timeoutCaller.CallAsync(async () => await _testHookApi.WaitUntilSeedlingExistInTile(column, row, cancellationTokenSource.Token));
                 Log.Write($"타일 ({column}, {row})에 묘목 존재 확인.");
                 return true;
             }
@@ -355,7 +373,7 @@ namespace Yggdrasill.Tests.E2E
         /// </summary>
         public async Task<int> GetSeedlingCount()
         {
-            return await _testHookApi.GetSeedlingCount();
+            return await _timeoutCaller.CallAsync(async () => await _testHookApi.GetSeedlingCount());
         }
 
         public void Dispose()
