@@ -16,6 +16,11 @@ namespace Yggdrasill.TestHelper.Protocol
         /// </summary>
         public const string PhotonAppVersionCommandLineArgumentName = "--test-hook-app-version";
         
+        /// <summary>
+        /// 게임 프로세스 실행 시 fps를 지정하는 명령행 인수의 이름.
+        /// </summary>
+        public const string TargetFrameRateCommandLineArgumentName = "--test-hook-target-frame-rate";
+        
         public Task WaitGameObjectLoad(GameObjectId gameObjectId, CancellationToken cancellationToken);
         
         public Task ClickObject(GameObjectId gameObjectId);

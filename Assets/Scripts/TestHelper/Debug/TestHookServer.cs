@@ -54,7 +54,7 @@ namespace Yggdrasill.TestHelper.Debug
             _unityContext = SynchronizationContext.Current;
             _cts = new CancellationTokenSource();
 
-            _port = ParsePortArg();
+            _port = ParseArg(ITestHookApi.PortCommandLineArgumentName);
             if (_port.HasValue)
             {
                 // 창이 포커스된 상태가 아니여도 클릭 이벤트가 가능하도록 하기 위해 필요.
@@ -64,6 +64,8 @@ namespace Yggdrasill.TestHelper.Debug
                 await TcpConnect();
                 if(_client != null)
                     JsonRpcConnect();
+                
+                SetFrameRate();
             }
             else
             {
@@ -127,20 +129,36 @@ namespace Yggdrasill.TestHelper.Debug
         }
 
         /// <summary>
-        /// 게임 프로세스 실행 시 주어진 명령행 인수 <see cref="TestHookConstants.PortCommandLineArgumentName"/> 에 지정된 값을 반환한다.
+        /// 명령행 인수 값에 따라 프레임 레이트 설정.
+        /// </summary>
+        /// <remarks>
+        /// CI 환경 등에서 CPU 점유율을 낮추는 데 사용 가능.
+        /// </remarks>
+        private void SetFrameRate()
+        {
+            var frameRate = ParseArg(ITestHookApi.TargetFrameRateCommandLineArgumentName);
+            if (frameRate.HasValue)
+            {
+                Application.targetFrameRate = frameRate.Value;
+                UnityEngine.Debug.Log($"[HOOK] targetFrameRate가 {frameRate.Value}로 설정됨.");
+            }
+        }
+
+        /// <summary>
+        /// 게임 프로세스 실행 시 명령행 인수 <paramref name="argName"/> 에 지정된 정수 값을 반환한다.
         /// </summary>
         /// <returns>
         /// 해당 명령행 인수가 지정되지 않았을 시, null 리턴.
         /// </returns>
-        private static int? ParsePortArg()
+        private static int? ParseArg(string argName)
         {
             var args = Environment.GetCommandLineArgs();
             for (int i = 0; i < args.Length - 1; i++)
-                if (args[i] == ITestHookApi.PortCommandLineArgumentName && int.TryParse(args[i + 1], out int p))
-                    return p;
+                if (args[i] == argName && int.TryParse(args[i + 1], out int value))
+                    return value;
             return null;
         }
-
+        
         void OnDestroy()
         {
             _cts?.Cancel();
