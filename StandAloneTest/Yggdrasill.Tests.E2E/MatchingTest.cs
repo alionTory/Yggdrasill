@@ -26,6 +26,9 @@ public class MatchingTest
     [TestCase(4)]
     public async Task AutoMatchingTest(int clientCount)
     {
+        // CI 등 열악한 환경에서는, 많은 수의 게임 프로세스 실행 시 더 긴 타임아웃이 필요.
+        TimeSpan longerTimeOut = TimeSpan.FromSeconds(30);  
+
         Log.Write("애플리케이션 시작");
         _applications = await ApplicationRunners.StartRunners(clientCount, photonAppVersion: _photonAppVersion);
 
@@ -34,7 +37,7 @@ public class MatchingTest
         foreach (var application in _applications)
         {
             await application.Click(GameObjectId.AutoMatchingButton);
-            await application.WaitUntilSceneLoad(SceneId.MultiplayPrototype);
+            await application.WaitUntilSceneLoad(SceneId.MultiplayPrototype, longerTimeOut);
         }
 
         // 매칭 여부 검증 - 게임 씬 입장 여부 확인
