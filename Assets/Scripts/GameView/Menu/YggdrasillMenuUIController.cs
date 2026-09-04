@@ -1,0 +1,37 @@
+﻿using System.Threading.Tasks;
+using Quantum.Menu;
+
+namespace Yggdrasill.GameView.Menu
+{
+    public class YggdrasillMenuUIController : QuantumMenuUIController
+    {
+        protected override void Awake()
+        {
+            base.Awake();
+            // 0번 스크린을 메인으로 설정.
+            _screenLookup.Add(typeof(QuantumMenuUIMain), _screens[0]);
+        }
+
+        public async Task HandleLocalConnectionResult(ConnectResult result)
+        {
+            if (result.Success)
+            {
+                Show<YggdrasillUISinglePlay>();
+            }
+            else if (result.FailReason != ConnectFailReason.ApplicationQuit)
+            {
+                var popup = PopupAsync(result.DebugMessage, "Connection Failed");
+                if (result.WaitForCleanup != null)
+                {
+                    await Task.WhenAll(result.WaitForCleanup, popup);
+                }
+                else
+                {
+                    await popup;
+                }
+
+                Show<QuantumMenuUIMain>();
+            }
+        }
+    }
+}

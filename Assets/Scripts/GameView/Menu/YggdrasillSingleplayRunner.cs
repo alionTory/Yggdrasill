@@ -1,0 +1,329 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Threading;
+using System.Threading.Tasks;
+using Photon.Deterministic;
+using Photon.Realtime;
+using Quantum;
+using Quantum.Menu;
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.SceneManagement;
+using Yggdrasill.Utilities;
+
+namespace Yggdrasill.GameView.Menu
+{
+    public class YggdrasillSingleplayRunner : MonoBehaviour, IHasInvariants
+    {
+        private QuantumRunner? _runner;
+
+        /// <summary>
+        /// 사용자 요청에 따라 photon 서버 연결 및 시뮬레이션 실행을 취소하는 용도.
+        /// </summary>
+        private CancellationTokenSource? _cancellation;
+
+        /// <summary>
+        /// <see cref="_cancellation"/> 취소 또는 애플리케이션 종료 시 취소되는 토큰.
+        /// </summary>
+        private CancellationToken? _linkedCancellationToken;
+
+        /// <summary>
+        /// 이 러너가 로드한 맵 씬의 이름.
+        /// </summary>
+        /// <remarks>
+        /// 씬을 러너가 직접 로드한 경우, Quantum의 자동 씬 로더는 이 씬을 정리하지 않는다. <br/>
+        /// 따라서 <see cref="CleanupAsync"/>에서 직접 언로드해야 한다. <br/>
+        /// </remarks>
+        private string? _loadedSceneName = null;
+
+        public bool IsGameRunning { get; private set; } = false;
+
+        /// <summary>
+        /// A Unity event that can be used to receive progress updates in text form.
+        /// </summary>
+        private UnityEvent<string>? _onProgress;
+
+        /// <summary>
+        /// Return the max player count for the Photon room.
+        /// </summary>
+        public int MaxPlayerCount => _runner?.Session.PlayerCount ?? 0;
+
+        /// <summary>
+        /// Return a list a Photon client names also connected to the room.
+        /// </summary>
+        public List<string?>? Usernames
+        {
+            get
+            {
+                var frame = _runner?.Game?.Frames?.Verified;
+                if (frame != null)
+                {
+                    var result = new List<string?>(frame.MaxPlayerCount);
+                    for (int i = 0; i < frame.MaxPlayerCount; i++)
+                    {
+                        var isPlayerConnected =
+                            (frame.GetPlayerInputFlags(i) & DeterministicInputFlags.PlayerNotPresent) == 0;
+                        if (isPlayerConnected)
+                        {
+                            var playerNickname = frame.GetPlayerData(i)?.PlayerNickname;
+                            if (string.IsNullOrEmpty(playerNickname))
+                            {
+                                playerNickname = $"Player{i:02}";
+                            }
+
+                            result.Add(playerNickname);
+                        }
+                        else
+                        {
+                            result.Add(null);
+                        }
+                    }
+
+                    return result;
+                }
+
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Reports progress to the progress event.
+        /// </summary>
+        private void ReportProgress(string message)
+        {
+            _onProgress?.Invoke(message);
+        }
+
+        /// <summary>
+        /// Register to get notified on session runner shutdowns to handle unexpected errors.
+        /// </summary>
+        public event Action<ShutdownCause, SessionRunner>? SessionShutdownEvent;
+
+        /// <summary>
+        /// Is added as callback for <see cref="SessionRunner.Arguments.OnShutdown"/>.
+        /// Triggers <see cref="SessionShutdownEvent"/>.
+        /// </summary>
+        private void OnSessionShutdown(ShutdownCause shutdownCause, SessionRunner sessionRunner)
+        {
+            SessionShutdownEvent?.Invoke(shutdownCause, sessionRunner);
+        }
+
+        public virtual void Invariants()
+        {
+            Contract.Invariant(IsGameRunning == (_runner != null));
+            Contract.Invariant(IsGameRunning == (_cancellation != null));
+            Contract.Invariant(IsGameRunning == (_linkedCancellationToken != null));
+            Contract.Invariant(IsGameRunning == (_loadedSceneName != null));
+        }
+
+        /// <summary>
+        /// 게임 시뮬레이션을 오프라인으로 시작한다.
+        /// </summary>
+        /// <returns>
+        /// <see cref="ConnectResult"/>에 게임 시작 성공 여부와, 실패한 경우 실패 원인을 담아 반환한다.
+        /// </returns>
+        public async Task<ConnectResult> StartLocalAsync(QuantumMenuConnectArgs connectArgs)
+        {
+            Contract.Require(!IsGameRunning);
+
+            ReportProgress("게임을 싱글 플레이로 시작하는 중...");
+
+            SetAuthValues(connectArgs);
+            SetCancellationToken();
+
+            var runtimeConfig = BuildRuntimeConfig(connectArgs);
+
+            ConnectResult result;
+            try
+            {
+                await LoadSceneAsync(runtimeConfig);
+                await StartSessionRunnerAsync(connectArgs, runtimeConfig);
+
+                for (int i = 0; i < connectArgs.MaxPlayerCount; i++)
+                    _runner.Game.AddPlayer(i, new RuntimePlayer { PlayerNickname = $"Player{i + 1}" });
+
+                result = ConnectResult.Ok();
+            }
+            catch (Exception e)
+            {
+                result = await HandleConnectionFail(e);
+            }
+
+            Invariants();
+            return result;
+        }
+
+        private static void SetAuthValues(QuantumMenuConnectArgs connectArgs)
+        {
+            connectArgs.AuthValues = new AuthenticationValues { UserId = Guid.NewGuid().ToString() };
+        }
+
+        [MemberNotNull(nameof(_cancellation), nameof(_linkedCancellationToken))]
+        private void SetCancellationToken()
+        {
+            _cancellation = new CancellationTokenSource();
+            _linkedCancellationToken = AsyncSetup.CreateLinkedSource(_cancellation.Token).Token;
+        }
+
+        private static RuntimeConfig BuildRuntimeConfig(QuantumMenuConnectArgs args)
+        {
+            // 씬 에셋의 RuntimeConfig를 JSON 왕복으로 깊은 복사 (원본 에셋 오염 방지)
+            var config = JsonUtility.FromJson<RuntimeConfig>(
+                JsonUtility.ToJson(args.Scene.RuntimeConfig));
+
+            // 시드가 0이면 새로 생성
+            if (config.Seed == 0)
+                config.Seed = Guid.NewGuid().GetHashCode();
+
+            return config;
+        }
+
+        /// <summary>
+        /// <paramref name="runtimeConfig"/>가 가리키는 맵의 유니티 씬을 로드하고 활성 씬으로 지정한다.
+        /// </summary>
+        /// <exception cref="Exception"><paramref name="runtimeConfig"/>에서 씬을 찾을 수 없으면 예외 발생.</exception>
+        [MemberNotNull(nameof(_loadedSceneName))]
+        private async Task LoadSceneAsync(RuntimeConfig runtimeConfig)
+        {
+            Contract.RequireNotNull(_linkedCancellationToken);
+
+            if (!QuantumUnityDB.TryGetGlobalAsset(runtimeConfig.Map, out Quantum.Map map))
+                throw new Exception($"맵 에셋 {runtimeConfig.Map}을 찾을 수 없음.");
+
+            if (string.IsNullOrEmpty(map.Scene))
+                throw new Exception($"맵 에셋에 씬이 지정되지 않음.");
+
+            ReportProgress("씬을 불러오는 중...");
+
+            await SceneManager.LoadSceneAsync(map.Scene, LoadSceneMode.Additive);
+            _loadedSceneName = map.Scene;
+            SceneManager.SetActiveScene(SceneManager.GetSceneByName(map.Scene));
+        }
+
+        /// <summary>
+        /// <see cref="SessionRunner"/>를 로컬로 실행한다.
+        /// </summary>
+        /// <remarks>
+        /// ensure: <see cref="IsGameRunning"/>
+        /// </remarks>
+        [MemberNotNull(nameof(_runner))]
+        private async Task StartSessionRunnerAsync(QuantumMenuConnectArgs connectArgs, RuntimeConfig runtimeConfig)
+        {
+            Contract.RequireNotNull(_linkedCancellationToken);
+
+            var sessionRunnerArgs = new SessionRunner.Arguments
+            {
+                RunnerFactory = QuantumRunnerUnityFactory.DefaultFactory,
+                GameParameters = QuantumRunnerUnityFactory.CreateGameParameters,
+                ClientId = connectArgs.AuthValues.UserId,
+                RuntimeConfig = runtimeConfig,
+                SessionConfig = connectArgs.SessionConfig?.Config ??
+                                QuantumDeterministicSessionConfigAsset.DefaultConfig,
+                GameMode = DeterministicGameMode.Local,
+                PlayerCount = connectArgs.MaxPlayerCount,
+                CancellationToken = _linkedCancellationToken.Value,
+                DeltaTimeType = connectArgs.DeltaTimeType,
+                StartGameTimeoutInSeconds = connectArgs.StartGameTimeoutInSeconds,
+                GameFlags = connectArgs.GameFlags,
+                OnShutdown = OnSessionShutdown,
+            };
+
+            ReportProgress("게임 시작 중...");
+            _runner = (QuantumRunner)await SessionRunner.StartAsync(sessionRunnerArgs);
+            IsGameRunning = true;
+        }
+
+
+        /// <summary>
+        /// 게임 시작 실패를 처리한다.
+        /// </summary>
+        /// <remarks>
+        /// ensure: <see cref="_cancellation"/> == null <br/>
+        /// ensure: <see cref="_linkedCancellationToken"/> == null <br/>
+        /// ensure: <see cref="_runner"/> == null <br/>
+        /// ensure: !<see cref="IsGameRunning"/> <br/>
+        /// </remarks>
+        private async Task<ConnectResult> HandleConnectionFail(Exception exception)
+        {
+            Debug.LogException(exception);
+            await CleanupAsync();
+            return new ConnectResult
+            {
+                FailReason = InferFailReason(),
+                DebugMessage = exception.Message,
+            };
+        }
+
+        /// <summary>
+        /// 게임 시작 실패 원인을 나타내는 코드를 반환한다.
+        /// </summary>
+        /// <returns><see cref="ConnectFailReason"/>에 정의된 실패 코드</returns>
+        private int InferFailReason()
+        {
+            int failReason;
+            if (AsyncConfig.Global.IsCancellationRequested)
+                failReason = ConnectFailReason.ApplicationQuit;
+            else if (_cancellation != null && _cancellation.IsCancellationRequested)
+                failReason = ConnectFailReason.UserRequest;
+            else
+                failReason = ConnectFailReason.RunnerFailed;
+
+            return failReason;
+        }
+
+
+        public async Task DisconnectAsync()
+        {
+            await CleanupAsync();
+
+            Invariants();
+        }
+
+        /// <summary>
+        /// 게임을 종료하고, 자원을 반환하고, 클래스 불변식을 회복한다.
+        /// </summary>
+        /// <remarks>
+        /// ensure: <see cref="_cancellation"/> == null <br/>
+        /// ensure: <see cref="_linkedCancellationToken"/> == null <br/>
+        /// ensure: <see cref="_runner"/> == null <br/>
+        /// ensure: <see cref="_loadedSceneName"/> == null <br/>
+        /// ensure: !<see cref="IsGameRunning"/> <br/>
+        /// </remarks>
+        private async Task CleanupAsync()
+        {
+            _cancellation?.Cancel();
+            _cancellation?.Dispose();
+            _cancellation = null;
+            _linkedCancellationToken = null;
+
+            if (_runner != null)
+                await _runner.ShutdownAsync();
+            _runner = null;
+
+            await UnloadSceneAsync();
+
+            IsGameRunning = false;
+        }
+
+        /// <summary>
+        /// <see cref="_loadedSceneName"/>에 해당하는 씬을 언로드한다.
+        /// </summary>
+        /// <remarks>
+        /// ensure: <see cref="_loadedSceneName"/> == null
+        /// </remarks>
+        private async Task UnloadSceneAsync()
+        {
+            try
+            {
+                await SceneManager.UnloadSceneAsync(_loadedSceneName);
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
+
+            _loadedSceneName = null;
+        }
+    }
+}

@@ -1,13 +1,26 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Quantum;
+using Quantum.Menu;
+using TMPro;
 using UnityEngine;
-using Tests.E2eTests.ClickPointProvider;
+using Yggdrasill.TestHelper.CalledByDebug;
+using Yggdrasill.TestHelper.Protocol;
+using Yggdrasill.Utilities;
 
-namespace Tests.E2eTests
+namespace Yggdrasill.TestHelper.Debug
 {
-    public class TestHookApi:ITestHookApi
+    public class TestHookApi : ITestHookApi
     {
+        public virtual async Task WaitGameObjectLoad(GameObjectId gameObjectId, CancellationToken cancellationToken)
+        {
+            while (!GameObjectRegistryForTest.TryGet(gameObjectId, out var gameObject))
+            {
+                await Awaitable.NextFrameAsync(cancellationToken);
+            }
+        }
+
         public virtual async Task ClickObject(GameObjectId gameObjectId)
         {
             var gameObject = GameObjectRegistryForTest.Get(gameObjectId);
@@ -17,6 +30,24 @@ namespace Tests.E2eTests
 
             var clickPoint = clickPointProvider.GetScreenPoint();
             await VirtualDevice.ClickAt(clickPoint);
+        }
+
+        public virtual async Task InputText(string text)
+        {
+            await VirtualDevice.InputText(text);
+        }
+
+        public virtual async Task InputToTextField(GameObjectId textFieldId, string text)
+        {
+            var gameObject = GameObjectRegistryForTest.Get(textFieldId);
+            if(gameObject.TryGetComponent<TMP_InputField>(out var inputField))
+            {
+                await VirtualDevice.InputToTextField(inputField, text);
+            }
+            else
+            {
+                throw new Exception($"{textFieldId}에 TMP_InputField 컴포넌트가 없음.");
+            }
         }
 
         public virtual async Task WaitUntilSceneLoad(SceneId sceneId, CancellationToken cancellationToken)
@@ -33,11 +64,51 @@ namespace Tests.E2eTests
             }
         }
 
+        public virtual async Task WaitUntilSimulationRunning(CancellationToken cancellationToken)
+        {
+            var frameAdapter = new FrameAdapter();
+            var isSimulationRunning = false;
+            while (true)
+            {
+                var frame = QuantumRunner.Default?.Game?.Frames?.Verified;
+                if (frame != null)
+                {
+                    frameAdapter.SetFrame(frame);
+                    if (frameAdapter.GameState == GameState.Running)
+                        isSimulationRunning = true;
+                }
+                
+                if (isSimulationRunning) break;
+                
+                await Awaitable.NextFrameAsync(cancellationToken);
+            }
+        }
+
+        public Task<string> GetInvitationCode()
+        {
+            var connection = UnityEngine.Object.FindAnyObjectByType<QuantumMenuConnectionBehaviour>();
+            if (connection == null)
+                return Task.FromException<string>(
+                    new Exception($"{nameof(QuantumMenuConnectionBehaviour)} 오브젝트가 씬에 없음."));
+            else if (string.IsNullOrEmpty(connection.SessionName))
+                return Task.FromException<string>(new Exception(
+                    $"{nameof(QuantumMenuConnectionBehaviour)} 오브젝트의 {nameof(connection.SessionName)}이 null 또는 빈 문자열임."));
+            else
+                return Task.FromResult(connection.SessionName);
+        }
+
         public virtual async Task ClickTile(int column, int row)
         {
             var tilemapView = GameObjectRegistryForTest.GetTilemapView();
             Vector2 clickPoint = tilemapView.GetTileClickPosition(new Vector2Int(column, row));
             await VirtualDevice.ClickAt(clickPoint);
+        }
+
+        public virtual Task<bool> IsSeedlingExistInTile(int column, int row)
+        {
+            var tilemapView = GameObjectRegistryForTest.GetTilemapView();
+            var result = SeedlingRegistryForTest.CountInCell(tilemapView, new Vector2Int(column, row)) > 0;
+            return Task.FromResult(result);
         }
 
         public virtual async Task WaitUntilSeedlingExistInTile(int column, int row, CancellationToken cancellationToken)

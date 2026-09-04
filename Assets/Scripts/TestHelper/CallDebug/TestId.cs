@@ -1,12 +1,17 @@
 ﻿using UnityEngine;
+#if DEBUG
+using Yggdrasill.TestHelper.Debug;
+#endif
+using Yggdrasill.TestHelper.Protocol;
 
-namespace Tests.E2eTests
+namespace Yggdrasill.TestHelper.CallDebug
 {
     /// <summary>
     /// 이 스크립트가 부착된 게임 오브젝트는 생성 시 <see cref="GameObjectRegistryForTest"/>에 등록되어 조회 가능해진다.
     /// </summary>
     /// <remarks>
-    /// 사용법: 인스펙터에서 <see cref="id"/> 필드를 중복되지 않는 값으로 설정해 줄 것.
+    /// 사용법: 인스펙터에서 <see cref="id"/> 필드를 중복되지 않는 값으로 설정해 줄 것. <br/>
+    /// 동시에 존재할 수 없는 게임 오브젝트가 동일한 <see cref="id"/>를 가지는 건 괜찮음.
     /// </remarks>
     public class TestId : MonoBehaviour
     {

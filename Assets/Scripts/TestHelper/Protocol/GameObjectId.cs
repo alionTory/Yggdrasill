@@ -1,4 +1,4 @@
-namespace Tests.E2eTests
+namespace Yggdrasill.TestHelper.Protocol
 {
     /// <summary>
     /// E2E 테스트가 조작할 수 있는 게임 오브젝트의 식별자.
@@ -8,7 +8,13 @@ namespace Tests.E2eTests
     /// </remarks>
     public enum GameObjectId
     {
-        QuickPlayButton,
+        SinglePlayButton,
+        MultiPlayButton,
+        AutoMatchingButton,
+        PrivateRoomCreateButton,
+        PrivateRoomParticipateButton,
+        InvitationCodeInputField,
+        InvitationCodeReadField,
         Tilemap,
     }
 }

@@ -24,8 +24,22 @@ inputs:
       기본값 설명:
       GitHub이 제공하는 러너에는 GPU도 인터랙티브 데스크톱 세션도 없으므로 그래픽 장치 없이 띄운다.
       화면 클릭과 같은 테스트도 진행되므로, 화면 크기도 명시한다.
+
+      그래픽 활성화 시에는 vsync가 게임 프레임 레이트를 모니터에 자동으로 맞춰 주는 반면,
+      -batchmode 시에는 프레임이 무제한으로 높아지면서, CPU가 과부화될 위험이 있다.
+      따라서 --test-hook-target-frame-rate 커스텀 인수를 통해 명시적으로 프레임을 제한할 필요가 있다.
     required: false
-    default: '-batchmode -nographics -screen-width 1920 -screen-height 1080'
+    default: '-batchmode -nographics -screen-width 1920 -screen-height 1080 --test-hook-target-frame-rate 60'
+  testTimeout:
+    description: >-
+      개별 테스트 타임아웃.
+
+      작성 예시
+      '60s': 60초
+      '5m': 5분
+      '1h': 1시간 
+    required: false
+    default: '3m'
 runs:
   using: composite
   steps:
@@ -45,12 +59,17 @@ runs:
       env:
         YGGDRASILL_E2E_GAME_ARGS: ${{ inputs.gameArguments }}
         BUILD_PATH: Builds/${{ inputs.executionFilePath }}
+        TEST_TIMEOUT: ${{ inputs.testTimeout }}
       run: >
         dotnet test
         StandAloneTest/Yggdrasill.Tests.sln
+        --blame-hang --blame-hang-timeout $TEST_TIMEOUT --blame-hang-dump-type full
         --logger "trx;LogFileName=e2e.trx"
+        --logger "console;verbosity=detailed"
         --results-directory TestResults
-        -- "TestRunParameters.Parameter(name=\"BuildPath\", value=\"$BUILD_PATH\")"
+        --
+        "TestRunParameters.Parameter(name=\"BuildPath\", value=\"$BUILD_PATH\")"
+        "TestRunParameters.Parameter(name=\"PhotonAppVersion\", value=\"dev1.0.0\")"
 
     - name: Upload test results
       if: always()

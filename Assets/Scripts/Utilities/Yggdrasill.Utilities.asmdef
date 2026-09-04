@@ -1,0 +1,19 @@
+{
+    "name": "Yggdrasill.Utilities",
+    "rootNamespace": "Yggdrasill.Utilities",
+    "references": [
+        "GUID:caca889fed6088d40b22c2d7e2909c31",
+        "GUID:5d82202959c2f144ea95e134645b6833",
+        "GUID:f6fa0c2f8b9a9f64897d3351666f3d66",
+        "GUID:563ec5f017b641829d88ae8abd97599a"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,7 +1,7 @@
-using QuantumUser.View;
+using Yggdrasill.Utilities;
 using UnityEngine;
 
-namespace Editor 
+namespace Yggdrasill.Editor
 {
     /// <summary>
     /// 프로젝트에서 사용할 씬 정보를 한 곳에 저장하기 위한 에셋.

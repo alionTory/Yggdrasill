@@ -1,0 +1,17 @@
+{
+    "name": "Yggdrasill.TestHelper.CallDebug",
+    "rootNamespace": "Yggdrasill.TestHelper.CallDebug",
+    "references": [
+        "GUID:563ec5f017b641829d88ae8abd97599a",
+        "GUID:ba6a477d944789c419812f779ac5d6e4"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,14 @@
+{
+    "name": "Yggdrasill.TestHelper.Protocol",
+    "rootNamespace": "Yggdrasill.TestHelper.Protocol",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}

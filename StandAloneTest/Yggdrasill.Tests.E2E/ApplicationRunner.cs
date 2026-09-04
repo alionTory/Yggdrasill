@@ -9,8 +9,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using StreamJsonRpc;
+using Yggdrasill.TestHelper.Protocol;
 
-namespace Tests.E2eTests
+namespace Yggdrasill.Tests.E2E
 {
     public class ApplicationRunner : IDisposable
     {
@@ -34,6 +35,22 @@ namespace Tests.E2eTests
         private const string ExtraGameArgumentsEnvironmentVariable = "YGGDRASILL_E2E_GAME_ARGS";
 
         private static readonly string BuildPath = GetBuildPath();
+
+        private TimeoutCaller _timeoutCaller = new()
+        {
+            Timeout = TimeSpan.FromMinutes(1),
+        };
+        
+        /// <summary>
+        /// 게임 프로세스와의 통신 시의 하드 타임아웃을 설정한다.
+        /// </summary>
+        /// <remarks>
+        /// 기본 하드 타임아웃은 1분.
+        /// </remarks>
+        public void SetHardTimeout(TimeSpan timeout)
+        {
+            _timeoutCaller.Timeout = timeout;
+        }
 
         /// <summary>
         /// 리포지터리 루트 디렉터리의 절대 경로를 반환한다.
@@ -93,17 +110,25 @@ namespace Tests.E2eTests
             return raw.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
         }
 
-        public static async Task<ApplicationRunner> StartAsync()
+        public static string GetCustomPhotonAppVersion()
+        {
+            var result = TestContext.Parameters["PhotonAppVersion"];
+            if (result == null)
+                throw new Exception("테스트 실행을 위해 PhotonAppVersion 테스트 인수가 주어져야 합니다.");
+            return result;
+        }
+
+        public static async Task<ApplicationRunner> StartAsync(string? photonAppVersion = null)
         {
             var result = new ApplicationRunner();
             try
             {
-                await result.InitializeAsync();
+                await result.InitializeAsync(photonAppVersion);
                 return result;
             }
             catch (Exception)
             {
-                TestContext.Progress.WriteLine("ApplicationRunner 초기화 실패");
+                Log.Write("ApplicationRunner 초기화 실패");
                 result.Dispose();
                 throw;
             }
@@ -113,10 +138,10 @@ namespace Tests.E2eTests
         {
         }
 
-        private async Task InitializeAsync()
+        private async Task InitializeAsync(string? photonAppVersion)
         {
             _port = GetFreePort();
-            TestContext.Progress.WriteLine($"포트 {_port}에서 게임 애플리케이션 시작 중.");
+            Log.Write($"포트 {_port}에서 게임 애플리케이션 시작 중.");
 
             var processInfo = new ProcessStartInfo()
             {
@@ -137,28 +162,27 @@ namespace Tests.E2eTests
                     "-",
                 }
             };
+
+            if (photonAppVersion != null)
+            {
+                processInfo.ArgumentList.Add(ITestHookApi.PhotonAppVersionCommandLineArgumentName);
+                processInfo.ArgumentList.Add(photonAppVersion);
+            }
+
             foreach (var argument in ExtraGameArguments())
                 processInfo.ArgumentList.Add(argument);
 
             _process = new Process { StartInfo = processInfo };
 
-            // 게임 프로세스 로그를 테스트 드라이버 로그에 전달.
-            //
-            // 여기서 TestContext.Out (또는 Out 생략)을 쓰면 안 된다.
-            // TestContext.Out은 BeginOutputReadLine을 호출한 시점에서 실행 중인 테스트 컨텍스트를 물려받는다.
-            // 이는 로그가 기록되지 않도록 만들 수 있다. 예를 들어, 게임 프로세스가 [OneTimeSetUp]에서 시작한다면,
-            // 그 컨텍스트는 개별 테스트가 아니라 픽스처이고, 픽스처 수준 출력은 .trx 파일에 기록되지 않아 로그가 통째로 사라진다.
-            //
-            // 대신 현재 실행 중인 테스트의 컨텍스트에 귀속되지 않는 TestContext.Progress를 써야 한다.
             _process.OutputDataReceived += (_, e) =>
             {
                 if (!string.IsNullOrEmpty(e.Data))
-                    TestContext.Progress.WriteLine($"[게임 프로세스 {_port}] {e.Data}");
+                    Log.Write($"[게임 프로세스 {_port}] {e.Data}");
             };
             _process.ErrorDataReceived += (_, e) =>
             {
                 if (!string.IsNullOrEmpty(e.Data))
-                    TestContext.Progress.WriteLine($"[게임 프로세스 {_port} - stderr!] {e.Data}");
+                    Log.Write($"[게임 프로세스 {_port} - stderr!] {e.Data}");
             };
 
             _process.Start();
@@ -169,11 +193,13 @@ namespace Tests.E2eTests
 
             _jsonRpc = JsonRpc.Attach(_tcpClient.GetStream());
             _testHookApi = _jsonRpc.Attach<ITestHookApi>();
+            
+            _timeoutCaller.TimeoutMessage = $"게임 프로세스 {_port}에서 하드 타임아웃 발생.";
         }
 
         private async Task TcpConnectAsync()
         {
-            TestContext.Progress.WriteLine("TCP 연결 시도 시작...");
+            Log.Write("TCP 연결 시도 시작...");
             _tcpClient = new TcpClient();
 
             bool canceled = false;
@@ -208,7 +234,7 @@ namespace Tests.E2eTests
             if (!canceled)
             {
                 Assert.That(connected, Is.True);
-                TestContext.Progress.WriteLine("TCP 연결 성공.");
+                Log.Write("TCP 연결 성공.");
             }
             else
             {
@@ -216,23 +242,77 @@ namespace Tests.E2eTests
             }
         }
 
-        public async Task ClickQuickPlayButton()
+        /**
+         * 게임 오브젝트를 클릭한다.
+         */
+        public async Task Click(GameObjectId gameObjectId)
         {
-            TestContext.WriteLine("Quick Play 버튼 클릭 시도 중.");
-            await _testHookApi.ClickObject(GameObjectId.QuickPlayButton);
-            TestContext.WriteLine("Quick Play 버튼 클릭 완료");
+            await _timeoutCaller.CallAsync(async () => await _testHookApi.ClickObject(gameObjectId));
+        }
+
+        public async Task InputText(string text)
+        {
+            await _timeoutCaller.CallAsync(async () => await _testHookApi.InputText(text));
         }
 
         /// <summary>
-        /// 게임 클라이언트가 멀티플레이 게임 시뮬레이션에 진입할 때까지 대기한다. <br/>
+        /// <paramref name="textFieldId"/>가 가진 TMP_TextField에 <paramref name="text"/>를 입력한다. <br/>
         /// </summary>
-        /// <param name="timeout">대기 시간. 이 시간을 넘으면 예외 발생.</param>
-        public async Task WaitUntilGameEntrance(TimeSpan timeout)
+        /// <param name="textFieldId">TMP_TextField를 가진 게임 오브젝트 id여야 한다.</param>
+        public async Task InputToTextField(GameObjectId textFieldId, string text)
         {
-            TestContext.WriteLine("게임 씬 입장을 기다리는 중.");
-            using var cancellationTokenSource = new CancellationTokenSource(timeout);
-            await _testHookApi.WaitUntilSceneLoad(SceneId.MultiplayPrototype, cancellationTokenSource.Token);
-            TestContext.WriteLine("게임 씬 입장 완료.");
+            await _timeoutCaller.CallAsync(async () => await _testHookApi.InputToTextField(textFieldId, text));
+        }
+
+        /// <summary>
+        /// 게임 오브젝트가 씬에 생성될 때까지 대기한다.
+        /// </summary>
+        /// <param name="timeout">
+        /// 기본값은 1초.
+        /// </param>
+        public async Task WaitGameObjectLoad(GameObjectId id, TimeSpan? timeout = null)
+        {
+            timeout ??= TimeSpan.FromSeconds(1);
+            Log.Write($"게임 오브젝트 {id}가 생성되기를 기다리는 중.");
+            using var cancellationTokenSource = new CancellationTokenSource(timeout.Value);
+            await _timeoutCaller.CallAsync(async () => await _testHookApi.WaitGameObjectLoad(id, cancellationTokenSource.Token));
+            Log.Write($"게임 오브젝트 {id} 생성 확인 완료.");
+        }
+
+        /// <summary>
+        /// 지정된 씬이 로드될 때까지 대기한다.
+        /// </summary>
+        /// <param name="timeout">
+        /// 기본값은 10초.
+        /// </param>
+        public async Task WaitUntilSceneLoad(SceneId id, TimeSpan? timeout = null)
+        {
+            timeout ??= TimeSpan.FromSeconds(10);
+            Log.Write($"씬 {id}가 생성되기를 기다리는 중.");
+            using var cancellationTokenSource = new CancellationTokenSource(timeout.Value);
+            await _timeoutCaller.CallAsync(async () => await _testHookApi.WaitUntilSceneLoad(id, cancellationTokenSource.Token));
+            Log.Write($"씬 {id} 생성 확인 완료.");
+        }
+
+        /// <summary>
+        /// 게임 시뮬레이션이 실행 중임이 확인될 때까지 대기한다. <br/>
+        /// </summary>
+        /// <param name="timeout">
+        /// 대기 시간. 이 시간을 넘으면 예외 발생.<br/>
+        /// 기본값은 10초.
+        /// </param>
+        public async Task WaitUntilSimulationRunning(TimeSpan? timeout = null)
+        {
+            timeout ??= TimeSpan.FromSeconds(10);
+            Log.Write("게임 시뮬레이션이 실행될 때까지 기다리는 중.");
+            using var cancellationTokenSource = new CancellationTokenSource(timeout.Value);
+            await _timeoutCaller.CallAsync(async () => await _testHookApi.WaitUntilSimulationRunning(cancellationTokenSource.Token));
+            Log.Write("게임 시뮬레이션 실행 확인됨..");
+        }
+
+        public async Task<string> GetInvitationCode()
+        {
+            return await _timeoutCaller.CallAsync(async () => await _testHookApi.GetInvitationCode());
         }
 
         /// <summary>
@@ -242,33 +322,48 @@ namespace Tests.E2eTests
         /// <param name="row">가장 아래 행의 칸이 1.</param>
         public async Task ClickTile(int column, int row)
         {
-            TestContext.WriteLine($"타일 ({column}, {row}) 클릭 시도 중.");
-            await _testHookApi.ClickTile(column, row);
-            TestContext.WriteLine($"타일 ({column}, {row}) 클릭 완료.");
+            Log.Write($"타일 ({column}, {row}) 클릭 시도 중.");
+            await _timeoutCaller.CallAsync(async () => await _testHookApi.ClickTile(column, row));
+            Log.Write($"타일 ({column}, {row}) 클릭 완료.");
         }
 
         /// <summary>
-        /// 격자(타일맵)의 <paramref name="column"/>열 <paramref name="row"/>행 칸에 묘목이 존재하는지 확인한다.
+        /// 현재 격자(타일맵)의 <paramref name="column"/>열 <paramref name="row"/>행 칸에 묘목이 존재하는지 확인한다. <br/>
+        /// </summary>
+        /// <param name="column">가장 왼쪽 열의 칸이 1.</param>
+        /// <param name="row">가장 아래 행의 칸이 1.</param>
+        /// <returns>
+        /// 묘목이 존재하면 true, 존재하지 않으면 false.
+        /// </returns>
+        public async Task<bool> IsSeedlingExistInTile(int column, int row)
+        {
+            return await _timeoutCaller.CallAsync(async () => await _testHookApi.IsSeedlingExistInTile(column, row));
+        }
+
+        /// <summary>
+        /// 격자(타일맵)의 <paramref name="column"/>열 <paramref name="row"/>행 칸에 묘목이 존재할 때까지 대기한다. <br/>
         /// </summary>
         /// <param name="column">가장 왼쪽 열의 칸이 1.</param>
         /// <param name="row">가장 아래 행의 칸이 1.</param>
         /// <param name="timeout">
-        /// 대기 시간. 묘목은 서버를 거쳐 생성되므로 즉시 나타나지 않는다.
-        /// 이 시간 안에 묘목이 나타나면 true, 나타나지 않으면 false를 리턴한다.
+        /// 대기 시간. 묘목은 서버를 거쳐 생성되므로 즉시 나타나지 않는다. <br/>
+        /// 이 시간 안에 묘목이 나타나면 true, 나타나지 않으면 false를 리턴한다. <br/>
+        /// 기본값은 1초.
         /// </param>
-        public async Task<bool> IsSeedlingExistInTile(int column, int row, TimeSpan timeout)
+        public async Task<bool> IsSeedlingExistInTileUntilTimeout(int column, int row, TimeSpan? timeout = null)
         {
-            TestContext.WriteLine($"타일 ({column}, {row})에 묘목이 생성되기를 기다리는 중.");
-            using var cancellationTokenSource = new CancellationTokenSource(timeout);
+            timeout ??= TimeSpan.FromSeconds(1);
+            Log.Write($"타일 ({column}, {row})에 묘목이 생성되기를 기다리는 중.");
+            using var cancellationTokenSource = new CancellationTokenSource(timeout.Value);
             try
             {
-                await _testHookApi.WaitUntilSeedlingExistInTile(column, row, cancellationTokenSource.Token);
-                TestContext.WriteLine($"타일 ({column}, {row})에 묘목 존재 확인.");
+                await _timeoutCaller.CallAsync(async () => await _testHookApi.WaitUntilSeedlingExistInTile(column, row, cancellationTokenSource.Token));
+                Log.Write($"타일 ({column}, {row})에 묘목 존재 확인.");
                 return true;
             }
             catch (OperationCanceledException)
             {
-                TestContext.WriteLine($"타임아웃. 타일 ({column}, {row})에 묘목이 존재하지 않음.");
+                Log.Write($"타임아웃. 타일 ({column}, {row})에 묘목이 존재하지 않음.");
                 return false;
             }
         }
@@ -278,7 +373,7 @@ namespace Tests.E2eTests
         /// </summary>
         public async Task<int> GetSeedlingCount()
         {
-            return await _testHookApi.GetSeedlingCount();
+            return await _timeoutCaller.CallAsync(async () => await _testHookApi.GetSeedlingCount());
         }
 
         public void Dispose()
