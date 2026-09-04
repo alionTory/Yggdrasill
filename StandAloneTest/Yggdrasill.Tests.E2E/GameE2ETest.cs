@@ -59,13 +59,17 @@ namespace Yggdrasill.Tests.E2E
         }
 
         [OneTimeTearDown]
-        public void TearDown()
+        public async Task TearDown()
         {
             if (_applicationRunners != null)
             {
                 foreach (var applicationRunner in _applicationRunners)
                     applicationRunner.Dispose();
             }
+            
+            // 테스트로 생성된 방이 다음 테스트까지 남아 문제를 일으키는 것을 방지하기 위한 임시 조치
+            await Task.Delay(TimeSpan.FromSeconds(10));
+
         }
     }
 }
