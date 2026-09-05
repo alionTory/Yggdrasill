@@ -34,6 +34,7 @@ namespace Yggdrasill.GameView.Menu
         public override void Init()
         {
             base.Init();
+            ConnectionArgs.PreferredRegion = Config.AvailableRegions[0];
             ConnectionArgs.SetDefaults(Config);
             ConnectionArgs.AppVersion = ResolveAppVersion();
         }
