@@ -29,7 +29,7 @@ inputs:
       -batchmode 시에는 프레임이 무제한으로 높아지면서, CPU가 과부화될 위험이 있다.
       따라서 --test-hook-target-frame-rate 커스텀 인수를 통해 명시적으로 프레임을 제한할 필요가 있다.
     required: false
-    default: '-batchmode -nographics -screen-width 1920 -screen-height 1080 --test-hook-target-frame-rate 30'
+    default: '-batchmode -nographics -screen-width 1920 -screen-height 1080 --test-hook-target-frame-rate 60'
   testTimeout:
     description: >-
       개별 테스트 타임아웃.
